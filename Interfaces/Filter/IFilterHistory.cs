@@ -1,4 +1,4 @@
-
+namespace Interfaces;
 public interface IFilterHistory : IStack<IFilter>, IDable
 {
     public IFilter Pop();

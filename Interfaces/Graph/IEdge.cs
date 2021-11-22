@@ -1,4 +1,4 @@
-
+namespace Interfaces;
 public interface IEdge
 {
     public IVertex GetFrom();

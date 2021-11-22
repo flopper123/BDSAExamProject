@@ -1,4 +1,4 @@
-
+namespace Interfaces;
 public interface IGraph
 {
     public bool AddVertex(IVertex vertex);
