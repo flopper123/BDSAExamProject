@@ -1,7 +1,7 @@
 namespace Interfaces;
-    public interface IGraphVisualizer
+    public interface IGraphVisualizer<T>
     {
-        public SvgDocument visualize(IGraph<T> graph);
+        // public SvgDocument visualize(IGraph<T> graph);
         //         ^
         //   subject to change
     }

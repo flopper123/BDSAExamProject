@@ -1,7 +1,7 @@
 namespace Interfaces;
-public interface IGraph
+public interface IGraph<T>
 {
-    public bool AddVertex(IVertex vertex);
-    public IEdge AddEdge(IVertex from, IVertex to);
-    public IEnumerable<IVertex> GetAdj(IVertex vertex);
+    public bool AddVertex(IVertex<T> vertex);
+    public IEdge<T> AddEdge(IVertex<T> from, IVertex<T> to);
+    public IEnumerable<IVertex<T>> GetAdj(IVertex<T> vertex);
 }

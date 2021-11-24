@@ -1,9 +1,10 @@
+
 namespace Interfaces;
-public interface IFilterHistory : IStack<IFilter>, IDable
+public interface IFilterHistory : IDable
 {
     public IFilter Pop();
     public bool Push(IFilter filter);
-    public IStack<IFilter> Resest();
+    public Stack<IFilter> Resest();
     public IFilter Peek();
-    public IEnumarable<IFilter> ToArray();
+    public IEnumerable<IFilter> ToArray();
 }

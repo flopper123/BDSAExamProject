@@ -1,0 +1,1 @@
+﻿// Taken from the RAD
