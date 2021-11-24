@@ -11,11 +11,11 @@ namespace LitExplore
     {
         static void Main(string[] args)
         {
-            var v = new Vertex(new Publication{Author = "J. K. Rowling", References = new List<Reference>{}});
-            var pup = v.GetData();
+            //var v = new Vertex(new Publication{Author = "J. K. Rowling", References = new List<Reference>{}});
+            //var pup = v.GetData();
             
 
-            // NewMethod(out string root, out string filename, out string path, out PdfReader doc2, out string udd);
+            NewMethod(out string root, out string filename, out string path, out PdfReader doc2, out string udd);
         }
 
         private static void NewMethod(out string root, out string filename, out string path, out PdfReader? doc2,

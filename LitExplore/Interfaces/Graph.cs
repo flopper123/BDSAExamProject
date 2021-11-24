@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using iTextSharp.text.pdf;
-using LitExplore.Entities;
 using LitExplore.Persistence.Entities;
 
 namespace LitExplore.Interfaces
@@ -37,15 +35,14 @@ namespace LitExplore.Interfaces
             throw new System.NotImplementedException();
         }
 
+        public IGraph<Publication> Build(Publication root, int depth)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public IGraph<IVertex<Publication>> Build(int depth)
         {
-            foreach (var i in Root.Vert.References)
-            {
-                
-            }
-            
-            
-
+            return null;
         }
     }
 }
