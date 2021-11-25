@@ -1,21 +1,38 @@
 using Interfaces;
 public class PublicationRepository : IRepository<IPublication>
 {
+
+    private readonly ILitExploreContext _context;
+
+    public PublicationRepository(ILitExploreContext context) => _context = context;
     public bool Create(IPublication Created)
     {
-        throw new NotImplementedException();
+        var publication = new Publication
+        {
+            Title = Created.Title,
+            References = Created.GetRefs().ToList(),
+        };
+        if (publication.Title != "")
+        {
+            return true;
+        }
+        else return false;
     }
 
     public bool Delete(int Id)
     {
-        throw new NotImplementedException();
-    }
+        var entity = _context.Publications.Find(Id);
 
-    public void Dispose()
-    {
-        throw new NotImplementedException();
-    }
+        if (entity == null)
+        {
+            return false;
+        }
 
+        _context.Publications.Remove(entity);
+        _context.SaveChanges();
+
+        return true;
+    }
     public IPublication Read(int Id)
     {
         throw new NotImplementedException();

@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using Interfaces;
+
 public class Publication
 {
     public int Id { get; set; }
     [Required]
-    public string Title {get; set; }
+    public string Title {get; set; } = "";
     [StringLength(128)]
     public String? Author { get; set; }
     [Range(500, 2200)]
@@ -14,5 +16,5 @@ public class Publication
     [Range(0, Int32.MaxValue)]
     public int Pages { get; set; } = 0;
     public int Edition { get; set; } = 1;
-    public ICollection<Reference> References;
+    public ICollection<IReference> References;
 }

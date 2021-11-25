@@ -1,5 +1,6 @@
 namespace Interfaces;
 public interface IReference : IDable
 {
-    public (IPublication,IPublication) GetPublications();
+    (IPublication, IPublication) publications { get; set; }
+
 }

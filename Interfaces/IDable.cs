@@ -1,5 +1,4 @@
-
 public interface IDable
 {
-    public int GetId();
+    int Id { get; init; }
 }
