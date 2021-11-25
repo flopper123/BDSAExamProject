@@ -18,7 +18,7 @@ public class Publication
     [Range(0, Int32.MaxValue)]
     public int Pages { get; set; } = 0;
     public int Edition { get; set; } = 1;
-    
-    public ICollection<Reference>? References { get; set; }
+
+    public ICollection<Reference> References { get; set; } = null!;
 
 }

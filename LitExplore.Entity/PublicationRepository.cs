@@ -1,6 +1,7 @@
+using System.Reflection;
 using Interfaces;
 using LitExplore.Core;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace LitExplore.Entity;
 
@@ -54,7 +55,35 @@ public class PublicationRepository : IPublicationRepository
 
     public async Task<PublicationDto> CreateAsync(PublicationCreateDto publication)
     {
-        throw new NotImplementedException();
+        var toCreate = new Publication
+        {
+            Title = publication.Title,
+            Author = publication.Author,
+            Edition = publication.Edition,
+            Pages = publication.Pages,
+            Publisher = publication.Publisher,
+            Year = publication.Year,
+            References = await GetReferencesAsync(publication.References).ToListAsync()
+        };
+
+        _context.Publications.Add(toCreate);
+        await _context.SaveChangesAsync();
+
+        return new PublicationDto(
+            toCreate.Id,
+            toCreate.Title,
+            toCreate.Author,
+            toCreate.Year,
+            toCreate.Type,
+            toCreate.Publisher,
+            toCreate.Pages,
+            toCreate.Edition,
+            toCreate.References.Select(p => new ReferenceDto
+            {
+                Id = p.Id,
+                Title = p.Title
+            }).ToHashSet()
+            );
     }
 
     public async Task<IReadOnlyCollection<PublicationDto>> ReadAsync()
@@ -75,5 +104,17 @@ public class PublicationRepository : IPublicationRepository
     public async Task<Status> DeleteAsync(int publicationId)
     {
         throw new NotImplementedException();
+    }
+    
+    private async IAsyncEnumerable<Reference> GetReferencesAsync(ISet<ReferenceDto> publicationReferences)
+    {
+        var existing = await _context.References.Select(r => r)
+            .Where(r => publicationReferences.Any(tr => tr.Title == r.Title)).ToDictionaryAsync(r => r.Title);
+        
+        foreach (ReferenceDto referenceDto in publicationReferences)
+        {
+            yield return existing.TryGetValue(referenceDto.Title, out var r) ? r : new Reference {Title = referenceDto.Title}; // Might need to call create ref to context.. this will then create new references.
+        }
+         
     }
 }

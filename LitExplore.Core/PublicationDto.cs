@@ -5,7 +5,7 @@ namespace LitExplore.Core;
 public record PublicationDto(int Id, 
     string Title, string? Author, 
     int? Year, Type? Type, string? Publisher, 
-    int Pages, int Edition );
+    int Pages, int Edition, ISet<ReferenceDto> References);
 
 public record PublicationCreateDto
 {
