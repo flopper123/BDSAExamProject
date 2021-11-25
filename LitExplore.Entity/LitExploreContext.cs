@@ -1,21 +1,23 @@
-
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
+namespace LitExplore.Entity;
 
 public class LitExploreContext : DbContext, ILitExploreContext
 {
 
-    public DbSet<Reference> References => throw new NotImplementedException();
+    public DbSet<Reference> References => Set<Reference>();
 
-    public DbSet<Publication> Publications => throw new NotImplementedException();
+    public DbSet<Publication> Publications => Set<Publication>();
 
-    public void Dispose()
+    public LitExploreContext(DbContextOptions<LitExploreContext> options) : base(options){ }
+
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        throw new NotImplementedException();
-    }
-
-    public int SaveChanges()
-    {
-        throw new NotImplementedException();
+        builder.Entity<Publication>()
+            .HasIndex(t => t.Title)
+            .IsUnique();
+        builder.Entity<Reference>()
+            .HasIndex(r => r.Title)
+            .IsUnique();
     }
 }

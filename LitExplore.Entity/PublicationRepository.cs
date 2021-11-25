@@ -1,4 +1,7 @@
 using Interfaces;
+
+namespace LitExplore.Entity;
+
 public class PublicationRepository : IRepository<IPublication>
 {
     public bool Create(IPublication Created)

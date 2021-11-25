@@ -1,15 +1,17 @@
 using Interfaces;
 
+namespace LitExplore.Entity;
+
 public class UserRepository: IRepository<IUser>
 {
-    public ICollection<IUser> UserCollection { get; set; }
+    public ICollection<IUser> UserCollection { get; set; } //??
 
-    public bool Create(IUser Created)
+    public bool Create(IUser created)
     {
         throw new NotImplementedException();
     }
 
-    public bool Delete(int Id)
+    public bool Delete(int id)
     {
         throw new NotImplementedException();
     }
@@ -19,12 +21,12 @@ public class UserRepository: IRepository<IUser>
         throw new NotImplementedException();
     }
 
-    public IUser Read(int Id)
+    public IUser Read(int id)
     {
         throw new NotImplementedException();
     }
 
-    public bool Update(IUser Updated)
+    public bool Update(IUser updated)
     {
         throw new NotImplementedException();
     }

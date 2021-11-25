@@ -1,7 +1,9 @@
+namespace LitExplore.Entity;
+
 public class Filter
 {
-      public int Id { get; set; }
+    public int Id { get; set; }
     // sequence: 
-   public string sequence{get; set; }
+    public string sequence{get; set; }
 
 }
