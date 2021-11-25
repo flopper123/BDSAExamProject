@@ -51,14 +51,29 @@ public class PublicationRepository : IPublicationRepository
     {
         throw new NotImplementedException();
     }
-}
 
-public interface IPublicationRepository
-{
-    Task<PublicationDto> CreateAsync(PublicationCreateDto publication);
+    public async Task<PublicationDto> CreateAsync(PublicationCreateDto publication)
+    {
+        throw new NotImplementedException();
+    }
 
-    Task<IReadOnlyCollection<PublicationDto>> ReadAsync();
-    Task<PublicationDto> ReadAsync(int publicationId); // Funky stuff with Option see Rasmus lecture #10 commit
-    Task<Status> UpdateAsync(int id, PublicationUpdateDto publication);
-    Task<Status> DeleteAsync(int publicationId);
+    public async Task<IReadOnlyCollection<PublicationDto>> ReadAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<PublicationDto> ReadAsync(int publicationId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Status> UpdateAsync(int id, PublicationUpdateDto publication)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Status> DeleteAsync(int publicationId)
+    {
+        throw new NotImplementedException();
+    }
 }
