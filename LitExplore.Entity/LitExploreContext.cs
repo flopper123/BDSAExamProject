@@ -4,7 +4,6 @@ namespace LitExplore.Entity;
 
 public class LitExploreContext : DbContext, ILitExploreContext
 {
-
     public DbSet<Reference> References => Set<Reference>();
 
     public DbSet<Publication> Publications => Set<Publication>();

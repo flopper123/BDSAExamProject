@@ -7,8 +7,7 @@ public class Publication
     public int Id { get; set; }
     
     [Required]
-    public string Title {get; set; }
-    
+    public string Title {get; set; } = "";
     [StringLength(128)]
     public string? Author { get; set; }
     [Range(500, 2200)]
@@ -20,5 +19,6 @@ public class Publication
     public int Pages { get; set; } = 0;
     public int Edition { get; set; } = 1;
     
-    public ISet<Reference> References { get; set; } = new Set<Reference>{};
+    public ISet<Reference> References { get; init; } = new HashSet<Reference>{};
+
 }

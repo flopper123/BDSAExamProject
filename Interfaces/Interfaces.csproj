@@ -1,8 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\LitExplore.Entity\LitExplore.Entity.csproj" />
-  </ItemGroup>
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
