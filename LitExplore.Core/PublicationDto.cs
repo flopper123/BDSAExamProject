@@ -30,3 +30,8 @@ public record PublicationCreateDto
     public ISet<ReferenceDto> References { get; init; } = null!;
 
 }
+
+public record PublicationUpdateDto : PublicationCreateDto
+{
+    public int Id { get; init; }
+}

@@ -19,6 +19,6 @@ public class Publication
     public int Pages { get; set; } = 0;
     public int Edition { get; set; } = 1;
     
-    public ISet<Reference> References { get; init; } = new HashSet<Reference>{};
+    public ICollection<Reference>? References { get; set; }
 
 }
