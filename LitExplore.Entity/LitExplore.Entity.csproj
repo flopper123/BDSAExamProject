@@ -16,6 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
-    <ProjectReference Include="LitExplore.Core.csproj" />
+    <ProjectReference Include="..\LitExplore.Core\LitExplore.Core.csproj" />
   </ItemGroup>
 </Project>
