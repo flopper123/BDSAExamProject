@@ -1,4 +1,5 @@
-using System.Reflection;
+
+using System.Linq;
 using Interfaces;
 using LitExplore.Core;
 using Microsoft.EntityFrameworkCore;
@@ -86,10 +87,27 @@ public class PublicationRepository : IPublicationRepository
             );
     }
 
-    public async Task<IReadOnlyCollection<PublicationDto>> ReadAsync()
+    public async Task<IReadOnlyCollection<PublicationDto>> ReadAsync() // Not so async HMM??
     {
-        throw new NotImplementedException();
+         _context.Publications
+            .Select(async p =>
+                new PublicationDto(
+
+                    p.Id, p.Title, p.Author, p.Year,
+                    p.Type, p.Publisher, p.Pages, p.Edition,
+                    await GetRefDtoAsync(p).ToHashSetAsync()
+                )
+            ).ToList().AsReadOnly();
     }
+
+    private async IAsyncEnumerable<ReferenceDto> GetRefDtoAsync(Publication pub)
+    {
+        foreach (var reference in pub.References)
+        {
+            yield return new ReferenceDto {Id = reference.Id, Title = reference.Title};
+        }
+    }
+
 
     public async Task<PublicationDto> ReadAsync(int publicationId)
     {

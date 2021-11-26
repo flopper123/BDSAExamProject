@@ -16,5 +16,14 @@ namespace LitExplore.Core
                 results.Add(item);
             return results;
         }
+
+        public static async Task<HashSet<T>> ToHashSetAsync<T>(this IAsyncEnumerable<T> items,
+            CancellationToken cancellationToken = default)
+        {
+            var results = new HashSet<T>();
+            await foreach (var item in items.WithCancellation(cancellationToken).ConfigureAwait(false))
+                results.Add(item);
+            return results;
+        }
     }
 }
