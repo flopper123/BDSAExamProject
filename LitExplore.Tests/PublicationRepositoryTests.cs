@@ -22,7 +22,7 @@ namespace LitExplore.Tests
             var connection = new SqliteConnection("Filename=:memory:");
             connection.Open();
             var builder = new DbContextOptionsBuilder<LitExploreContext>();
-            builder.UseSqlite(connection);
+            //builder.UseSqlServer(connection);
             var context = new LitExploreContext(builder.Options);
             seed(context);
             _context = context;
@@ -42,10 +42,12 @@ namespace LitExplore.Tests
                 
             );
 
+            Publication pub1 = new Publication
+                {Title = "Test pub 1", Author = "David", Year = 2021, Pages = 1, References = new List<Reference> {ref2}};
             context.Publications.AddRange(
-              new Publication { Title = "Test pub 1", Author = "David", Year = 2021, Pages = 1, References = new[] { ref2 } },
-              new Publication { Title = "Test pub 2", Author = "Chris", Year = 2021, Pages = 1, References = new[] { ref1 } },
-              new Publication { Title = "Test pub 3", Author = "Mads", Year = 2021, Pages = 1, References = new[] { ref1, ref2 } }
+              pub1,
+              new Publication { Title = "Test pub 2", Author = "Chris", Year = 2021, Pages = 1, References = new List<Reference>{ ref1 } },
+              new Publication { Title = "Test pub 3", Author = "Mads", Year = 2021, Pages = 1, References = new List<Reference> { ref1, ref2 } }
             );
             context.SaveChanges();
         }

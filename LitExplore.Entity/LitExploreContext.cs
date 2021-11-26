@@ -1,5 +1,6 @@
 using System.Security.AccessControl;
 using System.IO;
+using System.Reflection;
 using LitExplore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,19 +17,15 @@ public class LitExploreContext : DbContext, ILitExploreContext
 
     public LitExploreContext(DbContextOptions<LitExploreContext> options) : base(options) { }
 
-    /*  
+     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(
-                $"..{DirectorySeparatorChar}LitExplore{DirectorySeparatorChar}" 
-            )
-            .AddUserSecrets<Program>()
-        
-        
-        optionsBuilder.UseSqlServer(connectionString)
+        var configuration = new ConfigurationBuilder().AddUserSecrets("9c0d427e-d138-4993-8a77-66fee59e666f")
+            .Build();
+            
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("LitExplore"));
     }
-    */
+    
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

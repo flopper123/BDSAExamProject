@@ -4,8 +4,9 @@ namespace LitExplore.Entity;
 
 public class Reference
 {
-    public int Id { get; set; }
+    //public int Id { get; set; }
 
-    [Required]
+    [Required] 
+    [Key]
     public string Title { get; set; }
 }
