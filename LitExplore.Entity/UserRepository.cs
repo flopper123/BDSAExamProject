@@ -15,15 +15,16 @@ namespace LitExplore.Entity
             var toCreate = new User {/*do some stuff with User*/ };
             _context.Users.Add(toCreate);
             await _context.SaveChangesAsync();
-            return new UserDetailsDto(
-                toCreate.Id
-            );
+            return new UserDetailsDto
+            {
+                Id = toCreate.Id
+            };
         }
 
         public async Task<IReadOnlyCollection<UserDto>> ReadAsync()
         {
             return (await _context.Users
-                .Select(u => new UserDto(u.Id)).ToListAsync()).AsReadOnly();
+                .Select(u => new UserDto{Id = u.Id}).ToListAsync()).AsReadOnly();
         }
 
         public async Task<UserDto> ReadAsync(int UserId)

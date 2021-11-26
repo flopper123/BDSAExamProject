@@ -1,10 +1,15 @@
 namespace LitExplore.Core;
-public record UserDto(int Id);
+public record UserDto
+{
+    public int Id { get; init; }
+    
+}
 public record UserCreateDto { }
-public record UserUpdateDto(int Id) : UserCreateDto
+public record UserUpdateDto : UserCreateDto
 {
     public int Id { get; init; }
 }
-public record UserDetailsDto(int Id) : UserUpdateDto(Id)
+public record UserDetailsDto: UserDto
 {
+    
 }
