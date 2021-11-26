@@ -12,7 +12,8 @@ public class Publication
     public string? Author { get; set; }
     [Range(500, 2200)]
     public int? Year { get; set; }
-    public Type? Type { get; set; }//?? The Type of a Publication [Article, Book, Online/Link, Journal, etc..]? 
+    // PublicationType
+    public int? Type { get; set; }//?? The Type of a Publication [Article, Book, Online/Link, Journal, etc..]? 
     [StringLength(256)]
     public string? Publisher { get; set; }
     [Range(0, Int32.MaxValue)]

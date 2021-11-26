@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using LitExplore.Core;
 using LitExplore.Entity;
@@ -41,7 +42,7 @@ namespace LitExplore.Tests
               new Publication { Title = "Test pub 3", Author = "David", Year = 2021, Pages = 1, References = new[] { ref1, ref2 } }
             );
             context.SaveChanges();
-        }
+        }Half 
 
 
 
@@ -53,14 +54,27 @@ namespace LitExplore.Tests
         [Fact]
         public async void ReadAsync_Id_3_Retruns_Publication_no3()
         {
-            var expected = new PublicationDto { Title = "Test pub 3", Author = "David", Year = 2021, Pages = 1, References = new HashSet<ReferenceDto> { new ReferenceDto { Title = "Test pub 2" }, new ReferenceDto { Title = "Test pub 1" } } };
+            PublicationDto expected = new PublicationDto(
+                "Test pub 3", 
+                "David", 
+                2021, 
+                PublicationType.Article,
+                "ITU",
+                1, 
+                1,
+                new HashSet<ReferenceDto> { 
+                    new ReferenceDto { Title = "Test pub 2" }, 
+                    new ReferenceDto { Title = "Test pub 1" }, 
+                }
+            );
+
+            PublicationDto exp = new PublicationDto
 
             var acutal = await _repository.ReadAsync("Test pub 3");
 
             Assert.True(expected.Equals(acutal));
 
         }
-
 
         protected virtual void Dispose(bool disposing)
         {

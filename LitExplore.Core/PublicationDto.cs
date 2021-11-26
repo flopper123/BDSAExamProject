@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LitExplore.Core;
-
-public record PublicationDto(int Id, 
+namespace LitExplore.Core
+{
+public record PublicationDto(
     string Title, string? Author, 
-    int? Year, Type? Type, string? Publisher, 
+    int? Year, PublicationType? Type, string? Publisher, 
     int Pages, int Edition, ISet<ReferenceDto> References);
+
 
 public record PublicationCreateDto
 {
@@ -17,7 +18,7 @@ public record PublicationCreateDto
     [Range(500, 2200)]
     public int? Year { get; init; }
 
-    public Type? Type { get; init; }//?? The Type of a Publication [Article, Book, Online/Link, Journal, etc..]? 
+    public PublicationType? Type { get; init; }//?? The Type of a Publication [Article, Book, Online/Link, Journal, etc..]? 
     
     [StringLength(256)]
     public string? Publisher { get; init; }
@@ -34,4 +35,5 @@ public record PublicationCreateDto
 public record PublicationUpdateDto : PublicationCreateDto
 {
     public int Id { get; init; }
+}
 }
