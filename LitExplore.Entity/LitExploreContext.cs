@@ -5,10 +5,10 @@ namespace LitExplore.Entity;
 public class LitExploreContext : DbContext, ILitExploreContext
 {
     public DbSet<Reference> References => Set<Reference>();
-
+    public DbSet<User> Users => Set<User>();
     public DbSet<Publication> Publications => Set<Publication>();
 
-    public LitExploreContext(DbContextOptions<LitExploreContext> options) : base(options){ }
+    public LitExploreContext(DbContextOptions<LitExploreContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

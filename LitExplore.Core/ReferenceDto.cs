@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LitExplore.Core;
-
-public record ReferenceDto
+namespace LitExplore.Core
 {
-    public int Id { get; init; }
-
-    [Required] public string Title { get; init; } = null!;
+    public record ReferenceDto
+    {
+        [Required] public string Title { get; init; } = null!;
+    }
 }
