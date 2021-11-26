@@ -1,3 +1,4 @@
+using System.Reflection.PortableExecutable;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace LitExplore.Tests
         private bool disposed;
         private readonly ILitExploreContext _context;
         private readonly PublicationRepository _repository;
-
+        //cdotnet ef migrations add InitialCreate
         public PublicationRepositoryTests()
         {
             var connection = new SqliteConnection("Filename=:memory:");
@@ -31,49 +32,36 @@ namespace LitExplore.Tests
         // init db
         private void seed(LitExploreContext context)
         {
-            context.Database.EnsureCreated();
+            // context.Database.EnsureCreated();
             // seed actions here
-            var ref1 = new Reference { Title = "Test pub 2" };
-            var ref2 = new Reference { Title = "Test pub 1" };
+            Reference ref1 = new Reference { Title = "Test pub 1" };
+            Reference ref2 = new Reference { Title = "Test pub 2" };
+            
+            context.References.AddRange(
+                ref1, ref2
+                
+            );
 
             context.Publications.AddRange(
-              new Publication { Title = "Test pub 1", Author = "David", Year = 2021, Pages = 1, References = new[] { ref1 } },
-              new Publication { Title = "Test pub 2", Author = "David", Year = 2021, Pages = 1, References = new[] { ref2 } },
-              new Publication { Title = "Test pub 3", Author = "David", Year = 2021, Pages = 1, References = new[] { ref1, ref2 } }
+              new Publication { Title = "Test pub 1", Author = "David", Year = 2021, Pages = 1, References = new[] { ref2 } },
+              new Publication { Title = "Test pub 2", Author = "Chris", Year = 2021, Pages = 1, References = new[] { ref1 } },
+              new Publication { Title = "Test pub 3", Author = "Mads", Year = 2021, Pages = 1, References = new[] { ref1, ref2 } }
             );
             context.SaveChanges();
-        }Half 
-
-
-
-        [Fact]
-        public void CanCreate()
-        {
-
         }
+
         [Fact]
-        public async void ReadAsync_Id_3_Retruns_Publication_no3()
-        {
-            PublicationDto expected = new PublicationDto(
-                "Test pub 3", 
-                "David", 
-                2021, 
-                PublicationType.Article,
-                "ITU",
-                1, 
-                1,
-                new HashSet<ReferenceDto> { 
-                    new ReferenceDto { Title = "Test pub 2" }, 
-                    new ReferenceDto { Title = "Test pub 1" }, 
-                }
-            );
-
-            PublicationDto exp = new PublicationDto
-
-            var acutal = await _repository.ReadAsync("Test pub 3");
-
-            Assert.True(expected.Equals(acutal));
-
+        public async Task ReadAsync_given_id_exists_returns_Character() {
+            PublicationDto act = await _repository.ReadAsync("Test pub 1");
+            
+            Assert.Equal("Test pub 1", act.Title);
+            Assert.Equal("David", act.Author);
+            Assert.Equal(2021, act.Year);
+            Assert.Equal(1, act.Pages);
+            
+            ISet<ReferenceDto> refs = new HashSet<ReferenceDto>();
+            refs.Add(new ReferenceDto {Title = "Test pub 2"});
+            Assert.True(act.References.SetEquals(refs));
         }
 
         protected virtual void Dispose(bool disposing)

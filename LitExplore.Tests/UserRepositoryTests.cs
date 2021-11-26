@@ -34,11 +34,6 @@ namespace LitExplore.Tests
       context.SaveChanges();
     }
     
-    [Fact]
-    public void CanCreate(int id) {
-        
-    }
-
     protected virtual void Dispose(bool disposing)
     {
       if (!disposed)

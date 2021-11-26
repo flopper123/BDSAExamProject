@@ -29,7 +29,6 @@ namespace LitExplore.Entity
             await _context.SaveChangesAsync();
 
             return new PublicationDto(
-                toCreate.Id,
                 toCreate.Title,
                 toCreate.Author,
                 toCreate.Year,
@@ -83,7 +82,7 @@ namespace LitExplore.Entity
         }
 
         // Modify existing publication
-        public async Task<Status> UpdateAsync(string pubTitle, PublicationUpdateDto publication)
+        public async Task<Status> UpdateAsync(PublicationUpdateDto publication)
         {
             throw new NotImplementedException();
         }

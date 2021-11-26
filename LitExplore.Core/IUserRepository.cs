@@ -1,4 +1,5 @@
 namespace LitExplore.Core;
+
 public interface IUserRepository
 {
     Task<UserDto> CreateAsync(UserCreateDto User);

@@ -39,5 +39,10 @@ namespace LitExplore.Entity
         {
             throw new NotImplementedException();
         }
+
+        Task<UserDto> IUserRepository.CreateAsync(UserCreateDto User)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

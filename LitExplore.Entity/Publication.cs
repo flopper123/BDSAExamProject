@@ -1,19 +1,18 @@
 using System.ComponentModel.DataAnnotations;
 
+
 namespace LitExplore.Entity;
 
 public class Publication
 {
-    public int Id { get; set; }
-    
     [Required]
-    public string Title {get; set; } = "";
+    public string Title {get; set; } = null!;
     [StringLength(128)]
     public string? Author { get; set; }
     [Range(500, 2200)]
     public int? Year { get; set; }
     // PublicationType
-    public int? Type { get; set; }//?? The Type of a Publication [Article, Book, Online/Link, Journal, etc..]? 
+    public PublicationType? Type { get; set; }//?? The Type of a Publication [Article, Book, Online/Link, Journal, etc..]? 
     [StringLength(256)]
     public string? Publisher { get; set; }
     [Range(0, Int32.MaxValue)]
