@@ -4,9 +4,39 @@ namespace Graph
 {
     public class Graph : IGraph<Publication>
     {
-        private List<Vertex>? Vertices;
-        private List<Edge>? Edges;
+        private List<IVertex<Publication>> Vertices;
+        private IList<IEdge<Publication>> Edges;
+        public Graph()
+        {
+            Vertices = new List<IVertex<Publication>>();
+            Edges = new List<IEdge<Publication>>();
+        }
         public bool AddVertex(IVertex<Publication> vertex)
+        {
+            if (vertex.Data.Title == "" ||
+                vertex.Data.Title == null ||
+                vertex.Id < Vertices.Count) return false;
+            Vertices.Add(vertex);
+            return true;
+        }
+        //TO:DO burde nok ikke bare retrune bool
+        public bool AddEdge(IVertex<Publication> from, IVertex<Publication> to)
+        {
+            if (from.Equals(to)) return false;
+            var _from = Vertices.FirstOrDefault(v => v.Data.Title == from.Data.Title);
+            if (from == null) return false;
+            else if (!AddVertex(from)) return false;
+            else _from = from;
+            var _to = Vertices.FirstOrDefault(v => v.Data.Title == to.Data.Title);
+            if (to == null) return false;
+            else if (!AddVertex(to)) return false;
+            else _to = to;
+
+            Edges.Add(new Edge(_from, _to));
+
+            return true;
+        }
+        public bool AddEdge(int fromId, int toId)
         {
             throw new NotImplementedException();
         }
@@ -18,18 +48,10 @@ namespace Graph
         {
             throw new NotImplementedException();
         }
-        public bool AddEdge(IVertex<Publication> from, IVertex<Publication> to)
-        {
-            throw new NotImplementedException();
-        }
-        public bool AddEdge(int fromId, int toId)
-        {
-            throw new NotImplementedException();
-        }
         public int NumberOfVertices() =>
-            throw new NotImplementedException();
+            Vertices.Count;
         public int NumberOfEdges() =>
-            throw new NotImplementedException();
+            Edges.Count;
     }
     public class Vertex : IVertex<Publication>
     {
@@ -45,14 +67,22 @@ namespace Graph
     }
     public class Edge : IEdge<Publication>
     {
+        private IVertex<Publication> From;
+        private IVertex<Publication> To;
+
+        public Edge(IVertex<Publication> from, IVertex<Publication> to)
+        {
+            From = from;
+            To = to;
+        }
         public IVertex<Publication> GetFrom()
         {
-            throw new NotImplementedException();
+            return From;
         }
 
         public IVertex<Publication> GetTo()
         {
-            throw new NotImplementedException();
+            return To;
         }
     }
 }
