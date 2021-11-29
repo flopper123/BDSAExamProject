@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "buildcss": "postcss wwwroot/css/app.css -o wwwroot/css/app.min.css"
+    "buildcss": "postcss Pages/**/*.css --base Pages -d wwwroot/css"
   },
   "author": "",
   "license": "ISC",
