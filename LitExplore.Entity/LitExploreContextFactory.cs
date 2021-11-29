@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace LitExplore.Entity
 {
@@ -12,7 +13,7 @@ namespace LitExplore.Entity
                 .Build();
             var optionsBuilder = new DbContextOptionsBuilder<LitExploreContext>();
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("LitExplore"));
-
+                
             return new LitExploreContext(optionsBuilder.Options);
         }
     }

@@ -17,20 +17,6 @@ public class LitExploreContext : DbContext, ILitExploreContext
 
     public LitExploreContext(DbContextOptions<LitExploreContext> options) : base(options) { }
 
-     
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        // Commented out as it fucks test
-        /*
-        var configuration = new ConfigurationBuilder()
-            .AddUserSecrets("9c0d427e-d138-4993-8a77-66fee59e666f")
-            .Build();
-            
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("LitExplore"));
-        */
-    }
-    
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<Publication>()

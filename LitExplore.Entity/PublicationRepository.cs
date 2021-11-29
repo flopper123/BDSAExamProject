@@ -24,10 +24,11 @@ namespace LitExplore.Entity
                 Pages = publication.Pages,
                 Publisher = publication.Publisher,
                 Year = publication.Year,
-                References = (publication.References.Select(refDto => new Reference {Title = refDto.title })
-                                                    .ToList<Reference>()),
-                // should await references, but for now we just set it to empty GetReferencesAsync(publication.References).ToListAsync()
+                References = publication.References.Select( refDto => new Reference {Title = refDto.title })
+                                                    .ToList<Reference>(),
+                // should await references, but for now we just set it to empty GetReferencesAsync(publication.References).ToListAsync() // But Why thoug??
             };
+            
             _context.Publications.Add(pub);
             await _context.SaveChangesAsync();
 

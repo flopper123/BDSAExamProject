@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LitExplore.Core;
 using LitExplore.Entity;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore.Sqlite;
 using Xunit;
 
 namespace LitExplore.Tests
@@ -13,7 +11,7 @@ namespace LitExplore.Tests
     // In memory testing of publication repository
     public class PublicationRepositoryTests : IDisposable
     {
-        private bool disposed;
+        private bool disposedValue;
         private readonly ILitExploreContext _context;
         private readonly PublicationRepository _repository;
         
@@ -24,7 +22,11 @@ namespace LitExplore.Tests
             var builder = new DbContextOptionsBuilder<LitExploreContext>();
             builder.UseSqlite(connection);
             var context = new LitExploreContext(builder.Options);
+            context.Database.EnsureCreated();
+            
             seed(context);
+
+            context.SaveChanges();
             _context = context;
             _repository = new PublicationRepository(_context);
         }
@@ -32,7 +34,6 @@ namespace LitExplore.Tests
         // init db
         private void seed(LitExploreContext context)
         {
-            context.Database.EnsureCreated();
             // seed actions here
             Reference ref1 = new Reference { Title = "Test pub 1" };
             Reference ref2 = new Reference { Title = "Test pub 2" };
@@ -48,15 +49,41 @@ namespace LitExplore.Tests
               new Publication { Title = "Test pub 2", Author = "Chris", Year = 2021, Pages = 1, References = new List<Reference>{ ref1 } },
               new Publication { Title = "Test pub 3", Author = "Mads", Year = 2021, Pages = 1, References = new List<Reference> { ref1, ref2 } }
             );
-            context.SaveChanges();
         }
 
         [Fact]
-        public async Task ReadAsync_given_id_exists_returns_Character() {
-            PublicationDto? act = await _repository.ReadAsync("Test pub 1") ?? null;
-            Assert.True(act != null);
-            // not null at this point :))
-            if (act != null) {
+        public async Task CreateAsync_Given_PublicationCreateDto_Returns_Created_And_PublicationDto()
+        {
+            PublicationCreateDto publication = new PublicationCreateDto
+            {
+                Title = "My Little Pony",
+                Author = "Bonnie Zacherle",
+                Edition = 1,
+                Pages = 10,
+                Publisher = "Someone",
+                Year = 1983,
+                References = new HashSet<ReferenceDto> {new ReferenceDto( "Alabama Show Down")}
+            };
+
+            PublicationDto created = await _repository.CreateAsync(publication);
+            
+            Assert.NotNull(created);
+            Assert.Equal("My Little Pony", created.Title);
+            Assert.Equal("Bonnie Zacherle", created.Author);
+            Assert.Equal(1, created.Edition);
+            Assert.Equal(10, created.Pages);
+            Assert.Equal("Someone", created.Publisher);
+            Assert.Equal(1983, created.Year);
+            Assert.True(created.References.SetEquals(new [] {new ReferenceDto("Alabama Show Down")}));
+        }
+        
+        [Fact]
+        public async Task ReadAsync_given_Title_exists_returns_PublicationDto() 
+        {
+            PublicationDto? act = await _repository.ReadAsync("Test pub 1");
+            
+                Assert.NotNull(act); // Why not assert it since this is test and should be false
+                // not null at this point :))
                 Assert.Equal("Test pub 1", act.Title);
                 Assert.Equal("David", act.Author);
                 Assert.Equal(2021, act.Year);
@@ -70,22 +97,24 @@ namespace LitExplore.Tests
                     "Actual references != expected references act.references \n\t" + 
                     $"Actual ref: \n\t\tType @{act.References.GetType()} \n\t\tCount @{act.References.Count}, \n\t\tFirst element @{act.References.GetEnumerator().Current}\n\t" +
                     $"Expected ref: \n\t\tType @{exp.GetType()} \n\t\tCount @{exp.Count}, \n\t\tFirst element @{exp.GetEnumerator().Current.ToString()}");
-            }
+            
         }
-
+        
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!disposedValue)
             {
                 if (disposing)
                 {
-                    _context.Dispose();
+                    // TODO: dispose managed state (managed objects)
                 }
 
-                disposed = true;
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
             }
         }
-
+        
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
