@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 
 using System.Linq;
 using Interfaces;
@@ -9,12 +10,13 @@ namespace LitExplore.Entity
     public class PublicationRepository : IPublicationRepository
     {
         private readonly ILitExploreContext _context;
+        
         public PublicationRepository(ILitExploreContext context) => _context = context;
 
         // Add a new publication
-        public async Task<PublicationDto> CreateAsync(PublicationCreateDto publication)
+        public async Task<PublicationDto?> CreateAsync(PublicationCreateDto publication)
         {
-            var toCreate = new Publication
+            var pub = new Publication
             {
                 Title = publication.Title,
                 Author = publication.Author,
@@ -22,56 +24,62 @@ namespace LitExplore.Entity
                 Pages = publication.Pages,
                 Publisher = publication.Publisher,
                 Year = publication.Year,
-                References = await GetReferencesAsync(publication.References).ToListAsync()
+                References = (publication.References.Select(refDto => new Reference {Title = refDto.title })
+                                                    .ToList<Reference>()),
+                // should await references, but for now we just set it to empty GetReferencesAsync(publication.References).ToListAsync()
             };
-
-            _context.Publications.Add(toCreate);
+            _context.Publications.Add(pub);
             await _context.SaveChangesAsync();
 
             return new PublicationDto(
-                toCreate.Title,
-                toCreate.Author,
-                toCreate.Year,
-                toCreate.Type,
-                toCreate.Publisher,
-                toCreate.Pages,
-                toCreate.Edition,
-                toCreate.References.Select(p => new ReferenceDto
-                {
-                    //Id = p.Id,
-                    Title = p.Title
-                }).ToHashSet()
+                pub.Title,
+                pub.Author,
+                pub.Year,
+                pub.Publisher,
+                pub.Pages,
+                pub.Edition,
+                pub.References.Select(r => new ReferenceDto(r.Title)).ToHashSet()
             );
         }
 
-        // Read all publications async
+        /// <summary>
+        ///     Tries to asyncly retrieve a publication with the given parameter @pubtitle
+        ///     from the database and returns it as a @PublicationDto.
+        /// </summary>
+        /// <param name="pubTitle"> Title/key of the publication </param>
+        /// <returns> An task with the appropriate PublicationDto on success or  </returns>
+        public async Task<PublicationDto?> ReadAsync(string pubTitle) // Not so async HMM??
+        {
+            var pub =  
+                from p in _context.Publications
+                where p.Title != null && p.Title.Equals(pubTitle)
+                select new PublicationDto(
+                             p.Title,
+                             p.Author,
+                             p.Year,
+                             p.Publisher,
+                             p.Pages,
+                             p.Edition,
+                             p.References.Select(r => new ReferenceDto(r.Title)).ToHashSet()
+                );
+            return await pub.FirstOrDefaultAsync();
+        }
+
+         // Read all publications async
         public async Task<IReadOnlyCollection<PublicationDto>> ReadAsync() // Not so async HMM??
         {
-            /*_context.Publications
-               .Select(async p =>
-                   new PublicationDto(
-
-                       p.Id, p.Title, p.Author, p.Year,
-                       p.Type, p.Publisher, p.Pages, p.Edition,
-                       await GetRefDtoAsync(p).ToHashSetAsync()
-                   )
-               ).ToList().AsReadOnly();*/
-
-            throw new NotImplementedException();
-        }
-        public async Task<PublicationDto> ReadAsync(string pubTitle) // Not so async HMM??
-        {
             throw new NotImplementedException();
         }
 
+/*
         // input: Publication 
         // output: All references for the given publication as an async enumerable
         private async IAsyncEnumerable<ReferenceDto?> GetRefDtoAsync(Publication pub)
         {
             // search for matching reference in publication dbset
             Dictionary<string, Reference> refToPub =
-                await _context.References.Where(r => pub.Title.Equals(r.Title))
-                                         .ToDictionaryAsync(r => r.Title);
+                await _context.References.Where(r => pub.Title != null && pub.Title.Equals(r.Title))
+                                         .ToDictionaryAsync(r => (r.Title == null));
 
             foreach (var reference in pub.References)
             {
@@ -80,7 +88,7 @@ namespace LitExplore.Entity
                     ? new ReferenceDto { Title = r.Title } : null;
             }
         }
-
+*/
         // Modify existing publication
         public async Task<Status> UpdateAsync(PublicationUpdateDto publication)
         {
@@ -92,6 +100,7 @@ namespace LitExplore.Entity
             throw new NotImplementedException();
         }
 
+        /*
         private async IAsyncEnumerable<Reference> GetReferencesAsync(ISet<ReferenceDto> publicationReferences)
         {
             var existing = await _context.References.Select(r => r)
@@ -102,5 +111,6 @@ namespace LitExplore.Entity
                 yield return existing.TryGetValue(referenceDto.Title, out var r) ? r : new Reference { Title = referenceDto.Title }; // Might need to call create ref to context.. this will then create new references.
             }
         }
+        */
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using LitExplore.Core;
 using LitExplore.Entity;
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite;
 using Xunit;
 
 namespace LitExplore.Tests
@@ -16,13 +16,13 @@ namespace LitExplore.Tests
         private bool disposed;
         private readonly ILitExploreContext _context;
         private readonly PublicationRepository _repository;
-        //cdotnet ef migrations add InitialCreate
+        
         public PublicationRepositoryTests()
         {
             var connection = new SqliteConnection("Filename=:memory:");
             connection.Open();
             var builder = new DbContextOptionsBuilder<LitExploreContext>();
-            //builder.UseSqlServer(connection);
+            builder.UseSqlite(connection);
             var context = new LitExploreContext(builder.Options);
             seed(context);
             _context = context;
@@ -32,18 +32,17 @@ namespace LitExplore.Tests
         // init db
         private void seed(LitExploreContext context)
         {
-            // context.Database.EnsureCreated();
+            context.Database.EnsureCreated();
             // seed actions here
             Reference ref1 = new Reference { Title = "Test pub 1" };
             Reference ref2 = new Reference { Title = "Test pub 2" };
             
             context.References.AddRange(
-                ref1, ref2
-                
+                ref1, ref2     
             );
 
-            Publication pub1 = new Publication
-                {Title = "Test pub 1", Author = "David", Year = 2021, Pages = 1, References = new List<Reference> {ref2}};
+            Publication pub1 = new Publication{ Title = "Test pub 1", Author ="David", 
+                                                Year = 2021, Pages = 1, References = new List<Reference> {ref2}};
             context.Publications.AddRange(
               pub1,
               new Publication { Title = "Test pub 2", Author = "Chris", Year = 2021, Pages = 1, References = new List<Reference>{ ref1 } },
@@ -54,16 +53,24 @@ namespace LitExplore.Tests
 
         [Fact]
         public async Task ReadAsync_given_id_exists_returns_Character() {
-            PublicationDto act = await _repository.ReadAsync("Test pub 1");
+            PublicationDto? act = await _repository.ReadAsync("Test pub 1") ?? null;
+            Assert.True(act != null);
+            // not null at this point :))
+            if (act != null) {
+                Assert.Equal("Test pub 1", act.Title);
+                Assert.Equal("David", act.Author);
+                Assert.Equal(2021, act.Year);
+                Assert.Equal(1, act.Pages);
             
-            Assert.Equal("Test pub 1", act.Title);
-            Assert.Equal("David", act.Author);
-            Assert.Equal(2021, act.Year);
-            Assert.Equal(1, act.Pages);
-            
-            ISet<ReferenceDto> refs = new HashSet<ReferenceDto>();
-            refs.Add(new ReferenceDto {Title = "Test pub 2"});
-            Assert.True(act.References.SetEquals(refs));
+                ISet<ReferenceDto> exp = new HashSet<ReferenceDto>();
+                exp.Add(new ReferenceDto("Test pub 2"));
+                Assert.True(exp.Count != 0, "Expected references is empty");
+                Assert.True(act.References.Count != 0, "Actual references is empty");
+                Assert.True(act.References.SetEquals(exp), 
+                    "Actual references != expected references act.references \n\t" + 
+                    $"Actual ref: \n\t\tType @{act.References.GetType()} \n\t\tCount @{act.References.Count}, \n\t\tFirst element @{act.References.GetEnumerator().Current}\n\t" +
+                    $"Expected ref: \n\t\tType @{exp.GetType()} \n\t\tCount @{exp.Count}, \n\t\tFirst element @{exp.GetEnumerator().Current.ToString()}");
+            }
         }
 
         protected virtual void Dispose(bool disposing)

@@ -1,5 +1,5 @@
+/*
 using Interfaces;
-
 namespace LitExplore.Entity;
 
 public class FilterRepository : IRepository<IFilter>
@@ -35,3 +35,4 @@ public class FilterRepository : IRepository<IFilter>
         throw new NotImplementedException();
     }
 }
+*/

@@ -20,10 +20,14 @@ public class LitExploreContext : DbContext, ILitExploreContext
      
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var configuration = new ConfigurationBuilder().AddUserSecrets("9c0d427e-d138-4993-8a77-66fee59e666f")
+        // Commented out as it fucks test
+        /*
+        var configuration = new ConfigurationBuilder()
+            .AddUserSecrets("9c0d427e-d138-4993-8a77-66fee59e666f")
             .Build();
             
         optionsBuilder.UseSqlServer(configuration.GetConnectionString("LitExplore"));
+        */
     }
     
 

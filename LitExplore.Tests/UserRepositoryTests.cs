@@ -5,7 +5,7 @@ using LitExplore.Entity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-
+/*
 namespace LitExplore.Tests
 { 
   // In memory testing of publication repository
@@ -55,3 +55,4 @@ namespace LitExplore.Tests
     }
   }
 }
+*/
