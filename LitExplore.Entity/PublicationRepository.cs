@@ -53,7 +53,7 @@ namespace LitExplore.Entity
         {
             var pub =  
                 from p in _context.Publications
-                where p.Title != null && p.Title.Equals(pubTitle)
+                where p.Title != null && p.Title.Equals(pubTitle) // why ? Title should not be null in the DB If it is Pub doesnt exists should return NotFound
                 select new PublicationDto(
                              p.Title,
                              p.Author,
@@ -61,7 +61,7 @@ namespace LitExplore.Entity
                              p.Publisher,
                              p.Pages,
                              p.Edition,
-                             p.References.Select(r => new ReferenceDto(r.Title)).ToHashSet()
+                             p.References.Select(r => new ReferenceDto(r.Title)).ToHashSet() // This fails because it needs to be fetched from _context.References
                 );
             return await pub.FirstOrDefaultAsync();
         }

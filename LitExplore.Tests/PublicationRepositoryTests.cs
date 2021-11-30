@@ -82,7 +82,7 @@ namespace LitExplore.Tests
         {
             PublicationDto? act = await _repository.ReadAsync("Test pub 1");
             
-                Assert.NotNull(act); // Why not assert it since this is test and should be false
+                Assert.NotNull(act); // Why not assert it since this is test and should be True
                 // not null at this point :))
                 Assert.Equal("Test pub 1", act.Title);
                 Assert.Equal("David", act.Author);
