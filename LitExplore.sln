@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitExplore.Entity", "LitExp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{A0B4C01B-C928-49B0-905A-6D3D71FAFC86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Graph\Graph.csproj", "{EF0BC643-0E75-4FF4-B496-C649C1254775}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,5 +88,17 @@ Global
 		{A0B4C01B-C928-49B0-905A-6D3D71FAFC86}.Release|x64.Build.0 = Release|Any CPU
 		{A0B4C01B-C928-49B0-905A-6D3D71FAFC86}.Release|x86.ActiveCfg = Release|Any CPU
 		{A0B4C01B-C928-49B0-905A-6D3D71FAFC86}.Release|x86.Build.0 = Release|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Debug|x64.Build.0 = Debug|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Debug|x86.Build.0 = Debug|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Release|x64.ActiveCfg = Release|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Release|x64.Build.0 = Release|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Release|x86.ActiveCfg = Release|Any CPU
+		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
