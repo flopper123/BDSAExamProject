@@ -113,14 +113,16 @@ namespace LitExplore.Tests
             
             Assert.Equal(3, act.Count); // Check that we got the right amount of Publications
 
-            List<Publication> pub1 = await _context.Publications
+            /*List<Publication> pub1 = await _context.Publications 
                 .Select(p => p)
-                .Where(p=> p.Title == act.Select(publicationDto => publicationDto.Title)
-                    .FirstOrDefault()).ToListAsync();
-;
+                .Where(p=> act.Any(f => f.Title == p.Title)
+                    ).ToListAsync(); // TO:DO Find out how to fetch the  List of pubs in linQ.. // TO:DO SHOULD BE DELETED MAYBE MOST SURELY..
+;           */
+            
+            
             foreach (PublicationDto dto in act)
             {
-                Publication? expected = pub1.Find(p => p?.Title == dto.Title);
+                Publication? expected = await _context.Publications.FindAsync(dto.Title); // Find the DB rep to test upon.
                 Assert.NotNull(expected); // check that it found it.
 
                 Debug.Assert(expected != null, nameof(expected) + " != null"); // For deeper errors. 

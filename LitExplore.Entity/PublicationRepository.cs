@@ -1,4 +1,6 @@
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace LitExplore.Entity
 {
@@ -93,13 +95,26 @@ namespace LitExplore.Entity
         // Read all publications async
         public async Task<IReadOnlyCollection<PublicationDto>> ReadAsync() // Not so async HMM??
         {
-            throw new NotImplementedException();
+            return _context.Publications.Select(p => new PublicationDto
+            {
+                Title = p.Title,
+                Author = p.Author,
+                Edition = p.Edition,
+                Pages = p.Pages,
+                Publisher = p.Publisher,
+                Year = p.Year,
+                References = p.References.Select(r => new ReferenceDto // This could be await GetRefDtoAsync(p)
+                {
+                    Title = r.Title
+                }).ToHashSet()
+
+            }).ToList().AsReadOnly();
         }
 
 
         // input: Publication 
         // output: All references for the given publication as an async enumerable
-        private async IAsyncEnumerable<ReferenceDto> GetRefDtoAsync(Publication pub)
+        private async IAsyncEnumerable<ReferenceDto> GetRefDtoAsync(Publication pub) // This might actually be a way to get references async. such that we can await in the constrution.
         {
             // search for matching reference in publication dbset
             Dictionary<string, Reference> refToPub =
