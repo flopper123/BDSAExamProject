@@ -149,7 +149,22 @@ namespace LitExplore.Entity
         // Modify existing publication
         public async Task<Status> UpdateAsync(PublicationUpdateDto publication)
         {
-            throw new NotImplementedException();
+            Publication? toUpdate = await _context.Publications.FindAsync(publication.Title);
+
+            if (toUpdate is null)
+            {
+                return Status.NotFound;
+            } 
+            
+            toUpdate.Author = publication.Author;
+            toUpdate.Edition = publication.Edition;
+            toUpdate.Pages = publication.Pages;
+            toUpdate.Publisher = publication.Publisher;
+            //toUpdate.References = null;  // Need to check if new references has been made and add them to the DB if it has.
+            toUpdate.Year = publication.Year;
+
+            var res = await _context.SaveChangesAsync();
+            return Status.Updated; // TO:DO Handle Errors. Handled one already :D
         }
 
         public async Task<Status> DeleteAsync(string pubTitle)
