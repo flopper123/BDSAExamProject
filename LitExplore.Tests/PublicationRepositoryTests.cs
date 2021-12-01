@@ -1,6 +1,8 @@
 using System.Reflection.PortableExecutable;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using LitExplore.Core;
 using LitExplore.Entity;
@@ -103,7 +105,36 @@ namespace LitExplore.Tests
                     $"Expected ref: \n\t\tType @{exp.GetType()} \n\t\tCount @{exp.Count}, \n\t\tFirst element @{exp.GetEnumerator().Current.ToString()}"); // Dont know what magic but this makes the test fail not the assertion but something. */
             
         }
-        
+
+        [Fact]
+        public async Task ReadAsync_Returns_ReadOnlyCollection_Of_PublicationDto()
+        {
+            var act = await _repository.ReadAsync();
+            
+            Assert.Equal(3, act.Count); // Check that we got the right amount of Publications
+
+            List<Publication> pub1 = await _context.Publications
+                .Select(p => p)
+                .Where(p=> p.Title == act.Select(publicationDto => publicationDto.Title)
+                    .FirstOrDefault()).ToListAsync();
+;
+            foreach (PublicationDto dto in act)
+            {
+                Publication? expected = pub1.Find(p => p?.Title == dto.Title);
+                Assert.NotNull(expected); // check that it found it.
+
+                Debug.Assert(expected != null, nameof(expected) + " != null"); // For deeper errors. 
+                Assert.Equal(expected.Title, dto.Title);
+                Assert.Equal(expected.Author, dto.Author);
+                Assert.Equal(expected.Edition, dto.Edition);
+                Assert.Equal(expected.Pages, dto.Pages);
+                Assert.Equal(expected.Publisher, dto.Publisher);
+                Assert.Equal(expected.Year, dto.Year);
+                
+                // Do somehing to check the references.
+                //TO:DO check for references.
+            }
+        }
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
