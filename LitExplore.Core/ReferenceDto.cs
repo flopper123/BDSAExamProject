@@ -2,10 +2,14 @@
 
 namespace LitExplore.Core
 {
-    public record ReferenceDto(string? title);
+    public record ReferenceDto
+    {
+        public string Title { get; init; } = null!;
+    };
 
 
-    public record ReferenceCreateDto
+
+public record ReferenceCreateDto
     {
         [Required] public string? Title { get; init; }
 

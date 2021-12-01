@@ -1,13 +1,16 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace LitExplore.Entity;
 
 public class Publication
 {
+    public int Id { get; set; }
+    
     [Required]
     [Key] // This actually tells that this is the key and not Id.
-    public string? Title { get; set; }
+    public string Title { get; set; } = null!;
     [StringLength(128)]
     public string? Author { get; set; }
     [Range(500, 2200)]
@@ -20,7 +23,7 @@ public class Publication
     public int? Pages { get; set; } = 0;
     public int? Edition { get; set; } = 1;
 
-    [Required]
-    public ICollection<Reference> References { get; set; } = new List<Reference>();
+    //[InverseProperty("Title")]
+    public ICollection<Reference> References { get; set; } = null!;
 
 }

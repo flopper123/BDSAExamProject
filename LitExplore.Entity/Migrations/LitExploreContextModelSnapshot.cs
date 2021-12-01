@@ -31,18 +31,18 @@ namespace LitExplore.Entity.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<int>("Edition")
+                    b.Property<int?>("Edition")
                         .HasColumnType("int");
 
-                    b.Property<int>("Pages")
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Pages")
                         .HasColumnType("int");
 
                     b.Property<string>("Publisher")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int?>("Type")
-                        .HasColumnType("int");
 
                     b.Property<int?>("Year")
                         .HasColumnType("int");
@@ -57,22 +57,13 @@ namespace LitExplore.Entity.Migrations
 
             modelBuilder.Entity("LitExplore.Entity.Reference", b =>
                 {
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("PublicationTitle")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PublicationTitle");
+                    b.HasKey("Title");
 
                     b.HasIndex("Title")
                         .IsUnique();
@@ -93,16 +84,34 @@ namespace LitExplore.Entity.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("LitExplore.Entity.Reference", b =>
+            modelBuilder.Entity("PublicationReference", b =>
                 {
-                    b.HasOne("LitExplore.Entity.Publication", null)
-                        .WithMany("References")
-                        .HasForeignKey("PublicationTitle");
+                    b.Property<string>("PublicationsTitle")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ReferencesTitle")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("PublicationsTitle", "ReferencesTitle");
+
+                    b.HasIndex("ReferencesTitle");
+
+                    b.ToTable("PublicationReference");
                 });
 
-            modelBuilder.Entity("LitExplore.Entity.Publication", b =>
+            modelBuilder.Entity("PublicationReference", b =>
                 {
-                    b.Navigation("References");
+                    b.HasOne("LitExplore.Entity.Publication", null)
+                        .WithMany()
+                        .HasForeignKey("PublicationsTitle")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LitExplore.Entity.Reference", null)
+                        .WithMany()
+                        .HasForeignKey("ReferencesTitle")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

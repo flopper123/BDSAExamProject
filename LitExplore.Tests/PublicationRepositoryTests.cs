@@ -62,7 +62,7 @@ namespace LitExplore.Tests
                 Pages = 10,
                 Publisher = "Someone",
                 Year = 1983,
-                References = new HashSet<ReferenceDto> {new ReferenceDto( "Alabama Show Down")}
+                References = new HashSet<ReferenceDto> {new ReferenceDto{Title = "Alabama Show Down"}}
             };
 
             PublicationDto created = await _repository.CreateAsync(publication);
@@ -74,7 +74,7 @@ namespace LitExplore.Tests
             Assert.Equal(10, created.Pages);
             Assert.Equal("Someone", created.Publisher);
             Assert.Equal(1983, created.Year);
-            Assert.True(created.References.SetEquals(new [] {new ReferenceDto("Alabama Show Down")}));
+            Assert.True(created.References.SetEquals(new [] {new ReferenceDto{Title = "Alabama Show Down"}}));
         }
         
         [Fact]
@@ -90,9 +90,12 @@ namespace LitExplore.Tests
                 Assert.Equal(1, act.Pages);
             
                 ISet<ReferenceDto> exp = new HashSet<ReferenceDto>();
-                exp.Add(new ReferenceDto("Test pub 2"));
+                exp.Add(new ReferenceDto{Title = "Test pub 2"});
                 Assert.True(exp.Count != 0, "Expected references is empty");
                 Assert.True(act.References.Count != 0, "Actual references is empty");
+
+                var boo = act.References.SetEquals(exp);
+                
                 Assert.True(act.References.SetEquals(exp), 
                     "Actual references != expected references act.references \n\t" + 
                     $"Actual ref: \n\t\tType @{act.References.GetType()} \n\t\tCount @{act.References.Count}, \n\t\tFirst element @{act.References.GetEnumerator().Current}\n\t" +

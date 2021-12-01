@@ -2,13 +2,20 @@
 
 namespace LitExplore.Core
 {
-public record PublicationDto(
-    string? Title, string? Author, 
-    int? Year, string? Publisher, 
-    int? Pages, int? Edition, ISet<ReferenceDto> References);
+    public record PublicationDto
+    {
+        public string Title { get; init; } = null!; // The null! tells the compiler that this wont ever be null.
+        public string? Author { get; init; }
+        public int? Year { get; init; }
+        public string? Publisher { get; init; }
+        
+        public int? Pages { get; init; } 
+        public int? Edition { get; init; }
+        public ISet<ReferenceDto> References { get; init; }
+    }
 
 
-public record PublicationCreateDto
+    public record PublicationCreateDto
 {
     [Required] public string? Title { get; init; }
     
