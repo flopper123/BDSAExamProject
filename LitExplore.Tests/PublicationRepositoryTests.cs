@@ -137,6 +137,41 @@ namespace LitExplore.Tests
                 //TO:DO check for references.
             }
         }
+
+        [Fact]
+        public async Task UpdateAsync_GivenUpdateDto_Returns_Updated()
+        {
+            PublicationUpdateDto updateDto = new PublicationUpdateDto // This will be set more fully when program runs.
+            {
+                Title = "Test Pub 1",
+                Author = "Updated",
+                Edition = 1,
+                Id = 1, // Yikes this should not be here but a change requires a new migration and a DB update. TO:DO Fix Later.
+                Pages = 1,
+                Publisher = null,
+                References = new HashSet<ReferenceDto> {new ReferenceDto {Title = "Test Pub 2"}},
+                Year = 2021
+            };
+
+            var result = _repository.UpdateAsync(updateDto);
+
+            var expected = await _context.Publications.FindAsync(updateDto.Title);
+            
+            Assert.NotNull(expected); // check that it found it.
+
+            Debug.Assert(expected != null, nameof(expected) + " != null"); // For deeper errors. 
+            Assert.Equal(expected.Title, updateDto.Title);
+            Assert.Equal(expected.Author, updateDto.Author);
+            Assert.Equal(expected.Edition, updateDto.Edition);
+            Assert.Equal(expected.Pages, updateDto.Pages);
+            Assert.Equal(expected.Publisher, updateDto.Publisher);
+            Assert.Equal(expected.Year, updateDto.Year);
+                
+            // Do somehing to check the references.
+            //TO:DO check for references.
+
+
+        }
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
