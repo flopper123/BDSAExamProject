@@ -143,7 +143,7 @@ namespace LitExplore.Tests
         {
             PublicationUpdateDto updateDto = new PublicationUpdateDto // This will be set more fully when program runs.
             {
-                Title = "Test Pub 1",
+                Title = "Test pub 1",
                 Author = "Updated",
                 Edition = 1,
                 Id = 1, // Yikes this should not be here but a change requires a new migration and a DB update. TO:DO Fix Later.
@@ -155,7 +155,9 @@ namespace LitExplore.Tests
 
             var result = _repository.UpdateAsync(updateDto);
 
-            var expected = await _context.Publications.FindAsync(updateDto.Title);
+            var expected = await _context.Publications.FindAsync(updateDto.Title); 
+            // TO:DO Might think about how strictly we check title since
+            // "Test PUB" is not equal to "test pub" 
             
             Assert.NotNull(expected); // check that it found it.
 
@@ -167,10 +169,17 @@ namespace LitExplore.Tests
             Assert.Equal(expected.Publisher, updateDto.Publisher);
             Assert.Equal(expected.Year, updateDto.Year);
                 
-            // Do somehing to check the references.
+            // Do something to check the references.
             //TO:DO check for references.
 
 
+            // TO:DO Might want to test return as well ??
+        }
+
+        [Fact]
+        public async Task DeleteAsync_Given_Title_Returns_Deleted()
+        {
+            //TO:DO Implement test Should be easy Will implement this the next time I look at it if its still here -- Mads.
         }
         protected virtual void Dispose(bool disposing)
         {
