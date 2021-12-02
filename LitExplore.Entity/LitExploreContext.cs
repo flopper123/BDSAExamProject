@@ -12,11 +12,11 @@ namespace LitExplore.Entity;
 public class LitExploreContext : DbContext, ILitExploreContext
 {
     public DbSet<Reference> References => Set<Reference>();
-    public DbSet<User> Users => Set<User>();
     public DbSet<Publication> Publications => Set<Publication>();
 
     public LitExploreContext(DbContextOptions<LitExploreContext> options) : base(options) { }
 
+    // TO:DO consider cleaning
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<Publication>().HasKey(p => p.Title);

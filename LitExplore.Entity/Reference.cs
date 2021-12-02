@@ -5,12 +5,9 @@ namespace LitExplore.Entity;
 
 public class Reference
 {
-    public int Id { get; set; }
-    
-    //[Required]
-    //[ForeignKey("Title")]
     [Key]
-    public string Title { get; set; }
-    
-    public ICollection<Publication> Publications { get; set; }
+    [Required]
+    public string Title { get; set; } = null!;
+
+    public ICollection<Publication> Publications { get; set; } = null!;
 }

@@ -9,7 +9,7 @@ using LitExplore.Entity;
 using Xunit;
 
 namespace LitExplore.Tests
-{
+{   
     // In memory testing of publication repository
     public class PublicationRepositoryTests : IDisposable
     {
@@ -44,12 +44,11 @@ namespace LitExplore.Tests
                 ref1, ref2     
             );
 
-            Publication pub1 = new Publication{ Title = "Test pub 1", Author ="David", 
-                                                Year = 2021, Pages = 1, References = new List<Reference> {ref2}};
+            Publication pub1 = new Publication{ Title = "Test pub 1", References = new List<Reference> {ref2}};
             context.Publications.AddRange(
               pub1,
-              new Publication { Title = "Test pub 2", Author = "Chris", Year = 2021, Pages = 1, References = new List<Reference>{ ref1 } },
-              new Publication { Title = "Test pub 3", Author = "Mads", Year = 2021, Pages = 1, References = new List<Reference> { ref1, ref2 } }
+              new Publication { Title = "Test pub 2", References = new List<Reference>{ ref1 } },
+              new Publication { Title = "Test pub 3", References = new List<Reference> { ref1, ref2 } }
             );
         }
 
@@ -59,11 +58,6 @@ namespace LitExplore.Tests
             PublicationCreateDto publication = new PublicationCreateDto
             {
                 Title = "My Little Pony",
-                Author = "Bonnie Zacherle",
-                Edition = 1,
-                Pages = 10,
-                Publisher = "Someone",
-                Year = 1983,
                 References = new HashSet<ReferenceDto> {new ReferenceDto{Title = "Alabama Show Down"}}
             };
 
@@ -71,39 +65,30 @@ namespace LitExplore.Tests
             
             Assert.NotNull(created);
             Assert.Equal("My Little Pony", created.Title);
-            Assert.Equal("Bonnie Zacherle", created.Author);
-            Assert.Equal(1, created.Edition);
-            Assert.Equal(10, created.Pages);
-            Assert.Equal("Someone", created.Publisher);
-            Assert.Equal(1983, created.Year);
-            Assert.True(created.References.SetEquals(new [] {new ReferenceDto{Title = "Alabama Show Down"}}));
+            Assert.True(created.References.Contains(new ReferenceDto{Title = "Alabama Show Down"}));        
         }
         
         [Fact]
         public async Task ReadAsync_given_Title_exists_returns_PublicationDto() 
         {
+            // Arrange
+            ReferenceDto exp = new ReferenceDto{Title = "Test pub 2"};
+
+            // Act
             PublicationDto? act = await _repository.ReadAsync("Test pub 1");
             
-                Assert.NotNull(act); // Why not assert it since this is test and should be True
-                // not null at this point :))
-                Assert.Equal("Test pub 1", act.Title);
-                Assert.Equal("David", act.Author);
-                Assert.Equal(2021, act.Year);
-                Assert.Equal(1, act.Pages);
+            // Assert
             
-                ISet<ReferenceDto> exp = new HashSet<ReferenceDto>();
-                exp.Add(new ReferenceDto{Title = "Test pub 2"});
-                Assert.True(exp.Count != 0, "Expected references is empty");
-                Assert.True(act.References.Count != 0, "Actual references is empty");
+            Assert.NotNull(act); // Why not assert it since this is test and should be True
+            // not null at this point :))
+            Assert.Equal("Test pub 1", act.Title);
+            Assert.True(act.References.Count != 0, "Actual references is empty");            
 
-                var boo = act.References.SetEquals(exp); // This evaluates to True.
-                
-                //This nullpointer Ex.. ??
-                /*Assert.True(act.References.SetEquals(exp), 
-                    "Actual references != expected references act.references \n\t" + 
-                    $"Actual ref: \n\t\tType @{act.References.GetType()} \n\t\tCount @{act.References.Count}, \n\t\tFirst element @{act.References.GetEnumerator().Current}\n\t" +
-                    $"Expected ref: \n\t\tType @{exp.GetType()} \n\t\tCount @{exp.Count}, \n\t\tFirst element @{exp.GetEnumerator().Current.ToString()}"); // Dont know what magic but this makes the test fail not the assertion but something. */
-            
+            //This nullpointer Ex.. ??
+            Assert.True(act.References.Contains(exp), 
+                "Actual references != expected references act.references \n\t" + 
+                $"Actual ref: \n\t\tType @{act.References.GetType()} \n\t\tCount @{act.References.Count}, \n\t\tFirst element @{act.References.GetEnumerator().Current}\n\t" +
+                $"Expected ref: \n\t\tType @{exp.GetType()}, \n\t\t Expected@{exp.ToString()}");            
         }
 
         [Fact]
@@ -127,12 +112,6 @@ namespace LitExplore.Tests
 
                 Debug.Assert(expected != null, nameof(expected) + " != null"); // For deeper errors. 
                 Assert.Equal(expected.Title, dto.Title);
-                Assert.Equal(expected.Author, dto.Author);
-                Assert.Equal(expected.Edition, dto.Edition);
-                Assert.Equal(expected.Pages, dto.Pages);
-                Assert.Equal(expected.Publisher, dto.Publisher);
-                Assert.Equal(expected.Year, dto.Year);
-                
                 // Do somehing to check the references.
                 //TO:DO check for references.
             }
@@ -144,13 +123,7 @@ namespace LitExplore.Tests
             PublicationUpdateDto updateDto = new PublicationUpdateDto // This will be set more fully when program runs.
             {
                 Title = "Test pub 1",
-                Author = "Updated",
-                Edition = 1,
-                Id = 1, // Yikes this should not be here but a change requires a new migration and a DB update. TO:DO Fix Later.
-                Pages = 1,
-                Publisher = null,
                 References = new HashSet<ReferenceDto> {new ReferenceDto {Title = "Test Pub 2"}},
-                Year = 2021
             };
 
             var result = _repository.UpdateAsync(updateDto);
@@ -163,11 +136,6 @@ namespace LitExplore.Tests
 
             Debug.Assert(expected != null, nameof(expected) + " != null"); // For deeper errors. 
             Assert.Equal(expected.Title, updateDto.Title);
-            Assert.Equal(expected.Author, updateDto.Author);
-            Assert.Equal(expected.Edition, updateDto.Edition);
-            Assert.Equal(expected.Pages, updateDto.Pages);
-            Assert.Equal(expected.Publisher, updateDto.Publisher);
-            Assert.Equal(expected.Year, updateDto.Year);
                 
             // Do something to check the references.
             //TO:DO check for references.
@@ -181,6 +149,7 @@ namespace LitExplore.Tests
         {
             //TO:DO Implement test Should be easy Will implement this the next time I look at it if its still here -- Mads.
         }
+        
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
