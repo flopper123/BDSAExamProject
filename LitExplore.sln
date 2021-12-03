@@ -88,6 +88,7 @@ Global
 		{A0B4C01B-C928-49B0-905A-6D3D71FAFC86}.Release|x64.Build.0 = Release|Any CPU
 		{A0B4C01B-C928-49B0-905A-6D3D71FAFC86}.Release|x86.ActiveCfg = Release|Any CPU
 		{A0B4C01B-C928-49B0-905A-6D3D71FAFC86}.Release|x86.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -100,5 +101,7 @@ Global
 		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Release|x64.Build.0 = Release|Any CPU
 		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Release|x86.ActiveCfg = Release|Any CPU
 		{EF0BC643-0E75-4FF4-B496-C649C1254775}.Release|x86.Build.0 = Release|Any CPU
+=======
+>>>>>>> master
 	EndGlobalSection
 EndGlobal

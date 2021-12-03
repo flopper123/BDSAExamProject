@@ -1,4 +1,6 @@
-namespace Interfaces;
+
+namespace LitExplore.Core.Graph;
+
 public interface IGraph<T>
 {
     int NumberOfVertices();

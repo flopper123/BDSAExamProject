@@ -4,7 +4,6 @@ namespace LitExplore.Entity
 {
   public interface ILitExploreContext : IDisposable
   {
-    DbSet<User> Users{ get; }
     DbSet<Reference> References { get; }
     DbSet<Publication> Publications { get; }
     int SaveChanges();

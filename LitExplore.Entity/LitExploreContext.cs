@@ -12,28 +12,27 @@ namespace LitExplore.Entity;
 public class LitExploreContext : DbContext, ILitExploreContext
 {
     public DbSet<Reference> References => Set<Reference>();
-    public DbSet<User> Users => Set<User>();
     public DbSet<Publication> Publications => Set<Publication>();
 
     public LitExploreContext(DbContextOptions<LitExploreContext> options) : base(options) { }
 
-     
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var configuration = new ConfigurationBuilder().AddUserSecrets("9c0d427e-d138-4993-8a77-66fee59e666f")
-            .Build();
-            
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("LitExplore"));
-    }
-    
-
+    // TO:DO consider cleaning
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<Publication>().HasKey(p => p.Title);
+        builder.Entity<Publication>().Property(p => p.Title).IsRequired();
+
+        builder.Entity<Publication>()
+            .HasMany<Reference>(p => p.References)
+            .WithMany(r => r.Publications);
+        
         builder.Entity<Publication>()
             .HasIndex(t => t.Title)
             .IsUnique();
         builder.Entity<Reference>()
             .HasIndex(r => r.Title)
             .IsUnique();
+
+        //builder.Entity<Publication>().HasMany<Reference>(r=>r.References);
     }
 }
