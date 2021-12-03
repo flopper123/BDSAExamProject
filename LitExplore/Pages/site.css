@@ -1,0 +1,11 @@
+
+#blazor-error-ui {
+  @apply bg-black;
+}
+
+#blazor-error-ui .dismiss {
+cursor: pointer;
+position: absolute;
+right: 0.75rem;
+top: 0.5rem;
+}
