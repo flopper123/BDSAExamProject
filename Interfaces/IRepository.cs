@@ -1,5 +1,5 @@
 namespace Interfaces;
-public interface IRepository<T> : IDisposable where T : IDable
+public interface IRepository<T> where T : IDable
 {
     public bool Create(T Created);
     public T Read(int Id);
