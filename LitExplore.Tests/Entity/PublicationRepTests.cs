@@ -60,7 +60,6 @@ namespace LitExplore.Tests.Entity
             // Arrange
             // The reference representation of this DTO is being seeded to the db in seed()
             ReferenceDto exp = new ReferenceDto{ Title = "Test pub 2" };
-
             // Act
             PublicationDto? act = await repository.ReadAsync("Test pub 1");
             
