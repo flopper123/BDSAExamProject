@@ -10,8 +10,8 @@ public record ReferenceDto
 public record ReferenceCreateDto
 {
     [Key]
-    [Required] 
-    public string? Title { get; init; }
+    [Required]
+    public string Title { get; init; } = null!;
 
 
     public override string ToString()

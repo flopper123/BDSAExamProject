@@ -12,6 +12,5 @@ public abstract class AbsRepository : IDisposable
     // Any extending classes must contain a matching constructor for tests
     // reflection (AbsRepositoryTest.cs) to work correct.
     public AbsRepository(ILitExploreContext context) => _context = context;
-
     public abstract void Dispose();
 }
