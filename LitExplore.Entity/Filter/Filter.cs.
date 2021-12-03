@@ -1,3 +1,4 @@
+/*
 namespace LitExplore.Entity.Filter;
 
 interface IFilter<T>
@@ -27,3 +28,4 @@ public abstract FilterDecoration<T> : Filter<T> {
 
     public override virtual IEnumerable<T> Apply(IEnumerable<T> )
 }
+*/

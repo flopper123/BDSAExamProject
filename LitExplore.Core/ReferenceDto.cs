@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace LitExplore.Core;
+﻿namespace LitExplore.Core;
 
 public record ReferenceDto
 {
@@ -12,7 +10,6 @@ public record ReferenceCreateDto
     [Key]
     [Required]
     public string Title { get; init; } = null!;
-
 
     public override string ToString()
     {

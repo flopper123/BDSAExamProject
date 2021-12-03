@@ -9,7 +9,7 @@ public class Publication
     [Key]
     [Required]
     public string Title { get; set; } = null!;
-    
+
     // TO:DO test inverse property
     //[InverseProperty("Title")]
     public ICollection<Reference> References { get; set; } = null!;
