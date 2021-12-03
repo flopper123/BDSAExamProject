@@ -5,6 +5,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="npm install" />
     <Exec Command="npm run buildcss" />
   </Target>
 
