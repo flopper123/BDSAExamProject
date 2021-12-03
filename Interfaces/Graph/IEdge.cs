@@ -1,6 +1,6 @@
 namespace Interfaces;
-public interface IEdge
+public interface IEdge<T>
 {
-    public IVertex GetFrom();
-    public IVertex GetTo();
+    public IVertex<T> GetFrom();
+    public IVertex<T> GetTo();
 }

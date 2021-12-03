@@ -1,4 +1,6 @@
+namespace Interfaces;
 public interface IPublication : IDable
 {
-    public IEnumarable<IReference> GetRefs();
+    public string Title {get; set; }
+    public IEnumerable<IReference> GetRefs();
 }
