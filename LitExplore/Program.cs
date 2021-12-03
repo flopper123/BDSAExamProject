@@ -1,5 +1,5 @@
 ﻿using System;
-using Graph;
+using LitExplore.Core.Graph;
 using LitExplore.Entity;
 using Interfaces;
 

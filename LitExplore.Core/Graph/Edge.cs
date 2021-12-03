@@ -2,22 +2,22 @@
 
 namespace LitExplore.Core.Graph;
 
-public class Edge : IEdge<Publication>
+public class Edge : IEdge<PublicationDto,string>
 {
-    private IVertex<Publication> From;
-    private IVertex<Publication> To;
+    private IVertex<PublicationDto,string> From;
+    private IVertex<PublicationDto,string> To;
 
-    public Edge(IVertex<Publication> from, IVertex<Publication> to)
+    public Edge(IVertex<PublicationDto,string> from, IVertex<PublicationDto,string> to)
     {
         From = from;
         To = to;
     }
-    public IVertex<Publication> GetFrom()
+    public IVertex<PublicationDto,string> GetFrom()
     {
         return From;
     }
 
-    public IVertex<Publication> GetTo()
+    public IVertex<PublicationDto,string> GetTo()
     {
         return To;
     }

@@ -1,7 +1,7 @@
 namespace LitExplore.Core.Graph;
 
-public interface IEdge<T>
+public interface IEdge<T,K>
 {
-    public IVertex<T> GetFrom();
-    public IVertex<T> GetTo();
+    public IVertex<T,K> GetFrom();
+    public IVertex<T,K> GetTo();
 }
