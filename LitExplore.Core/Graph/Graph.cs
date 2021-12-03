@@ -2,49 +2,67 @@ using System.Collections.Generic;
 
 namespace LitExplore.Core.Graph;
 
-// TODO: Fix IVertex etc,string
 
 public class PublicationGraph : IGraph<PublicationDto, string>
 {
-    private List<IVertex<PublicationDto, string>> Vertices;
+    private IDictionary<string, IVertex<PublicationDto, string>> Vertices;
     private IDictionary<string, List<IEdge<PublicationDto, string>>> Edges;
     public PublicationGraph()
     {
-        Vertices = new List<IVertex<PublicationDto, string>>();
+        Vertices = new Dictionary<string, IVertex<PublicationDto, string>>();
         Edges = new Dictionary<string, List<IEdge<PublicationDto, string>>>();
     }
     public bool AddVertex(IVertex<PublicationDto, string> vertex)
     {
-        if (vertex.Id == "" ||
-            vertex.Id == null ||
-            Vertices.FirstOrDefault(v => v.Id == vertex.Id) != null) return false;
-        Vertices.Add(vertex);
+
+        if (Vertices.ContainsKey(vertex.Id) ||
+            vertex.Data.Title == null ||
+            vertex.Id == "" ||
+            vertex.Id == null)
+        {
+            return false;
+        }
+        Vertices.Add(vertex.Id, vertex);
         Edges.Add(vertex.Id, new List<IEdge<PublicationDto, string>>());
         return true;
     }
+
     //TO:DO burde nok ikke bare retrune bool
     public bool AddEdge(IVertex<PublicationDto, string> from, IVertex<PublicationDto, string> to)
     {
-        if (from.Equals(to)) return false;
-        var _from = Vertices.FirstOrDefault(v => v.Id == from.Id);
-        if (from == null) return false;
-        else if (!AddVertex(from)) return false;
-        else _from = from;
-        var _to = Vertices.FirstOrDefault(v => v.Id == to.Id);
-        if (to == null) return false;
-        else if (!AddVertex(to)) return false;
-        else _to = to;
+        // Does vertices exist in table
+        if (from.Id.Equals(to.Id))
+        {
+            return false;
+        }
+        if (from == null || !Vertices.ContainsKey(from.Id))
+        {
+            if (!AddVertex(from)) return false;
+        }
+        if (to == null || !Vertices.ContainsKey(to.Id))
+        {
+            if (!AddVertex(to)) return false;
+        }
+        var _from = Vertices[from.Id];
+        var _to = Vertices[to.Id];
 
         if (Edges.Keys.Contains(_to.Id))
         {
             Edges[_from.Id].Add(new Edge(_from, _to));
         }
-        else throw new NotImplementedException();//TO:DO
+        else
+        {
+            throw new NotImplementedException();//TO:DO
+        }
+
         if (Edges.Keys.Contains(_to.Id))
         {
             Edges[_to.Id].Add(new Edge(_from, _to));
         }
-        else throw new NotImplementedException();//TO:DO
+        else
+        {
+            throw new NotImplementedException();
+        }
         return true;
     }
     /// <summary>
@@ -56,10 +74,10 @@ public class PublicationGraph : IGraph<PublicationDto, string>
     /// <returns></returns>
     public bool AddEdge(string fromId, string toId)
     {
-        var from = Vertices.FirstOrDefault(v => v.Id == fromId);
-        var to = Vertices.FirstOrDefault(v => v.Id == toId);
-        if (from == null) return false;
-        if (to == null) return false;
+        if (!Vertices.ContainsKey(fromId)) return false;
+        if (!Vertices.ContainsKey(toId)) return false;
+        var from = Vertices[fromId];
+        var to = Vertices[toId];
         if (Edges.Keys.Contains(fromId))
         {
             Edges[fromId].Add(new Edge(from, to));
@@ -74,8 +92,8 @@ public class PublicationGraph : IGraph<PublicationDto, string>
     }
     public IEnumerable<IVertex<PublicationDto, string>> GetAdj(IVertex<PublicationDto, string> vertex)
     {
-        var _vertex = Vertices.FirstOrDefault(v => v.Id == vertex.Id);
-        if (_vertex == null) throw new NotImplementedException();//TO:DO
+        var _vertex = Vertices[vertex.Id];
+        //if (_vertex == null) throw new NotImplementedException();//TO:DO
         foreach (var edge in Edges[vertex.Id])
         {
             yield return edge.GetTo();
@@ -83,7 +101,7 @@ public class PublicationGraph : IGraph<PublicationDto, string>
     }
     public IEnumerable<IVertex<PublicationDto, string>> GetAdj(string vertexId)
     {
-        var _vertex = Vertices.FirstOrDefault(v => v.Id == vertexId);
+        var _vertex = Vertices[vertexId];
         if (_vertex == null) throw new NotImplementedException(); //TO:DO
         foreach (var edge in Edges[vertexId])
         {
@@ -143,7 +161,7 @@ public class PublicationGraph : IGraph<PublicationDto, string>
     {
         string s = "";
         s += NumberOfVertices() + " vertices, " + NumberOfEdges() + " edges \n";
-        foreach (var v in Vertices.Select(vet => vet.Id))
+        foreach (var v in Vertices.Keys)
         {
             s += v + ": ";
             foreach (var w in GetAdj(v))

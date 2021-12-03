@@ -72,7 +72,7 @@ public class GraphTests : IDisposable
     }
     [Fact]
     public void Inserts_1_Referance_Edge_With_addEdge_Id_Id_Increses_Number_Of_Edges_By_1()
-    {   
+    {
         _graph.AddVertex(new Vertex("T 1", new PublicationDto { Title = "T 1" }));
         _graph.AddVertex(new Vertex("T 2", new PublicationDto { Title = "T 2" }));
         var expected = 1;
@@ -121,18 +121,22 @@ public class GraphTests : IDisposable
     public void Vertex_Without_Connections_Is_Not_Connected_To_The_Graph()
     {
         graphSeedBig();
-        _graph.AddVertex(new Vertex("Publication 12",new PublicationDto{Title = "Publication 12"}));
+        _graph.AddVertex(new Vertex("Publication 12", new PublicationDto { Title = "Publication 12" }));
 
-        var acual = connected("Publication 0","Publication 12");
+        var acual = connected("Publication 0", "Publication 12");
 
-        Assert.False(acual,"Unconnected vertex seems to be connected");
+        Assert.False(acual, "Unconnected vertex seems to be connected");
     }
     //this is a simple algorithem and shuld not be used if degrees of seperation is wanted
-    private bool connected(string fromId, string toId) 
+    private bool connected(string fromId, string toId)
     {
-        var marked = new Dictionary<string,bool>(_graph.NumberOfVertices());
+        var marked = new Dictionary<string, bool>(_graph.NumberOfVertices());
         var adjs = new Stack<Vertex>();
-        adjs.Push(new Vertex("0", new PublicationDto()));
+        adjs.Push(new Vertex("Publication 0", new PublicationDto()));
+        for (var i = 0; i < _graph.NumberOfVertices(); i++)
+        {
+            marked.Add($"Publication {i}", false);
+        }
         while (adjs.Count > 0)
         {
             var v = adjs.Pop();
