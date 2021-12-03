@@ -13,28 +13,16 @@ namespace LitExplore.Entity.Migrations
                 columns: table => new
                 {
                     Title = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
                     Author = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     Year = table.Column<int>(type: "int", nullable: true),
+                    Type = table.Column<int>(type: "int", nullable: true),
                     Publisher = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Pages = table.Column<int>(type: "int", nullable: true),
-                    Edition = table.Column<int>(type: "int", nullable: true)
+                    Pages = table.Column<int>(type: "int", nullable: false),
+                    Edition = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Publications", x => x.Title);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "References",
-                columns: table => new
-                {
-                    Title = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_References", x => x.Title);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,39 +38,34 @@ namespace LitExplore.Entity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PublicationReference",
+                name: "References",
                 columns: table => new
                 {
-                    PublicationsTitle = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ReferencesTitle = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PublicationTitle = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PublicationReference", x => new { x.PublicationsTitle, x.ReferencesTitle });
+                    table.PrimaryKey("PK_References", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PublicationReference_Publications_PublicationsTitle",
-                        column: x => x.PublicationsTitle,
+                        name: "FK_References_Publications_PublicationTitle",
+                        column: x => x.PublicationTitle,
                         principalTable: "Publications",
-                        principalColumn: "Title",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PublicationReference_References_ReferencesTitle",
-                        column: x => x.ReferencesTitle,
-                        principalTable: "References",
-                        principalColumn: "Title",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Title");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PublicationReference_ReferencesTitle",
-                table: "PublicationReference",
-                column: "ReferencesTitle");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Publications_Title",
                 table: "Publications",
                 column: "Title",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_References_PublicationTitle",
+                table: "References",
+                column: "PublicationTitle");
 
             migrationBuilder.CreateIndex(
                 name: "IX_References_Title",
@@ -94,16 +77,13 @@ namespace LitExplore.Entity.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PublicationReference");
+                name: "References");
 
             migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Publications");
-
-            migrationBuilder.DropTable(
-                name: "References");
         }
     }
 }

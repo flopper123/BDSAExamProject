@@ -1,4 +1,4 @@
-﻿namespace LitExplore.Core;
+namespace LitExplore.Core;
 
 public interface IPublicationRepository
 {

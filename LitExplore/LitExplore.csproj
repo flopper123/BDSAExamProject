@@ -9,6 +9,12 @@
     <Exec Command="npm run buildcss" />
   </Target>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
+    <ProjectReference Include="..\LitExplore.Entity\LitExplore.Entity.csproj" />
+    <ProjectReference Include="..\Graph\Graph.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
