@@ -30,7 +30,7 @@ namespace LitExplore.Tests.Entity
 
             context.Publications.AddRange(
               pub1,
-              new Publication { Title = "Test pub 2", References = new List<Reference>{ ref1 } },
+              new Publication { Title = "Test pub 2", References = new List<Reference> { ref1 } },
               new Publication { Title = "Test pub 3", References = new List<Reference> { ref1, ref2 } }
             );
         }
@@ -42,7 +42,7 @@ namespace LitExplore.Tests.Entity
             PublicationCreateDto exp = new PublicationCreateDto
             {
                 Title = "My Little Pony",
-                References = new HashSet<ReferenceDto> {new ReferenceDto{Title = "Alabama Show Down"}}
+                References = new HashSet<ReferenceDto> { new ReferenceDto{Title = "Alabama Show Down"}}
             };
 
             // Act
@@ -59,8 +59,7 @@ namespace LitExplore.Tests.Entity
         {
             // Arrange
             // The reference representation of this DTO is being seeded to the db in seed()
-            ReferenceDto exp = new ReferenceDto{Title = "Test pub 2"};
-
+            ReferenceDto exp = new ReferenceDto{ Title = "Test pub 2" };
             // Act
             PublicationDto? act = await repository.ReadAsync("Test pub 1");
             
