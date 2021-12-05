@@ -3,16 +3,16 @@ using System.Collections.Generic;
 namespace LitExplore.Core.Graph;
 
 
-public class PublicationGraph : IGraph<PublicationDto, string>
+public class PublicationGraph : IGraph<string, PublicationDto>
 {
-    private IDictionary<string, IVertex<PublicationDto, string>> Vertices;
-    private IDictionary<string, List<IEdge<PublicationDto, string>>> Edges;
+    private IDictionary<string, IVertex<string, PublicationDto>> Vertices;
+    private IDictionary<string, List<IEdge<string, PublicationDto>>> Edges;
     public PublicationGraph()
     {
-        Vertices = new Dictionary<string, IVertex<PublicationDto, string>>();
-        Edges = new Dictionary<string, List<IEdge<PublicationDto, string>>>();
+        Vertices = new Dictionary<string, IVertex<string, PublicationDto>>();
+        Edges = new Dictionary<string, List<IEdge<string, PublicationDto>>>();
     }
-    public bool AddVertex(IVertex<PublicationDto, string> vertex)
+    public bool AddVertex(IVertex<string, PublicationDto> vertex)
     {
 
         if (Vertices.ContainsKey(vertex.Id) ||
@@ -23,12 +23,17 @@ public class PublicationGraph : IGraph<PublicationDto, string>
             return false;
         }
         Vertices.Add(vertex.Id, vertex);
-        Edges.Add(vertex.Id, new List<IEdge<PublicationDto, string>>());
+        Edges.Add(vertex.Id, new List<IEdge<string, PublicationDto>>());
         return true;
     }
-
+    /// <summary>
+    /// This adds an edge with the use of 2 Vertecies
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    /// <returns>bool</returns>
     //TO:DO burde nok ikke bare retrune bool
-    public bool AddEdge(IVertex<PublicationDto, string> from, IVertex<PublicationDto, string> to)
+    public bool AddEdge(IVertex<string, PublicationDto> from, IVertex<string, PublicationDto> to)
     {
         // Does vertices exist in table
         if (from.Id.Equals(to.Id))
@@ -37,27 +42,27 @@ public class PublicationGraph : IGraph<PublicationDto, string>
         }
         if (from == null || !Vertices.ContainsKey(from.Id))
         {
-            if (!AddVertex(from)) return false;
+            if (!AddVertex(from!)) return false;
         }
         if (to == null || !Vertices.ContainsKey(to.Id))
         {
-            if (!AddVertex(to)) return false;
+            if (!AddVertex(to!)) return false;
         }
-        var _from = Vertices[from.Id];
-        var _to = Vertices[to.Id];
+        var _from = Vertices[from!.Id];
+        var _to = Vertices[to!.Id];
 
         if (Edges.Keys.Contains(_to.Id))
         {
-            Edges[_from.Id].Add(new Edge(_from, _to));
+            Edges[_to.Id].Add(new PublicationEdge(_from, _to));
         }
         else
         {
             throw new NotImplementedException();//TO:DO
         }
 
-        if (Edges.Keys.Contains(_to.Id))
+        if (Edges.Keys.Contains(_from.Id))
         {
-            Edges[_to.Id].Add(new Edge(_from, _to));
+            Edges[_from.Id].Add(new PublicationEdge(_from, _to));
         }
         else
         {
@@ -66,7 +71,7 @@ public class PublicationGraph : IGraph<PublicationDto, string>
         return true;
     }
     /// <summary>
-    /// This method uses the id of the vertecies (strings)
+    /// This method uses the id of the 2 vertecies
     /// This is probobly also slow af
     /// </summary>
     /// <param name="fromId"></param>
@@ -74,23 +79,99 @@ public class PublicationGraph : IGraph<PublicationDto, string>
     /// <returns></returns>
     public bool AddEdge(string fromId, string toId)
     {
+        if (fromId.Equals(toId))
+        {
+            return false;
+        }
         if (!Vertices.ContainsKey(fromId)) return false;
         if (!Vertices.ContainsKey(toId)) return false;
+
         var from = Vertices[fromId];
         var to = Vertices[toId];
+
         if (Edges.Keys.Contains(fromId))
         {
-            Edges[fromId].Add(new Edge(from, to));
+            Edges[fromId].Add(new PublicationEdge(from, to));
         }
-        else throw new NotImplementedException();//TO:DO
+        else throw new NotImplementedException();//TODO:
         if (Edges.Keys.Contains(toId))
         {
-            Edges[toId].Add(new Edge(to, from));
+            Edges[toId].Add(new PublicationEdge(to, from));
         }
-        else throw new NotImplementedException();//TO:DO
+        else throw new NotImplementedException();//TODO:
         return true;
     }
-    public IEnumerable<IVertex<PublicationDto, string>> GetAdj(IVertex<PublicationDto, string> vertex)
+    /// <summary>
+    /// This method uses the id of "from" and a new vertecies for "to"
+    /// This is probobly also slow af
+    /// </summary>
+    /// <param name="fromId"></param>
+    /// <param name="to"></param>
+    /// <returns></returns>
+    public bool AddEdge(string fromId, IVertex<string, PublicationDto> to)
+    {
+        if (fromId.Equals(to.Id))
+        { return false; }
+
+        if (!Vertices.ContainsKey(fromId)) return false;
+        var from = Vertices[fromId];
+
+        if (to == null || !Vertices.ContainsKey(to.Id))
+        {
+            if (!AddVertex(to!)) return false;
+        }
+        var _to = Vertices[to!.Id];
+
+        if (Edges.Keys.Contains(fromId))
+        {
+            Edges[fromId].Add(new PublicationEdge(from, _to));
+        }
+        else throw new NotImplementedException();//TODO:
+
+        if (Edges.Keys.Contains(_to.Id))
+        {
+            Edges[_to.Id].Add(new PublicationEdge(from, _to));
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
+        return true;
+    }
+    /// <summary>
+    /// This method uses the id of one of vertecies and a new vertecies for the second one
+    /// This is probobly also slow af
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="toId"></param>
+    /// <returns></returns>
+    public bool AddEdge(IVertex<string, PublicationDto> from, string toId)
+    {
+        if (from.Id.Equals(toId))
+        { return false; }
+
+        if (!Vertices.ContainsKey(toId)) return false;
+        if (from == null || !Vertices.ContainsKey(from.Id))
+        { if (!AddVertex(from!)) return false; }
+
+        var to = Vertices[toId];
+        var _from = Vertices[from!.Id];
+
+        if (Edges.Keys.Contains(toId))
+        { Edges[toId].Add(new PublicationEdge(to, from)); }
+        else throw new NotImplementedException();//TODO:
+        if (Edges.Keys.Contains(_from.Id))
+        { Edges[_from.Id].Add(new PublicationEdge(_from, to)); }
+        else
+        { throw new NotImplementedException(); }
+
+        return true;
+    }
+    public bool AddEdge(IEdge<string,PublicationDto> edge)
+    {
+        return AddEdge(edge.GetFrom(),edge.GetTo());
+    }
+    public IEnumerable<IVertex<string, PublicationDto>> GetAdj(IVertex<string, PublicationDto> vertex)
     {
         var _vertex = Vertices[vertex.Id];
         //if (_vertex == null) throw new NotImplementedException();//TO:DO
@@ -99,7 +180,7 @@ public class PublicationGraph : IGraph<PublicationDto, string>
             yield return edge.GetTo();
         }
     }
-    public IEnumerable<IVertex<PublicationDto, string>> GetAdj(string vertexId)
+    public IEnumerable<IVertex<string, PublicationDto>> GetAdj(string vertexId)
     {
         var _vertex = Vertices[vertexId];
         if (_vertex == null) throw new NotImplementedException(); //TO:DO
@@ -127,18 +208,18 @@ public class PublicationGraph : IGraph<PublicationDto, string>
     public static void Main(string[] args)
     {
         var g = new PublicationGraph();
-        g.AddVertex(new Vertex("PublicationDto 0", new PublicationDto { Title = "PublicationDto 0" }));
-        g.AddVertex(new Vertex("PublicationDto 1", new PublicationDto { Title = "PublicationDto 1" }));
-        g.AddVertex(new Vertex("PublicationDto 2", new PublicationDto { Title = "PublicationDto 2" }));
-        g.AddVertex(new Vertex("PublicationDto 3", new PublicationDto { Title = "PublicationDto 3" }));
-        g.AddVertex(new Vertex("PublicationDto 4", new PublicationDto { Title = "PublicationDto 4" }));
-        g.AddVertex(new Vertex("PublicationDto 5", new PublicationDto { Title = "PublicationDto 5" }));
-        g.AddVertex(new Vertex("PublicationDto 6", new PublicationDto { Title = "PublicationDto 6" }));
-        g.AddVertex(new Vertex("PublicationDto 7", new PublicationDto { Title = "PublicationDto 7" }));
-        g.AddVertex(new Vertex("PublicationDto 8", new PublicationDto { Title = "PublicationDto 8" }));
-        g.AddVertex(new Vertex("PublicationDto 9", new PublicationDto { Title = "PublicationDto 9" }));
-        g.AddVertex(new Vertex("PublicationDto 10", new PublicationDto { Title = "PublicationDto 10" }));
-        g.AddVertex(new Vertex("PublicationDto 11", new PublicationDto { Title = "PublicationDto 11" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 0", new PublicationDto { Title = "PublicationDto 0" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 1", new PublicationDto { Title = "PublicationDto 1" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 2", new PublicationDto { Title = "PublicationDto 2" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 3", new PublicationDto { Title = "PublicationDto 3" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 4", new PublicationDto { Title = "PublicationDto 4" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 5", new PublicationDto { Title = "PublicationDto 5" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 6", new PublicationDto { Title = "PublicationDto 6" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 7", new PublicationDto { Title = "PublicationDto 7" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 8", new PublicationDto { Title = "PublicationDto 8" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 9", new PublicationDto { Title = "PublicationDto 9" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 10", new PublicationDto { Title = "PublicationDto 10" }));
+        g.AddVertex(new PublicationVertex("PublicationDto 11", new PublicationDto { Title = "PublicationDto 11" }));
         g.AddEdge("PublicationDto 0", "PublicationDto 1");
         g.AddEdge("PublicationDto 0", "PublicationDto 1");
         g.AddEdge("PublicationDto 1", "PublicationDto 3");

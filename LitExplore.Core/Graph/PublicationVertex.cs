@@ -1,15 +1,16 @@
 
 namespace LitExplore.Core.Graph;
 
-public class Vertex : IVertex<PublicationDto, string>
+public class PublicationVertex : IVertex<string, PublicationDto>
 {
-
     public PublicationDto Data { get; init; }
     public string Id { get; init; }
 
-    public Vertex(string Id, PublicationDto Data)
+
+    public PublicationVertex(string Id, PublicationDto Data)
     {
         this.Id = Id;
         this.Data = Data;
     }
+
 }

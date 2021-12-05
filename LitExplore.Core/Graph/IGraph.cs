@@ -1,13 +1,13 @@
 
 namespace LitExplore.Core.Graph;
 
-public interface IGraph<T,K>
+public interface IGraph<K,V>
 {
     int NumberOfVertices();
     int NumberOfEdges();
-    bool AddVertex(IVertex<T,K> vertex);//TO:DO overvje om input bare skal værre af tyben 'T,K'
-    bool AddEdge(IVertex<T,K> from, IVertex<T,K> to);
+    bool AddVertex(IVertex<K,V> vertex);//TODO: overvje om input bare skal værre af tyben 'K,V'
+    bool AddEdge(IVertex<K,V> from, IVertex<K,V> to);
     bool AddEdge(K fromId, K toId);
-    IEnumerable<IVertex<T,K>> GetAdj(K Id);
-    IEnumerable<IVertex<T,K>> GetAdj(IVertex<T,K> vertex);//TO:DO overvje om input bare skal værre af tyben 'T,K'
+    IEnumerable<IVertex<K,V>> GetAdj(K Id);
+    IEnumerable<IVertex<K,V>> GetAdj(IVertex<K,V> vertex);//TODO: overvje om input bare skal værre af tyben 'K,V'
 }

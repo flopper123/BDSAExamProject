@@ -1,7 +1,7 @@
 namespace LitExplore.Core.Graph;
 
-public interface IVertex<T, K>
+public interface IVertex<K,V>
 {
-    public T Data { get; init; }
+    public V Data { get; init; }
     public K Id { get; init; }
 }
