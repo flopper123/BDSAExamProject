@@ -12,13 +12,7 @@ namespace LitExplore.Entity.Migrations
                 name: "Publications",
                 columns: table => new
                 {
-                    Title = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Author = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
-                    Year = table.Column<int>(type: "int", nullable: true),
-                    Publisher = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Pages = table.Column<int>(type: "int", nullable: true),
-                    Edition = table.Column<int>(type: "int", nullable: true)
+                    Title = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,24 +23,11 @@ namespace LitExplore.Entity.Migrations
                 name: "References",
                 columns: table => new
                 {
-                    Title = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Title = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_References", x => x.Title);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,9 +76,6 @@ namespace LitExplore.Entity.Migrations
         {
             migrationBuilder.DropTable(
                 name: "PublicationReference");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Publications");

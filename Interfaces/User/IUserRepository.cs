@@ -1,6 +1,6 @@
-namespace Interfaces;
+// namespace Interfaces;
 
-public interface IUserRepository : IRepository<IUser>
-{
-    //TO:DO
-} 
+// public interface IUserRepository : IRepository<IUser>
+// {
+//     //TO:DO
+// } 
