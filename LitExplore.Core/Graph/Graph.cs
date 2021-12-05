@@ -76,7 +76,7 @@ public class PublicationGraph : IGraph<string, PublicationDto>
     /// </summary>
     /// <param name="fromId"></param>
     /// <param name="toId"></param>
-    /// <returns></returns>
+    /// <returns>bool</returns>
     public bool AddEdge(string fromId, string toId)
     {
         if (fromId.Equals(toId))
@@ -107,7 +107,7 @@ public class PublicationGraph : IGraph<string, PublicationDto>
     /// </summary>
     /// <param name="fromId"></param>
     /// <param name="to"></param>
-    /// <returns></returns>
+    /// <returns>bool</returns>
     public bool AddEdge(string fromId, IVertex<string, PublicationDto> to)
     {
         if (fromId.Equals(to.Id))
@@ -144,7 +144,7 @@ public class PublicationGraph : IGraph<string, PublicationDto>
     /// </summary>
     /// <param name="from"></param>
     /// <param name="toId"></param>
-    /// <returns></returns>
+    /// <returns>bool</returns>
     public bool AddEdge(IVertex<string, PublicationDto> from, string toId)
     {
         if (from.Id.Equals(toId))
@@ -167,6 +167,11 @@ public class PublicationGraph : IGraph<string, PublicationDto>
 
         return true;
     }
+    /// <summary>
+    /// This method adds a PublicationEdge 
+    /// </summary>
+    /// <param name="edge"></param>
+    /// <returns>bool</returns>
     public bool AddEdge(IEdge<string,PublicationDto> edge)
     {
         return AddEdge(edge.GetFrom(),edge.GetTo());
