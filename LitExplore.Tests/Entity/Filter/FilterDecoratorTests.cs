@@ -84,5 +84,29 @@ public class FilterDecoratorTests
         // Assert
         Assert.Equal(exp, act);
     }
+
+    [Fact]
+    // We expect EmptyFilter to be excluded, and the order to be the same as the constructed
+    // chain
+    public void CorrectOrderOfGetFilterHistoryChains() {
+        // Arrange 
+        Filter<PublicationDto> fRefs = new MinRefsFilter(1, EmptyFilter<PublicationDto>.Get());
+        Filter<PublicationDto> fLittle = new TitleFilter("little", fRefs);
+        Filter<PublicationDto> fEnd = new TitleFilter("Pony", fLittle);
+
+        // Act
+        List<Filter<PublicationDto>> exp = new List<Filter<PublicationDto>> {
+            fRefs, fLittle, fEnd
+        };
+        IEnumerable<Filter<PublicationDto>> act = fEnd.GetHistory();
+
+        // Assert
+        int i = 0;
+        foreach (Filter<PublicationDto> fAct in act) {
+            var fExp = exp[i++];
+            Assert.Equal(fAct, fExp);
+        }
+    }
+
 }
 

@@ -2,6 +2,10 @@ namespace LitExplore.Tests.Entity.Filter;
 
 class FilterEven : FilterDecorator<int> {
     public FilterEven() : base(n => n % 2 == 0) {}
+    
+    public override EFilter GetId() {
+        return EFilter.NONE;
+    }
 }
 
 // Tests for Filter<T> and EmptyFilter 
@@ -42,11 +46,12 @@ public class FilterTests
     }
 
     [Fact]
-    public void CanGetFilterHistory() {
+    public void OwnFilterIsLastOfFilterHistory() {
         // Act
-        IEnumerable<Filter<int>> act = filter.GetHistory();
-
-        // Assert
-        act.ToList().ForEach(tmp => Assert.True(filter == tmp));
+        var act = filter.GetHistory().GetEnumerator();
+        
+        // Assert actual
+        Assert.True(act.MoveNext(), "Failed to move to first enumeration");
+        Assert.Equal(filter, act.Current);
     }    
 }
