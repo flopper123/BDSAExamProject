@@ -11,7 +11,7 @@ using Xunit;
 namespace LitExplore.Tests.Entity
 {   
     // In memory testing of publication repository
-    public class PublicationRepTests : AbsRepositoryTest<PublicationRepository>
+    public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
     {        
         public PublicationRepTests() : base() {}
 

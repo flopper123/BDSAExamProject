@@ -1,6 +1,7 @@
 
 namespace LitExplore.Core.Graph;
 
+// TO:DO implement IEnumerable<IVertex<T,K>>
 public interface IGraph<T,K>
 {
     int NumberOfVertices();
