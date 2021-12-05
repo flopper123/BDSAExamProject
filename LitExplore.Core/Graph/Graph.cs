@@ -26,6 +26,10 @@ public class PublicationGraph : IGraph<string, PublicationDto>
         Edges.Add(vertex.Id, new List<IEdge<string, PublicationDto>>());
         return true;
     }
+    public IVertex<string, PublicationDto> GetVertex(string Id)
+    {
+        return Vertices[Id];
+    }
     /// <summary>
     /// This adds an edge with the use of 2 Vertecies
     /// </summary>
@@ -172,9 +176,9 @@ public class PublicationGraph : IGraph<string, PublicationDto>
     /// </summary>
     /// <param name="edge"></param>
     /// <returns>bool</returns>
-    public bool AddEdge(IEdge<string,PublicationDto> edge)
+    public bool AddEdge(IEdge<string, PublicationDto> edge)
     {
-        return AddEdge(edge.GetFrom(),edge.GetTo());
+        return AddEdge(edge.GetFrom(), edge.GetTo());
     }
     public IEnumerable<IVertex<string, PublicationDto>> GetAdj(IVertex<string, PublicationDto> vertex)
     {
@@ -207,6 +211,23 @@ public class PublicationGraph : IGraph<string, PublicationDto>
             }
         }
         return numEdges / 2;//This is divided in 2 because both of the vetecies of an edge knows the edge
+    }
+    public IEnumerable<IVertex<String, PublicationDto>> DegreesOfSeperation(IVertex<String, PublicationDto> startVertex, int degree)
+    {
+        var closeVertecies = new List<IVertex<String, PublicationDto>>();
+        DegreesOfSeperationRecursive(startVertex, degree, closeVertecies);
+        return closeVertecies;
+    }
+    private void DegreesOfSeperationRecursive(IVertex<String, PublicationDto> currentVertex, int degree, List<IVertex<string, PublicationDto>> closeVertecies)
+    {
+        if (degree == 0) { closeVertecies.Add(currentVertex); }
+        else
+        {
+            foreach (var vertex in GetAdj(currentVertex.Id))
+            {
+                DegreesOfSeperationRecursive(vertex, degree-1, closeVertecies);
+            }
+        }
     }
 
     //kan bruges til at se den matematiske notering af en graph med 12 V og 
@@ -242,7 +263,6 @@ public class PublicationGraph : IGraph<string, PublicationDto>
         g.AddEdge("PublicationDto 10", "PublicationDto 11");
         Console.WriteLine(g);
     }
-
     public override string ToString()
     {
         string s = "";
@@ -258,6 +278,5 @@ public class PublicationGraph : IGraph<string, PublicationDto>
         }
         return s;
     }
-
 
 }

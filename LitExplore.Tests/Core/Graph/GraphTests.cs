@@ -5,7 +5,7 @@ namespace LitExplore.Tests.Core.Graph;
 
 public class GraphTests : IDisposable
 {
-    PublicationGraph _graph;
+    IGraph<string, PublicationDto> _graph;
     public GraphTests()
     {
         _graph = new PublicationGraph();
@@ -199,6 +199,26 @@ public class GraphTests : IDisposable
             }
         }
         return marked[toId];
+    }
+    [Fact]
+    public void Degrees_Of_Seperation_Of_0()
+    {
+        // Arrange
+        graphSeedBig();
+        // Act
+        var actual = _graph.DegreesOfSeperation(_graph.GetVertex("Publication 0"), 0).ToArray();
+        // Assert
+        Assert.Equal(1 , actual.Length);
+    }
+    [Fact]
+    public void Degrees_Of_Seperation_Of_1()
+    {
+        // Arrange
+        graphSeedBig();
+        // Act
+        var actual = _graph.DegreesOfSeperation(_graph.GetVertex("Publication 0"), 1).ToArray();
+        // Assert
+        Assert.Equal(3 , actual.Length);
     }
     private void graphSeedSmall()
     {
