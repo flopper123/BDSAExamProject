@@ -13,5 +13,4 @@ public class Publication
     // TO:DO test inverse property
     //[InverseProperty("Title")]
     public ICollection<Reference> References { get; set; } = null!;
-
 }
