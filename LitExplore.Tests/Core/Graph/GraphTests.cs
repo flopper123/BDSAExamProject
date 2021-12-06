@@ -5,7 +5,7 @@ namespace LitExplore.Tests.Core.Graph;
 
 public class GraphTests : IDisposable
 {
-    IGraph<string, PublicationDto> _graph;
+    PublicationGraph _graph;
     public GraphTests()
     {
         _graph = new PublicationGraph();
@@ -208,7 +208,7 @@ public class GraphTests : IDisposable
         // Act
         var actual = _graph.DegreesOfSeperation(_graph.GetVertex("Publication 0"), 0).ToArray();
         // Assert
-        Assert.Equal(1 , actual.Length);
+        Assert.Equal(1, actual.Length);
     }
     [Fact]
     public void Degrees_Of_Seperation_Of_1()
@@ -218,8 +218,29 @@ public class GraphTests : IDisposable
         // Act
         var actual = _graph.DegreesOfSeperation(_graph.GetVertex("Publication 0"), 1).ToArray();
         // Assert
-        Assert.Equal(3 , actual.Length);
+        Assert.Equal(4, actual.Length);
     }
+    [Fact]
+    public void Degrees_Of_Seperation_Of_2()
+    {
+        // Arrange
+        graphSeedBig();
+        // Act
+        var actual = _graph.DegreesOfSeperation(_graph.GetVertex("Publication 0"), 2).ToArray();
+        // Assert
+        Assert.Equal(8, actual.Length);
+    }
+    [Fact]
+    public void Degrees_Of_Seperation_Of_3()
+    {
+        // Arrange
+        graphSeedBig();
+        // Act
+        var actual = _graph.DegreesOfSeperation(_graph.GetVertex("Publication 0"), 3).ToArray();
+        // Assert
+        Assert.Equal(12, actual.Length);
+    }
+
     private void graphSeedSmall()
     {
         _graph.AddVertex(new PublicationVertex("Publication 0", new PublicationDto { Title = "Publication 0" }));

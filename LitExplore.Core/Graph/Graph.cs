@@ -212,20 +212,27 @@ public class PublicationGraph : IGraph<string, PublicationDto>
         }
         return numEdges / 2;//This is divided in 2 because both of the vetecies of an edge knows the edge
     }
+    /// <summary>
+    /// This method returns the vertex as well as the vertecies seperated by the degree
+    /// </summary>
+    /// <param name="startVertex"></param>
+    /// <param name="degree"></param>
+    /// <returns></returns>
     public IEnumerable<IVertex<String, PublicationDto>> DegreesOfSeperation(IVertex<String, PublicationDto> startVertex, int degree)
     {
-        var closeVertecies = new List<IVertex<String, PublicationDto>>();
+        var closeVertecies = new HashSet<IVertex<String, PublicationDto>>();
         DegreesOfSeperationRecursive(startVertex, degree, closeVertecies);
         return closeVertecies;
     }
-    private void DegreesOfSeperationRecursive(IVertex<String, PublicationDto> currentVertex, int degree, List<IVertex<string, PublicationDto>> closeVertecies)
+    private void DegreesOfSeperationRecursive(IVertex<String, PublicationDto> currentVertex, int degree, HashSet<IVertex<string, PublicationDto>> closeVertecies)
     {
         if (degree == 0) { closeVertecies.Add(currentVertex); }
         else
         {
+            closeVertecies.Add(currentVertex);
             foreach (var vertex in GetAdj(currentVertex.Id))
             {
-                DegreesOfSeperationRecursive(vertex, degree-1, closeVertecies);
+                DegreesOfSeperationRecursive(vertex, degree - 1, closeVertecies);
             }
         }
     }
