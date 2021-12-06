@@ -5,8 +5,7 @@ namespace LitExplore.Entity.Filter;
 /// what input the filter expects, what field the filter checks, and 
 /// what operation that checks it.
 /// 
-/// 
-/// For now we use 12 bit for each anotation
+/// Each information takes up 12 bit
 /// 
 /// ! Warning specific naming convention expected:
 /// ! NAME: TYPE_INPUT_FIELD_OPERATION
@@ -14,7 +13,8 @@ namespace LitExplore.Entity.Filter;
 /// ! No enum defined for Filter_Operation denotations as it can vary greatly.
 /// </summary>
 /// <example> 
-/// Example of naming convention and values for: PUB_UINT64_REF_SIZE
+/// MinRefSize(uint64 n) :  
+/// Example of naming convention and values for: PUB_UINT64_REF_MINSIZE
 /// PUB       - the filter operates on a PublicationDto
 /// UINT64    - the filter expects uint64 input
 /// REF       - the filter checks the Reference field of the PublicationDto   

@@ -11,7 +11,6 @@ class FilterEven : FilterDecorator<int> {
 // Tests for Filter<T> and EmptyFilter 
 public class FilterTests
 {
-
     private Filter<int> filter;
 
     public FilterTests() {

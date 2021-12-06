@@ -105,6 +105,7 @@ public class PublicationGraph : IGraph<PublicationDto, string>,
             yield return edge.GetTo();
         }
     }
+    
     public IEnumerable<IVertex<PublicationDto, string>> GetAdj(string vertexId)
     {
         var _vertex = Vertices[vertexId];
