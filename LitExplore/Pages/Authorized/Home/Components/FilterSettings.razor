@@ -1,0 +1,27 @@
+
+@namespace LitExplore.Authorized.Home.Components
+
+@using LitExplore.Pages.Shared
+
+<div class="text-white bg-gray-800 pl-8 pr-4 pb-4 pt-2 w-1/4">
+  <div class="text-2xl mb-4">
+    Options
+  </div>
+  
+  <div class="grid grid-cols-3 gap-2 mb-6">
+    <div class="col-span-1">Find max:</div>
+    <div class="col-span-2 flex space-x-2">
+      <input class="w-1/2 text-black" />
+      <input class="w-1/2 text-black" />
+    </div>
+
+    <div class="col-span-1">Keywords:</div>
+    <div class="col-span-2">
+      <input class="w-full text-black" />
+    </div>
+  </div>
+
+  <div class="flex justify-end">
+    <LitButton Text="Filter" />
+  </div>
+</div>
