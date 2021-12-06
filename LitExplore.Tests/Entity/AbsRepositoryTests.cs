@@ -18,14 +18,13 @@ namespace LitExplore.Tests.Entity;
 /// and @context ready for testing.
 /// </summary>
 /// <typeparam name="T"> The repository to test. Any class that implements AbsRepository </typeparam>
-public abstract class AbsRepositoryTest<T> : IDisposable 
+public abstract class AbsRepositoryTests<T> : IDisposable 
     where T : AbsRepository
 {
     protected readonly ILitExploreContext context;   
     protected readonly T repository;
-
   
-    public AbsRepositoryTest() {
+    public AbsRepositoryTests() {
         // Create in memory connection
         var connection = new SqliteConnection("Filename=:memory:");
         connection.Open();

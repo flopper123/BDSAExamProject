@@ -2,7 +2,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace LitExplore.Entity;
 
-
 /// <summary>
 ///     Auxiliary class used for time based operations such as migrations. 
 ///     The class initializes an SQL server connection where using user secrets and a docker sql server. 
