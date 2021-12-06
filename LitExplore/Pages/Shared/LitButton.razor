@@ -1,0 +1,28 @@
+
+@namespace LitExplore.Pages.Shared
+
+<button
+  onclick="@InvokeOnClick"
+  disabled="@disabled"
+  class="w-48 h-12 bg-white bg-blue-600 text-white text-lg shadow-white"
+>
+  @Text
+</button>
+
+@code {
+  [Parameter] public string Text { get; init; }
+
+  [Parameter] public Task Clicked { get; init; }
+
+  private bool disabled { get; set; }
+
+  private async void InvokeOnClick()
+  {
+    disabled = true;
+    
+    Func<Task> clickFunc = async () => await Clicked; 
+    await clickFunc();
+
+    disabled = false;
+  }
+}
