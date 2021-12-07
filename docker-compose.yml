@@ -1,0 +1,41 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.9'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD_FILE: /run/secrets/db_password
+    ports:
+      - 1433:1433
+    secrets:
+      - db_password
+
+  web:
+    image: web
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      ConnectionStrings__LitExplore: null
+      # ASPNETCORE_URLS: https://+;http://+ - taken from ondfisk repo maybe for usage later
+      # ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
+      # ASPNETCORE_Kestrel__Certificates__Default__Password: localhost
+    ports:
+      - 5077:80
+      - 7207:443
+    depends_on:
+      - db
+    secrets:
+      - source: connection_string
+        target: ConnectionStrings__LitExplore
+    volumes:
+      - ../../../../.aspnet/https:/https/
+
+secrets:
+  db_password:
+    file: ./.local/db_password.txt
+  connection_string:
+    file: ./.local/connection_string.txt
