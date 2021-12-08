@@ -11,12 +11,12 @@ public class GraphTests
 
     public GraphTests()
     {
-        
+
         // root
         var par = new Vertex<int>(0);
         src = new Graph<int>(par);
 
-        for (int i = 1; i < N-1 ; i+=2)
+        for (int i = 1; i < N - 1; i += 2)
         {
             var v2 = new Vertex<int>(i);
             var v3 = new Vertex<int>(i + 1);
@@ -27,12 +27,9 @@ public class GraphTests
             Assert.True(src.Add(v3), $"Failed to add element #{i} - {v3}");
             par = v2;
         }
-
-        var end = new Vertex<int>((int) N);
-        end.Parent = par;
-
+        var end = new Vertex<int>((int)N - 1, par);
         Assert.True(src.Add(end), $"Failed to add last element {end}");
-        
+
         // Assert that construction is correct
         Assert.Equal(src.Size, N);
     }
@@ -51,12 +48,34 @@ public class GraphTests
     [Fact]
     public void CanDeleteMultiple()
     {
-        for (int i = (int) N; i >= 0; i--)
+        for (int i = (int)N - 1; i > 0; i--)
         {
             IVertex<int> exp = new Vertex<int>(i);
-            Assert.Equal(i, (int) src.Size);
-            Assert.True(src.Delete(exp), $"Failed deletion of {exp}");
-            Assert.Equal(i - 1, (int)src.Size);
+            Assert.True(i + 1 == (int)src.Size, $"loop {N - i - 1}, before delete");
+            Assert.True(src.Delete(exp), $"Failed deletion of {exp}, at loop {N - i}");
+            Assert.True(i == (int)src.Size, $"loop {N - i - 1}, after delete");
         }
+    }
+
+    [Fact]
+    public void CanGetEnumerator()
+    {
+        // Arrange
+        IVertex<UInt64> root = new Vertex<UInt64>(0UL);
+        IGraph<UInt64> _src = new Graph<UInt64>(root);
+        IVertex<UInt64> v1 = new Vertex<UInt64>(1UL, root);
+        IVertex<UInt64> v2 = new Vertex<UInt64>(2UL, root);
+        root.Children.Add(v1);
+        root.Children.Add(v2);
+        // Act
+        var actEnumerator =_src.GetEnumerator();
+        actEnumerator.MoveNext(); //this is nessesary because stupid >:(
+        
+        // Assert
+        Assert.True(root.Data == actEnumerator.Current,$"\tActual data is {actEnumerator.Current}\n\tExpected was {root.Data}");
+        Assert.True(actEnumerator.MoveNext(), "Could not move to next Item");
+        Assert.True(v1.Data == actEnumerator.Current,$"\tActual data is {actEnumerator.Current}\n\tExpected was {v1.Data}");
+        Assert.True(actEnumerator.MoveNext(), "Could not move to next Item");
+        Assert.True(v2.Data == actEnumerator.Current,$"\tActual data is {actEnumerator.Current}\n\tExpected was {v2.Data}");
     }
 }

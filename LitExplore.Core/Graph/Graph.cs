@@ -13,25 +13,28 @@ public class Graph<T> : IGraph<T>
     // ? since we can have a graph, where root has been removed already
     public IVertex<T>? Root { get; set; }
 
-    public Graph() {
+    public Graph()
+    {
         Root = null;
     }
 
     public Graph(IVertex<T> root)
-    { 
+    {
         Root = root;
     }
-    
+
     public bool Add(IVertex<T> v)
     {
-        if (Root == null) Root = v.Parent;    
-        else {
+        if (Root == null) Root = v.Parent;
+        else
+        {
 
             T needle = v.Parent.Data;
             IVertex<T>? tar = Root.Find(needle);
 
             if (tar == null) return false;
-            else {
+            else
+            {
 
                 // Set parent of v to found target
                 v.Parent = tar;
@@ -44,14 +47,16 @@ public class Graph<T> : IGraph<T>
 
     public bool Delete(IVertex<T> v)
     {
-        if (Root == null) {
+        if (Root == null)
+        {
             return false;
         }
 
         //  Find v.Data
         IVertex<T>? tar = Root.Find(v.Data);
-        
-        if (tar == null) {
+
+        if (tar == null)
+        {
             return false;
         }
 
@@ -59,14 +64,31 @@ public class Graph<T> : IGraph<T>
         return true;
     }
 
-    public IEnumerator<T> GetEnumerator()
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
-        throw new NotImplementedException();
+        foreach (var childData in getCildrenData(Root!))
+        {
+            yield return childData;
+        }
+        
+        IList<T> getCildrenData(IVertex<T> child)
+        {
+            var tmp = new List<T>();
+            tmp.Add(child.Data);
+            if (!child.IsLeaf())
+            {
+                foreach (var grandChild in child.Children)
+                {
+                    tmp.AddRange(getCildrenData(grandChild));
+                }
+            }
+            return tmp;
+        }
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
+    public IEnumerator GetEnumerator()
     {
-        throw new NotImplementedException();
+        return this.GetEnumerator();
     }
 
     protected virtual void Dispose(bool disposing)
@@ -92,8 +114,5 @@ public class Graph<T> : IGraph<T>
         GC.SuppressFinalize(this);
     }
 
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
+
 }
