@@ -44,7 +44,19 @@ public class Graph<T> : IGraph<T>
 
     public bool Delete(IVertex<T> v)
     {
-        throw new NotImplementedException();
+        if (Root == null) {
+            return false;
+        }
+
+        //  Find v.Data
+        IVertex<T>? tar = Root.Find(v.Data);
+        
+        if (tar == null) {
+            return false;
+        }
+
+        tar.Parent.Children.Remove(tar);
+        return true;
     }
 
     public IEnumerator<T> GetEnumerator()

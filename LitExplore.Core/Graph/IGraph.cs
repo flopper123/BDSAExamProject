@@ -27,7 +27,7 @@ public interface IGraph<T> : IEnumerable<T>, IDisposable
     bool Add(IVertex<T> v);
 
     /// <summary>
-    /// Tries to delete the given vertex from the graph.
+    /// Tries to delete the given vertex from the graph and all its children.
     /// </summary>
     /// <param name="v"></param>
     /// <returns></returns>

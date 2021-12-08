@@ -9,49 +9,54 @@ public class GraphTests
     IGraph<int> src = null!;
     const UInt32 N = 100;
 
-    public GraphTests() {
-        src = new Graph<int>(new Vertex<int>(0));
-        for (int i = 1; i < N; i++) {
-            src.Add(new Vertex<int>(i));
-        }
-    }
-
-    [Fact]
-    public void CanDeleteOne() {
-        // Arrange
-        IGraph<int> act = new Graph<int>(new Vertex<int> (0));
+    public GraphTests()
+    {
         
-        // Act
-        // act.Delete()
+        // root
+        var par = new Vertex<int>(0);
+        src = new Graph<int>(par);
 
-        // Assert
+        for (int i = 1; i < N-1 ; i+=2)
+        {
+            var v2 = new Vertex<int>(i);
+            var v3 = new Vertex<int>(i + 1);
+            v2.Parent = par;
+            v3.Parent = par;
+
+            Assert.True(src.Add(v2), $"Failed to add element #{i} - {v2}");
+            Assert.True(src.Add(v3), $"Failed to add element #{i} - {v3}");
+            par = v2;
+        }
+
+        var end = new Vertex<int>((int) N);
+        end.Parent = par;
+
+        Assert.True(src.Add(end), $"Failed to add last element {end}");
+        
+        // Assert that construction is correct
+        Assert.Equal(src.Size, N);
     }
-    
-    /*
+
     [Fact]
-    public void DeleteChild()
+    public void CanDeleteOne()
     {
         // Arrange
-        Vertex<int> v_1 = new Vertex<int>(0);
-        IVertex<int> v_2 = new Vertex<int>(1);
-        
-        //Act
-        v_1.AddChild(v_2);
-        v_1.AddChild(new Vertex<int>(2));
-        
-        Assert.True(v_1.Size == 3); // succesfully add
+        IGraph<UInt64> act = new Graph<UInt64>(new Vertex<UInt64>(0xD3ADB33F));
+        IVertex<UInt64> toDelete = new Vertex<UInt64>(0xD3ADB33F);
 
-        // Failed delete check
-        Assert.True(!v_1.Delete(v_1), "Delete was succesful, when we expected false");
-        Assert.True(v_1.Size == 3);
-
-        // Succesful delete check
-        Assert.True(v_1.Delete(v_2), "Did not Delete With Success");
-        Assert.True(v_1.Size == 2); 
-
-        foreach(IVertex<int> child in v_1.GetChildren()) {
-            Assert.True(!child.Equals(v_2), $"Failed deletion of child {v_2} from {v_1}");           
-        }            
+        // Act
+        Assert.True(act.Delete(toDelete), $"Failed deletion of {toDelete}");
     }
-    */
+
+    [Fact]
+    public void CanDeleteMultiple()
+    {
+        for (int i = (int) N; i >= 0; i--)
+        {
+            IVertex<int> exp = new Vertex<int>(i);
+            Assert.Equal(i, (int) src.Size);
+            Assert.True(src.Delete(exp), $"Failed deletion of {exp}");
+            Assert.Equal(i - 1, (int)src.Size);
+        }
+    }
 }
