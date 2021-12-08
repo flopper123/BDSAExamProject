@@ -1,5 +1,7 @@
 namespace LitExplore.Entity.Filter;
 
+using System.Reflection;
+
 /// <summary>
 /// The predicate of an empty filter is always true, hence it doesnt filter.. 
 /// The class is constructed as a generic singleton,
@@ -13,9 +15,21 @@ public class EmptyFilter<T> : Filter<T>
 
     protected EmptyFilter() : base(t => true) {}
 
+    public override UInt32 Depth {
+        get { return 0; }
+    }
+
     public override EFilter GetId() {
-        if (typeof(T) == typeof(PublicationDto)) return EFilter.PUB;
-        else return EFilter.NONE;
+        UInt64 id = EFilter.NONE | (UInt64) typeof(T).GetFilterType();
+        try
+        {
+            return (EFilter)id;
+            // if (UInt32) EFiler.None | (UInt32) typeof(T).GetFilterType()
+        } catch (InvalidCastException ex) {
+            string msg = $"Reflection Cast Exception: EFilter type not found for uint64:#${id}." +
+                         "Probably an error in FilterEnum definitions";
+            throw new InvalidCastException(msg, ex);
+        }
     }
 
     /// <summary>

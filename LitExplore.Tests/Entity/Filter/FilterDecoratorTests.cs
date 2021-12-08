@@ -104,8 +104,30 @@ public class FilterDecoratorTests
         int i = 0;
         foreach (Filter<PublicationDto> fAct in act) {
             var fExp = exp[i++];
-            Assert.Equal(fAct, fExp);
+            Assert.Equal(fExp, fAct);
         }
+    }
+
+
+    [Theory]
+    [InlineData(10)]
+    [InlineData(30)]
+    [InlineData(50)]
+    [InlineData(100_00)]
+    public void TestDepthOfChainedFilters(UInt32 exp) {
+
+        Filter<PublicationDto> fAct = new TitleFilter("Pony");
+        for (UInt32 i = 1; i < exp; i++) {
+            fAct = new TitleFilter("Pony", fAct);
+        }
+
+        Assert.Equal(exp, (UInt32) fAct.GetHistory().Count());
+        Assert.Equal(exp, fAct.Depth);
+    }
+
+    [Fact]
+    public void TestDepthForEmptyFilter() {
+        Assert.Equal(0UL, EmptyFilter<int>.Get().Depth);
     }
 
 }

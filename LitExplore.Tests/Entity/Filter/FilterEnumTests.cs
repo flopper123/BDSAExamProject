@@ -9,6 +9,9 @@ public class FilterEnumTests {
     IEnumerable<FilterInput> input_flags = Enum.GetValues(typeof(FilterInput)).Cast<FilterInput>();
     IEnumerable<FilterType> type_flags = Enum.GetValues(typeof(FilterType)).Cast<FilterType>();
     
+    // TO:DO add tests for composition of the flags.
+    //       Ensure that field, input and type are on different bits
+
     /// Cant make reduce methods generic due to generic enum constraints
     private UInt64 ReduceField(IEnumerable<FilterField> enums) { 
         UInt64 ret = 0UL;
@@ -88,7 +91,7 @@ public class FilterEnumTests {
     public void InputFlagsSetUniqueBits() {
         // Arrange
         UInt64 act = ReduceInput(input_flags);
-        foreach (FilterInput exp in field_flags) {
+        foreach (FilterInput exp in input_flags) {
             if (exp != FilterInput.MASK) {
                 FilterInput fact = (FilterInput) (act & (UInt64) exp);
                 Assert.Equal(exp, fact);
@@ -115,8 +118,8 @@ public class FilterEnumTests {
     [Fact]
     public void TypeFlagsSetUniqueBits() {
         // Arrange
-        UInt64 act = ReduceInput(input_flags);
-        foreach (FilterType exp in field_flags) {
+        UInt64 act = ReduceType(type_flags);
+        foreach (FilterType exp in type_flags) {
             if (exp != FilterType.MASK) {
                 FilterType fact = (FilterType) (act & (UInt64) exp);
                 Assert.Equal(exp, fact);

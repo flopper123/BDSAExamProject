@@ -11,10 +11,20 @@ namespace LitExplore.Entity.Filter;
 /// <typeparam name="T"></typeparam>
 public abstract class FilterDecorator<T> : Filter<T> {
     protected Filter<T> prv;
-        
+    protected readonly UInt32 _depth;
+    
     // If prv is null, this is the last filter in the chain
     public FilterDecorator(Predicate<T> p, Filter<T>? prv_ = null) : base(p) {
         prv = prv_ ?? EmptyFilter<T>.Get();
+        this._depth = base.Depth + prv.Depth;
+    }
+
+    /// <summary>
+    /// How many filters this decoration applies in total. Should be same as 
+    /// count of enumerable returned by GetHistory(). 
+    /// </summary>
+    public override UInt32 Depth {
+        get { return _depth; }
     }
 
     /// <summary>
