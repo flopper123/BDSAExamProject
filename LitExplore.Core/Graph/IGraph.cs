@@ -1,18 +1,18 @@
 namespace LitExplore.Core.Graph;
-/*
-public interface IGraphHandler<T> {
-    IVertex<T> ToVertex(T type);
-}
-*/
+
 
 // T refers to the data object the Vertex holds
 // Creates a directed graph from a specific root of type T
 public interface IGraph<T> : IEnumerable<T>, IDisposable
     where T : IEquatable<T>
 {
-    // Number of total vertices in the given graph
+    // Number of total vertices in the graph
     UInt64 Size { get; }
-    IVertex<T>? Root { get; protected set; }
+
+    /// <summary>
+    /// Returns a pointer to the root vertex of the graph
+    /// </summary> 
+    IVertex<T>? Root { get; set; }
 
     /// <summary>
     /// Tries to add the given vertex to the graph. The vertex will be 
@@ -32,22 +32,4 @@ public interface IGraph<T> : IEnumerable<T>, IDisposable
     /// <param name="v"></param>
     /// <returns></returns>
     bool Delete(IVertex<T> v);
-
-    /*  
-    public bool Delete(T needle)
-    {
-        var children = this.GetChildren();
-        int i = 0;
-        for (i = 0; i < children.Count; i++)
-        {
-            var child = children[i];
-            if (tar.Data.Equals(child.Data))
-            {
-                children.RemoveAt(i);
-                return true;
-            }
-        }
-        return false;
-    }
-    */
 }

@@ -63,15 +63,19 @@ public class Graph<T> : IGraph<T>
         tar.Parent.Children.Remove(tar);
         return true;
     }
-
+    
+    /// <summary>
+    ///  Returns all data in the graph. 
+    ///  The data is returned in the order matching a depth-first-search of the tree in the graph.
+    /// </summary>
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
-        foreach (var childData in getCildrenData(Root!))
+        foreach (var childData in getChildrenData(Root!))
         {
             yield return childData;
         }
 
-        IList<T> getCildrenData(IVertex<T> child)
+        IList<T> getChildrenData(IVertex<T> child)
         {
             var tmp = new List<T>();
             tmp.Add(child.Data);
@@ -79,7 +83,7 @@ public class Graph<T> : IGraph<T>
             {
                 foreach (var grandChild in child.Children)
                 {
-                    tmp.AddRange(getCildrenData(grandChild));
+                    tmp.AddRange(getChildrenData(grandChild));
                 }
             }
             return tmp;
@@ -113,6 +117,4 @@ public class Graph<T> : IGraph<T>
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
-
-
 }

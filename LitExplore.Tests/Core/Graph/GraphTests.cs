@@ -98,4 +98,10 @@ public class GraphTests
         }
 
     }
+
+    [Fact]
+    public void DoesEnumeratorReturnDFSOrder() {
+        // TO:DO insert code to assert enum order
+        Assert.True(true);
+    }
 }
