@@ -3,11 +3,11 @@ namespace LitExplore.Core.Graph;
 public class Vertex<T> : IVertex<T>
     where T : IEquatable<T>
 {
-    protected IVertex<T> _parent;
-    protected IList<IVertex<T>> _children;
-
+    
     public T Data { get; init; }
     public UInt64 Depth { get; set; }
+    public IList<IVertex<T>> Children { get; set; }
+    public IVertex<T> Parent { get; set; }
 
     // worst case O(N), where N is size of subtree rooted at this vertex.
     public UInt64 Size
@@ -15,7 +15,7 @@ public class Vertex<T> : IVertex<T>
         get
         {
             UInt64 size = 1UL;
-            foreach(var child in GetChildren()) 
+            foreach(var child in Children) 
             {
                 size += child.Size; 
             } 
@@ -27,43 +27,31 @@ public class Vertex<T> : IVertex<T>
     {
         Data = data;
         Depth = 0;
-        _parent = this;
-        _children = new List<IVertex<T>>();
+        Parent = this;
+        Children = new List<IVertex<T>>();
     }
 
-    public void AddChild(IVertex<T> newChild)
-    {
-        _children.Add(newChild);
-    }
+    public bool IsRoot() { return (Parent == this); }
+    public bool IsLeaf() { return (Size == 1UL); }
 
-    public IList<IVertex<T>> GetChildren()
-    {
-        return _children;
-    }
+    /// <summary>
+    /// Depth-First-Search for needle. 
+    /// </summary>
+    /// <param name="needle"> Target to search for  </param>
+    /// <returns></returns>
+    public IVertex<T>? Find(T needle) {
+        if (Data.Equals(needle)) return this;
 
-    public bool IsRoot()
-    {
-        return (_parent == this);
-    }
+        IVertex<T>? tar = null;
 
-    public IVertex<T> GetParent()
-    {
-        return _parent;
-    }
-
-    public bool Delete(IVertex<T> tar)
-    {
-        var children = this.GetChildren();
-        int i = 0;
-        for (i = 0; i < children.Count; i++)
-        {
-            var child = children[i];
-            if (tar.Data.Equals(child.Data))
-            {
-                children.RemoveAt(i);
-                return true;
+        foreach (var child in this.Children) {
+            tar = child.Find(needle);
+            
+            if (tar != null) {
+                break;
             }
         }
-        return false;
+
+        return tar;
     }
 }

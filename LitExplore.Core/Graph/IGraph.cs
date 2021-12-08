@@ -12,7 +12,7 @@ public interface IGraph<T> : IEnumerable<T>, IDisposable
 {
     // Number of total vertices in the given graph
     UInt64 Size { get; }
-    IVertex<T> Root { get; protected set; }
+    IVertex<T>? Root { get; protected set; }
 
     /// <summary>
     /// Tries to add the given vertex to the graph. The vertex will be 
@@ -20,6 +20,8 @@ public interface IGraph<T> : IEnumerable<T>, IDisposable
     /// if v.parent is contained in the graph.
     /// if not it returns false, and does nothing.
     /// Asymptotic running time: O(N)
+    /// 
+    /// In case the graph is empty, vertex v will be added as a root node to the graph
     /// </summary> 
     /// <returns> A boolean indicating whether the addition was succesful </returns>
     bool Add(IVertex<T> v);
@@ -30,11 +32,22 @@ public interface IGraph<T> : IEnumerable<T>, IDisposable
     /// <param name="v"></param>
     /// <returns></returns>
     bool Delete(IVertex<T> v);
-    /*
+
+    /*  
+    public bool Delete(T needle)
     {
-        Should also set depth of the vertex
-        IVertex<T> par = Root.find(v.Parent());
-        return if-succesful(par.GetChildren().Add(par));
+        var children = this.GetChildren();
+        int i = 0;
+        for (i = 0; i < children.Count; i++)
+        {
+            var child = children[i];
+            if (tar.Data.Equals(child.Data))
+            {
+                children.RemoveAt(i);
+                return true;
+            }
+        }
+        return false;
     }
     */
 }
