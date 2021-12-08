@@ -70,7 +70,7 @@ public class Graph<T> : IGraph<T>
         {
             yield return childData;
         }
-        
+
         IList<T> getCildrenData(IVertex<T> child)
         {
             var tmp = new List<T>();
@@ -83,7 +83,7 @@ public class Graph<T> : IGraph<T>
                 }
             }
             return tmp;
-        }
+        }  
     }
 
     public IEnumerator GetEnumerator()

@@ -68,14 +68,34 @@ public class GraphTests
         root.Children.Add(v1);
         root.Children.Add(v2);
         // Act
-        var actEnumerator =_src.GetEnumerator();
+        var actEnumerator = _src.GetEnumerator();
         actEnumerator.MoveNext(); //this is nessesary because stupid >:(
-        
+
         // Assert
-        Assert.True(root.Data == actEnumerator.Current,$"\tActual data is {actEnumerator.Current}\n\tExpected was {root.Data}");
-        Assert.True(actEnumerator.MoveNext(), "Could not move to next Item");
-        Assert.True(v1.Data == actEnumerator.Current,$"\tActual data is {actEnumerator.Current}\n\tExpected was {v1.Data}");
-        Assert.True(actEnumerator.MoveNext(), "Could not move to next Item");
-        Assert.True(v2.Data == actEnumerator.Current,$"\tActual data is {actEnumerator.Current}\n\tExpected was {v2.Data}");
+        Assert.True(root.Data == actEnumerator.Current, $"\tActual data is {actEnumerator.Current}\n\tExpected was {root.Data}");
+        Assert.True(actEnumerator.MoveNext(), "Could not move to next expected Item");
+        Assert.True(v1.Data == actEnumerator.Current, $"\tActual data is {actEnumerator.Current}\n\tExpected was {v1.Data}");
+        Assert.True(actEnumerator.MoveNext(), "Could not move to next expected Item");
+        Assert.True(v2.Data == actEnumerator.Current, $"\tActual data is {actEnumerator.Current}\n\tExpected was {v2.Data}");
+    }
+    [Fact]
+    public void CanGetEnumerator100Elements()
+    {
+        // Arrange
+        ///---- src is src see constructor
+        var tmp = new List<int>();
+        // Act
+        var actEnumerator = src.GetEnumerator();
+        while (actEnumerator.MoveNext())
+        {
+            tmp.Add(actEnumerator.Current);
+        }
+
+        // Assert
+        for (int i = 0; i < N; i++)
+        {
+            Assert.True(tmp.Contains(i),$"The enumerator did not contain {i} but shuld have");
+        }
+
     }
 }
