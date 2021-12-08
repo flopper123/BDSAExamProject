@@ -1,158 +1,120 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace LitExplore.Core.Graph;
 
-public class PublicationGraph : IGraph<PublicationDto, string>, 
-                                IEnumerable,
-                                IEnumerable<KeyValuePair<string, IVertex<PublicationDto, string>>>
+public class Graph<T> : IGraph<T>
+    where T : IEquatable<T>
 {
-    private IDictionary<string, IVertex<PublicationDto, string>> Vertices;
-    private IDictionary<string, List<IEdge<PublicationDto, string>>> Edges;
+    private bool disposedValue;
 
-    public PublicationGraph()
+    public UInt64 Size
     {
-        Vertices = new Dictionary<string, IVertex<PublicationDto, string>>();
-        Edges = new Dictionary<string, List<IEdge<PublicationDto, string>>>();
+        get => (Root == null) ? 0 : Root.Size;
     }
 
-    public bool AddVertex(IVertex<PublicationDto, string> vertex)
+    // ? since we can have a graph, where root has been removed already
+    public IVertex<T>? Root { get; set; }
+
+    public Graph()
     {
-        if (Vertices.ContainsKey(vertex.Id) ||
-            vertex.Data.Title == null ||
-            vertex.Id == "" ||
-            vertex.Id == null)
+        Root = null;
+    }
+
+    public Graph(IVertex<T> root)
+    {
+        Root = root;
+    }
+
+    public bool Add(IVertex<T> v)
+    {
+        if (Root == null) Root = v.Parent;
+        else
         {
-            return false;
+
+            T needle = v.Parent.Data;
+            IVertex<T>? tar = Root.Find(needle);
+
+            if (tar == null) return false;
+            else
+            {
+
+                // Set parent of v to found target
+                v.Parent = tar;
+                tar.Children.Add(v);
+            }
         }
-        Vertices.Add(vertex.Id, vertex);
-        Edges.Add(vertex.Id, new List<IEdge<PublicationDto, string>>());
+
         return true;
     }
 
-    // TO:DO burde nok ikke bare return bool
-    public bool AddEdge(IVertex<PublicationDto, string> from, IVertex<PublicationDto, string> to)
+    public bool Delete(IVertex<T> v)
     {
-        // Does vertices exist in table
-        if (from.Id.Equals(to.Id))
+        if (Root == null)
         {
             return false;
         }
-        if (from == null || !Vertices.ContainsKey(from.Id))
-        {
-            if (!AddVertex(from)) return false;
-        }
-        if (to == null || !Vertices.ContainsKey(to.Id))
-        {
-            if (!AddVertex(to)) return false;
-        }
-        var _from = Vertices[from.Id];
-        var _to = Vertices[to.Id];
 
-        if (Edges.Keys.Contains(_to.Id))
+        //  Find v.Data
+        IVertex<T>? tar = Root.Find(v.Data);
+
+        if (tar == null)
         {
-            Edges[_from.Id].Add(new Edge(_from, _to));
-        }
-        else
-        {
-            throw new NotImplementedException();//TO:DO
+            return false;
         }
 
-        if (Edges.Keys.Contains(_to.Id))
-        {
-            Edges[_to.Id].Add(new Edge(_from, _to));
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
+        tar.Parent.Children.Remove(tar);
         return true;
     }
     
     /// <summary>
-    /// This method uses the id of the vertecies (strings)
-    /// This is probobly also slow af
+    ///  Returns all data in the graph. 
+    ///  The data is returned in the order matching a depth-first-search of the tree in the graph.
     /// </summary>
-    /// <param name="fromId"></param>
-    /// <param name="toId"></param>
-    /// <returns></returns>
-    public bool AddEdge(string fromId, string toId)
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
-        if (!Vertices.ContainsKey(fromId)) return false;
-        if (!Vertices.ContainsKey(toId)) return false;
-        var from = Vertices[fromId];
-        var to = Vertices[toId];
-        if (Edges.Keys.Contains(fromId))
+        foreach (var childData in getChildrenData(Root!))
         {
-            Edges[fromId].Add(new Edge(from, to));
+            yield return childData;
         }
-        else throw new NotImplementedException();//TO:DO
-        if (Edges.Keys.Contains(toId))
-        {
-            Edges[toId].Add(new Edge(to, from));
-        }
-        else throw new NotImplementedException();//TO:DO
-        return true;
-    }
 
-    public IEnumerable<IVertex<PublicationDto, string>> GetAdj(IVertex<PublicationDto, string> vertex)
-    {
-        var _vertex = Vertices[vertex.Id];
-        //if (_vertex == null) throw new NotImplementedException();//TO:DO
-        foreach (var edge in Edges[vertex.Id])
+        IList<T> getChildrenData(IVertex<T> child)
         {
-            yield return edge.GetTo();
-        }
-    }
-    
-    public IEnumerable<IVertex<PublicationDto, string>> GetAdj(string vertexId)
-    {
-        var _vertex = Vertices[vertexId];
-        if (_vertex == null) throw new NotImplementedException(); //TO:DO
-        foreach (var edge in Edges[vertexId])
-        {
-            yield return edge.GetTo();
-        }
-    }
-    public int NumberOfVertices() => Vertices.Count;
-    
-    public int NumberOfEdges()
-    {
-        var numEdges = 0;
-        foreach (var edges in Edges.Values)
-        {
-            foreach (var edge in edges)
+            var tmp = new List<T>();
+            tmp.Add(child.Data);
+            if (!child.IsLeaf())
             {
-                numEdges++;
+                foreach (var grandChild in child.Children)
+                {
+                    tmp.AddRange(getChildrenData(grandChild));
+                }
             }
-        }
-        return numEdges / 2;//This is divided in 2 because both of the vetecies of an edge knows the edge
+            return tmp;
+        }  
     }
 
-    public IEnumerator<KeyValuePair<string, IVertex<PublicationDto, string>>> GetEnumerator()
+    public IEnumerator GetEnumerator()
     {
-        return Vertices.GetEnumerator();
+        return this.GetEnumerator();
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
+    protected virtual void Dispose(bool disposing)
     {
-        return GetEnumerator();
-    }
-    
-    public override string ToString()
-    {
-        string s = "";
-        s += NumberOfVertices() + " vertices, " + NumberOfEdges() + " edges \n";
-        foreach (var v in Vertices.Keys)
+        if (!disposedValue)
         {
-            s += v + ": ";
-            foreach (var w in GetAdj(v))
+            if (disposing)
             {
-                s += w.Id + " ";
+                // TODO: dispose managed state (managed objects)
             }
-            s += "\n";
+
+            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+            // TODO: set large fields to null
+            Root = null;
+            disposedValue = true;
         }
-        return s;
+    }
+
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

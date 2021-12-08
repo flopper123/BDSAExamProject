@@ -108,7 +108,6 @@ public class FilterDecoratorTests
         }
     }
 
-
     [Theory]
     [InlineData(10)]
     [InlineData(30)]
@@ -129,6 +128,5 @@ public class FilterDecoratorTests
     public void TestDepthForEmptyFilter() {
         Assert.Equal(0UL, EmptyFilter<int>.Get().Depth);
     }
-
 }
 

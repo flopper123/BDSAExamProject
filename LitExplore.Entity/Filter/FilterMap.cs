@@ -35,7 +35,7 @@ public static class FilterMap {
         var types = FilterMap.GetConcreteFilters();
 
         // Call static getID on all filters
-
+        
 
         // TO:DO Change to Reflection code to find all concrete implementing classes of Filter, 
         // and map their GetId to Filter. 
