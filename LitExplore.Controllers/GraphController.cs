@@ -1,12 +1,12 @@
 namespace LitExplore.Controllers;
 
-public class GraphController : ControllerBase
+public class GraphController
 {
     public GraphController() {}
 
 
 
-    public Task<PublicationNode> GetGraphRepresentationAsync() {
+    /*public Task<PublicationNode> GetGraphRepresentationAsync() {
         // Fetch graph
         
         // Find graph relations
@@ -16,5 +16,5 @@ public class GraphController : ControllerBase
         // Iteratively fall towards eachother
 
         // Normalize
-    }
+    }*/
 }
