@@ -13,19 +13,26 @@ services:
     secrets:
       - db_password
 
-  web:
-    image: web
+  testweb:
+    image: node:16.13.1
     build:
       context: .
       dockerfile: ./Dockerfile
     environment:
       ConnectionStrings__LitExplore: null
-      # ASPNETCORE_URLS: https://+;http://+ - taken from ondfisk repo maybe for usage later
-      # ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
-      # ASPNETCORE_Kestrel__Certificates__Default__Password: localhost
+      ASPNETCORE_URLS: https://+;http://+ # taken from ondfisk repo maybe for usage later
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
+      ASPNETCORE_Kestrel__Certificates__Default__Password: localhost
     ports:
       - 5141:80
       - 7252:443
+    command:
+      [
+        "npm install",
+        "npm run buildcss",
+        "npm start",
+        "dotnet dev-certs https"
+      ]
     depends_on:
       - db
     secrets:
@@ -33,6 +40,7 @@ services:
         target: ConnectionStrings__LitExplore
     volumes:
       - ../../../../.aspnet/https:/https/
+      - ./../../source:/source
 
 secrets:
   db_password:
