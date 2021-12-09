@@ -1,4 +1,4 @@
-namespace LitExplore.Controllers;
+namespace LitExplore.Server.Controllers;
 
 public class WeatherForecastService
 {

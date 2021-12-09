@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using LitExplore.Controllers;
+using LitExplore.Server.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 

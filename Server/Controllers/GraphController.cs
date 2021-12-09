@@ -1,6 +1,6 @@
-namespace LitExplore.Controllers;
+namespace LitExplore.Server.Controllers;
 
-using LitExplore.Controllers.Graph;
+using LitExplore.Server.Controllers.Graph;
 
 using LitExplore.Entity;
 
