@@ -13,30 +13,10 @@ public class GraphRelationTests
   public GraphRelationTests()
   {
     // Test references
-    var ref0 = new ReferenceDto() { Title = "Test reference0" };
-    var ref1 = new ReferenceDto() { Title = "Test reference1" };
-    var ref2 = new ReferenceDto() { Title = "Test reference2" };
-    var ref3 = new ReferenceDto() { Title = "Test reference3" };
-    var ref4 = new ReferenceDto() { Title = "Test reference4" };
-    references = new List<ReferenceDto> { ref0, ref1, ref2, ref3, ref4 };
-
+    references = GraphTestData.GetReferences();
 
     // Test publications
-    var pub0 = new PublicationDto { Title = "Test publication", References = new HashSet<ReferenceDto> { ref0, ref1, ref2, ref3 } };
-
-    // Pub1 and pub0 share same title to test for title relation
-    var pub1 = new PublicationDto { Title = "Test publication", References = new HashSet<ReferenceDto> { ref1, ref2, ref3 } };
-
-    // Pub1 and pub2 share the same references
-    var pub2 = new PublicationDto { Title = "Test publication2", References = new HashSet<ReferenceDto> { ref1, ref2, ref3 } };
-
-    var pub3 = new PublicationDto { Title = "Test publication3", References = new HashSet<ReferenceDto> { ref1, ref2, ref3 } };
-    var pub4 = new PublicationDto { Title = "Test publication4", References = new HashSet<ReferenceDto> { ref2, ref3, ref4 } };
-    var pub5 = new PublicationDto { Title = "Test publication5", References = new HashSet<ReferenceDto> { ref3, ref4 } };
-    var pub6 = new PublicationDto { Title = "Test publication6", References = new HashSet<ReferenceDto> { ref4 } };
-    var pub7 = new PublicationDto { Title = "Test publication7", References = new HashSet<ReferenceDto>() };
-
-    publications = new List<PublicationDto> { pub0, pub1, pub2, pub3, pub4, pub5, pub6, pub7 };
+    publications = GraphTestData.GetPublications();
 
   }
 
@@ -54,7 +34,7 @@ public class GraphRelationTests
     List<PublicationDto> pubs = new List<PublicationDto> { publications[1], publications[2], publications[3], publications[4], publications[5] };
 
     // Act
-    List<(PublicationDto pub, List<(PublicationDto other, double factor)> related)> relations = gr.GetManyToManyRelations(pubs);
+    List<(PublicationDto pub, RelationsHandler related)> relations = gr.GetManyToManyRelations(pubs);
 
     // Assert
     Assert.True(relations.Count == pubs.Count); // Test number of elements are still the same

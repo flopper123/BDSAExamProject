@@ -8,20 +8,20 @@ using System.Linq;
 public class GraphRelation
 {
 
-  public List<(PublicationDto, List<(PublicationDto, double)>)> GetManyToManyRelations(List<PublicationDto> pubs) {
-
+  public List<(PublicationDto, RelationsHandler)> GetManyToManyRelations(List<PublicationDto> pubs)
+  {
     var relations = from p in pubs select (p, GetRelations(p, pubs));
     return relations.ToList();
   }
 
   // Returns relation of publication to all other publications
-  public List<(PublicationDto, double)> GetRelations(PublicationDto pub, List<PublicationDto> pubs) 
+  public RelationsHandler GetRelations(PublicationDto pub, List<PublicationDto> pubs) 
   {
     var relations = from p in pubs
                     where p != pub
                     select (p, GetRelation(pub, p));
 
-    return relations.ToList();
+    return RelationsHandler.FromList(relations.ToList());
   }
 
   // Returns relation between first pub to second
