@@ -1,5 +1,7 @@
 namespace LitExplore.Entity.Filter;
 
+using System.Reflection;
+
 /// <summary>
 /// ! Warning All concrete implementing classes are expected to have a static variable named 
 /// !         FilterFrameworkChecks.EXP_ID_VAR_NAME of type FilterFrameworkChecks.EXP_TYPE_OF_EID 
@@ -10,7 +12,7 @@ public abstract class Filter<T> {
     protected Predicate<T> predicate;
 
     static Filter() {
-        FilterIdFrameworkChecks.Assert();
+        FilterIdFrameworkChecks.Assert(Assembly.Load("LitExplore.Entity"));
     }
 
     // How many filters this filter applies

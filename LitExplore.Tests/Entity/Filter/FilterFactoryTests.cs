@@ -1,19 +1,32 @@
 namespace LitExplore.Tests.Entity.Filter;
 
-
 public class FilterFactoryTests {
+    [Fact]
+    public void CanGetEmptyPubFByFilterType() {
+        Type act = FilterFactory.Get((UInt64) FilterType.PUB);
+        Type exp = typeof(EmptyFilter<PublicationDto>);
+        Assert.Equal(exp, act);
+    }
     
+    [Fact]
+    public void CanGetEmptyPubFByEFilter() {
+        Type act = FilterFactory.Get(EFilter.PUB);
+        Type exp = typeof(EmptyFilter<PublicationDto>);
+        Assert.Equal(exp, act);
+    }
+
     [Fact]
     public void CanGetAllConcreteTypes() {
         Type[] exp = { typeof(TitleFilter), typeof(MinRefsFilter) };
-        var act = FilterFactory.GetConcreteFilters();
+
+        var act = FilterFactory.GetConcreteFilters(Assembly.Load("LitExplore.Entity"));
         
         foreach(Type t in exp) {
             Assert.True(act.Contains(t), $"Failed to find {t} among concrete filters of filter factory"
                                          + $"\n\tConcrete filters contains {act.Count()} in total");
         }
     }
-    
+
     /*
     public List<(EFilter, Type)> _exp = new List<(EFilter, Type)> {
        // (EFilter.PUB, typeof(EmptyFilter<PublicationDto>)),

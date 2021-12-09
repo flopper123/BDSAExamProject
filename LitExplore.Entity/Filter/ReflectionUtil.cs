@@ -17,13 +17,9 @@ public static class ReflectionUtil
     /// </summary>
     /// <param name="gType"> An open generic type </param>
     /// <param name="assembly"> The assembly to search </param>
-    /// <returns> </returns>
     public static IEnumerable<Type> GetAllConcreteTypes(Type gType, Assembly assembly)
     {
-        IEnumerable<Type> ret;
-        try
-        {
-            ret = (
+        return (
                 from t in assembly.GetTypes()
                 where
                     !t.IsGenericType &&
@@ -32,13 +28,7 @@ public static class ReflectionUtil
                     t.BaseType.IsGenericType &&
                     gType.IsAssignableFrom(t.BaseType.GetGenericTypeDefinition())
                 select t
-            );
-        } catch (TargetInvocationException ex) {
-            throw new TargetInvocationException(
-                $"Something went wrong during Reflection search for type@{gType} in assembly@{assembly}", ex
-            );
-        }
-        return ret;
+        );
     }
 
     /// <summary>
@@ -51,28 +41,39 @@ public static class ReflectionUtil
     /// <param name="exp_type"> The type of the expected static variable named param @exp_name </param>
     /// <param name="tar"> The assembly to search
     /// <exception cref="System.Reflection.MissingFieldException"> 
-    /// Thrown when a static field named @exp_name of type @exp_type 
-    /// is not found on concrete classes that implement @src. 
+    /// Thrown when a field named @exp_name is not found
+    /// </exception>
+    /// <exception cref="System.Reflection.FieldAccessException"> 
+    /// Thrown when the field named @exp_name of type @exp_type
+    /// is not static. 
+    /// </exception>
+    /// <exception cref="System.TypeAccessException"> 
+    /// Thrown when type of the field named @exp_name is not @exp_type.
     /// </exception>
     public static void StaticFieldAssertion(Type src, string exp_name, Type exp_type, Assembly tar) {
-        string err_msg = $"ReflectionException: \nFailed assertion of availablity for typeof({src}):\n\t\t";
+        string err_msg = $"\nReflectionException: \nFailed assertion of availablity for typeof({src}):\n\t\t";
 
         foreach(Type t in ReflectionUtil.GetAllConcreteTypes(src, tar)) {
-            FieldInfo? field = src.GetField(exp_name);
-        
+
+            FieldInfo? field = t.GetField(exp_name);
+    
             if (field == null) 
             {
                 err_msg += $"Missing declaration of field:\n\t\t\t";
                 err_msg += $"Expected field \"{exp_name}\"@typeof({exp_type}) on typeof({src})" ;
             
                 throw new MissingFieldException(err_msg);
-            
+            } else if (field.FieldType != exp_type) {
+
+                err_msg += $"Wrong type of \"{exp_name}\"@field:\n\t\t\t";
+                err_msg += $"Expected typeof({exp_type}) but found typeof({field.GetType()}))";
+                throw new TypeAccessException(err_msg);
+
             } else if (!field.IsStatic) 
             {
                 err_msg += "$Missing static declaration of field\n\t\t";
                 err_msg += $"Expected static field: \"{exp_name}\"@typeof({exp_type}) on typeof({src})" ;
-            
-                throw new MissingFieldException(err_msg);
+                throw new FieldAccessException(err_msg);
             }
         }
     }

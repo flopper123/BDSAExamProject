@@ -1,6 +1,6 @@
 namespace LitExplore.Entity.Filter;
 
-static class FilterEnumFactory
+public static class FilterEnumFactory
 {
     static Dictionary<Type, FilterType> T_To_filterT = null!;
 

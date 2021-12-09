@@ -9,6 +9,9 @@ using static ReflectionUtil;
 
 // TO:DO Reflection code to map ids of any filterdecoration to their constructor
 public static class FilterFactory {
+
+    private static Assembly _assembly = Assembly.Load("LitExplore.Entity");
+
     // TO:DO Unsure if it should be enumid to filter constructor instead
     private static Dictionary<EFilter, Type> eid_to_type = new Dictionary<EFilter, Type>();
 
@@ -17,16 +20,18 @@ public static class FilterFactory {
     }
 
     /// <summary>
-    /// Generate EID_TO_TYPE på reflection on program start..
+    /// Generate EID_TO_TYPE by reflection on program start..
     /// </summary>
     static FilterFactory() {
+        
         InitMapByReflection();
+        // Add generic types manually
+        eid_to_type.Add(EFilter.PUB, typeof(EmptyFilter<PublicationDto>));
+
     }
 
-    static public IEnumerable<Type> GetConcreteFilters()
+    static public IEnumerable<Type> GetConcreteFilters(Assembly assembly)
     {
-        Assembly assembly = Assembly.Load("LitExplore.Entity");
-
         foreach (Type t in GetAllConcreteTypes(typeof(Filter<>), assembly)) {
             yield return t;
         }    
@@ -37,7 +42,7 @@ public static class FilterFactory {
 
     private static void InitMapByReflection() {
         
-        IEnumerable<Type> types = FilterFactory.GetConcreteFilters();
+        IEnumerable<Type> types = FilterFactory.GetConcreteFilters(_assembly);
         
         foreach(Type type in types) {
             FieldInfo? field = type.GetField(EXP_ID_VAR_NAME, BindingFlags.Public | BindingFlags.Static);
