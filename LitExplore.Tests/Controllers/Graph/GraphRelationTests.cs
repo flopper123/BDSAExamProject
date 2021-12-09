@@ -41,6 +41,33 @@ public class GraphRelationTests
   }
 
 
+  /**
+  * Tests for GetRelations
+  *
+  */
+  [Fact]
+  public void GivenAListOfPubsReturnsAListWithManyToMany()
+  {
+    // Arrange
+    var gr = new GraphRelation();
+
+    List<PublicationDto> pubs = new List<PublicationDto> { publications[1], publications[2], publications[3], publications[4], publications[5] };
+
+    // Act
+    List<(PublicationDto pub, List<(PublicationDto other, double factor)> related)> relations = gr.GetManyToManyRelations(pubs);
+
+    // Assert
+    Assert.True(relations.Count == pubs.Count); // Test number of elements are still the same
+    relations.ForEach(relation => Assert.True(pubs.Contains(relation.pub))); // Test that we still have the publications
+    relations.ForEach(relation => Assert.True(relation.related.Count == pubs.Count - 1)); // Test that the size is what it should be
+  }
+
+
+
+  /**
+   * Tests for GetRelations
+   *
+   */
   [Fact]
   public void GivenAPubAndAListOfPubsReturnsListWithRelationFactors()
   {
@@ -57,6 +84,28 @@ public class GraphRelationTests
     Assert.True(relations.Count == pubs.Count); // Test number of elements are still the same
     relations.ForEach(relation => Assert.True(pubs.Contains(relation.pub))); // Test that we still have the publications
     relations.ForEach(relation => Assert.True(relation.factor >= 0.0 && relation.factor <= 1.0)); // Test that factors are between 0 and 1
+  }
+
+  [Fact]
+  public void GivenAListOfPubsAPubWillIgnoreRelationToSelf()
+  {
+    // Arrange
+    var gr = new GraphRelation();
+    var pub0 = publications[0];
+
+    int expCount = 1;
+    var expPub = publications[3];
+
+    List<PublicationDto> pubs = new List<PublicationDto> { pub0, expPub };
+
+    // Act
+    List<(PublicationDto pub, double factor)> relations = gr.GetRelations(pub0, pubs);
+    int actCount = relations.Count;
+    var actPub = relations[0].pub;
+
+    // Assert
+    Assert.Equal(expCount, actCount);
+    Assert.Equal(expPub, actPub);
   }
 
 
@@ -97,11 +146,11 @@ public class GraphRelationTests
     var pub0 = publications[0]; // These share the same title
     var pub1 = publications[1];
 
-    double expected = 1.0d; 
+    double expected = 1.0d;
 
     // Act
     double actual = gr.GetTitleRelation(pub0, pub1);
-   
+
     // Assert
     Assert.Equal(expected, actual);
   }

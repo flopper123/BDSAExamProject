@@ -7,10 +7,21 @@ using System.Linq;
 
 public class GraphRelation
 {
+
+  public List<(PublicationDto, List<(PublicationDto, double)>)> GetManyToManyRelations(List<PublicationDto> pubs) {
+
+    var relations = from p in pubs select (p, GetRelations(p, pubs));
+    return relations.ToList();
+  }
+
   // Returns relation of publication to all other publications
   public List<(PublicationDto, double)> GetRelations(PublicationDto pub, List<PublicationDto> pubs) 
   {
-    return pubs.Select(rPub => (rPub, GetRelation(pub, rPub))).ToList();
+    var relations = from p in pubs
+                    where p != pub
+                    select (p, GetRelation(pub, p));
+
+    return relations.ToList();
   }
 
   // Returns relation between first pub to second
