@@ -2,6 +2,20 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using LitExplore.Controllers;
 
+using LitExplore.Entity;
+using LitExplore.Entity.Filter;
+
+
+using System;
+using System.Reflection;
+
+using static System.Console;
+
+WriteLine("Printing concrete filters");
+foreach(Type t in FilterFactory.GetConcreteFilters()) {
+    WriteLine($"{t}@type is a conreteFilter");
+}
+/*
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -29,3 +43,4 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
+*/

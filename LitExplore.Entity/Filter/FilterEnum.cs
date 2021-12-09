@@ -36,16 +36,21 @@ public enum EFilter : UInt64
     PUB_UINT64_TITLE_MINSIZE =                   0b1 | PUB_UINT64_TITLE,
     PUB_UINT64_TITLE_MAXSIZE =                  0b10 | PUB_UINT64_TITLE,
 
+
     // Publication with str input
     PUB_STR                  =       FilterInput.STR | PUB,
     PUB_STR_TITLE            =     FilterField.TITLE | PUB_STR,
     PUB_STR_TITLE_CONTAINS   =                   0b1 | PUB_STR_TITLE,
     PUB_STR_TITLE_EQUALS     =                  0b10 | PUB_STR_TITLE,
 
+    
+    PUB_STRARR               =  FilterInput.STRARR,
+    PUB_STRARR_REF_DEPTH     =  FilterInput.STRARR  | PUB,
+
     PUB_STR_AUTHOR           =    FilterField.AUTHOR | PUB_STR,
 
     /* Article type */
-    ART_NONE_NONE_NONE       = FilterType.ART,
+    ART       = FilterType.ART,
 }
 
 /* The following enums contain a mask denoting which bits they flag for */
@@ -80,7 +85,7 @@ public enum FilterInput : UInt64
     
     UINT64 = 0x001_000_000,
     STR = 0x002_000_000,
-
+    STRARR = 0x004_000_000,
     MASK = 0xFFF_000_000,
     // Add other inputs
 }

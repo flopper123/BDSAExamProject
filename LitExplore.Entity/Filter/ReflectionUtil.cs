@@ -4,12 +4,14 @@ namespace LitExplore.Entity.Filter;
 using System;
 using System.Reflection;
 
-static class ReflectionUtil
+using static System.Console;
+
+public static class ReflectionUtil
 {
     // TO:DO add tests for both methods
 
     /// <summary>
-    /// Returns all non generic types that implement the input open generic type in the current scope 
+    /// Returns all non-generic/abstract types that implement the input open generic type in the current scope 
     /// of the parameter assembly.
     /// Abstract types and interfaces are excluded.
     /// </summary>
@@ -24,10 +26,11 @@ static class ReflectionUtil
             ret = (
                 from t in assembly.GetTypes()
                 where
+                    !t.IsGenericType &&
+                    !t.IsAbstract && 
                     (t.BaseType != null) &&
                     t.BaseType.IsGenericType &&
-                    gType.IsAssignableFrom(t.BaseType.GetGenericTypeDefinition()) &&
-                    !(t.BaseType.IsAbstract)
+                    gType.IsAssignableFrom(t.BaseType.GetGenericTypeDefinition())
                 select t
             );
         } catch (TargetInvocationException ex) {
@@ -52,22 +55,22 @@ static class ReflectionUtil
     /// is not found on concrete classes that implement @src. 
     /// </exception>
     public static void StaticFieldAssertion(Type src, string exp_name, Type exp_type, Assembly tar) {
-        string err_msg = $"ReflectionException: \nFailed assertion of availablity for typeof({src}):\n\t\t"
-        
+        string err_msg = $"ReflectionException: \nFailed assertion of availablity for typeof({src}):\n\t\t";
+
         foreach(Type t in ReflectionUtil.GetAllConcreteTypes(src, tar)) {
             FieldInfo? field = src.GetField(exp_name);
         
             if (field == null) 
             {
                 err_msg += $"Missing declaration of field:\n\t\t\t";
-                err_msg += $"Expected \"{exp_name}\"@typeof({exp_type} on typeof({src})" ;
+                err_msg += $"Expected field \"{exp_name}\"@typeof({exp_type}) on typeof({src})" ;
             
                 throw new MissingFieldException(err_msg);
             
             } else if (!field.IsStatic) 
             {
                 err_msg += "$Missing static declaration of field\n\t\t";
-                err_msg += $"Expected field: \"{exp_name}\"@typeof({exp_type} on typeof({src})" ;
+                err_msg += $"Expected static field: \"{exp_name}\"@typeof({exp_type}) on typeof({src})" ;
             
                 throw new MissingFieldException(err_msg);
             }

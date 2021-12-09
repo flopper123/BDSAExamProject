@@ -53,8 +53,10 @@ public class FilterEnumTests {
         
         // Insert value outside mask
         act |= 0b1;
+        
         // Should remove now
         act &= (UInt64) FilterField.MASK;
+
         // Check if bit is still set 
         Assert.Equal(0UL, act & 0b1);        
     }

@@ -7,6 +7,7 @@ using static AppDomain;
 
 // TO:DO Assert the checks run, and work as intended
 static class FilterIdFrameworkChecks {
+    
     public static readonly string EXP_ID_VAR_NAME = "Id";
     public static readonly Type EXP_TYPE_OF_EID = typeof(EFilter);
 
@@ -26,7 +27,12 @@ static class FilterIdFrameworkChecks {
     /// </exception>
     private static void AssertStaticIdVariable() {
         foreach(Assembly a in CurrentDomain.GetAssemblies()) {
-            foreach(Type t in FilterMap.GetConcreteFilters()) {
+            string name = a.GetName().Name ?? "";
+            
+            if(!name.Contains("LitExplore.Entity", StringComparison.OrdinalIgnoreCase)) {
+                continue;
+            }
+            foreach(Type t in FilterFactory.GetConcreteFilters()) {
                 ReflectionUtil.StaticFieldAssertion(
                     t,
                     EXP_ID_VAR_NAME,

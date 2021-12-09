@@ -5,6 +5,8 @@ namespace LitExplore.Entity.Filter;
 /// </summary>
 public class TitleFilter : FilterDecorator<PublicationDto> {
 
+    public static EFilter Id = EFilter.PUB_STR_TITLE_CONTAINS; 
+    
     public TitleFilter(string name) : this(name, null) { }
     
     public TitleFilter(string name, Filter<PublicationDto>? _prv) 
@@ -13,4 +15,5 @@ public class TitleFilter : FilterDecorator<PublicationDto> {
     public override EFilter GetId() {
         return EFilter.PUB_STR_TITLE_CONTAINS;
     }
+    
 }
