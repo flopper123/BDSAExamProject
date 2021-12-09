@@ -1,6 +1,8 @@
 
 namespace LitExplore.Tests.Entity.Filter;
 
+using LitExplore.Entity.Filter;
+
 // Tests for filter decorations
 public class FilterDecoratorTests
 {
@@ -25,6 +27,10 @@ public class FilterDecoratorTests
                 References = new HashSet<ReferenceDto> { new ReferenceDto{Title = "Alabama Show Down"}, 
                                                          new ReferenceDto{Title = "Copenhagen Show Down"},
                                                          new ReferenceDto{Title = "Swedish Show Down"}}
+            },
+            new PublicationDto {
+                Title = "0xDEADBEEF",
+                References = new HashSet<ReferenceDto> { }
             },
         };
     }
@@ -127,6 +133,38 @@ public class FilterDecoratorTests
     [Fact]
     public void TestDepthForEmptyFilter() {
         Assert.Equal(0UL, EmptyFilter<int>.Get().Depth);
+    }
+
+
+    // Integration with FilterFactory
+    [Theory]
+    [InlineData("IAlsoConstructedSuccesfully")]
+    [InlineData("IConstructedSuccesfully")]
+    public void CanConstructTitleFilterFromEIDAndObjectArgs(string arg) {
+
+        object? act_opt = FilterFactory.Construct(TitleFilter.Id, arg);
+        Assert.NotNull(act_opt);
+        TitleFilter? act_filter = (TitleFilter?) act_opt;
+        Assert.NotNull(act_filter);
+        if (act_filter == null) return;
+        Assert.Equal(arg, act_filter.Key);
+    }
+
+    [Fact]
+    public void CanApplyConstructedTitleFilter()
+    {
+
+        string arg = "0xDEADBEEF";
+        object? act_opt = FilterFactory.Construct(TitleFilter.Id, arg);
+        Assert.NotNull(act_opt);
+        TitleFilter? act_filter = (TitleFilter?) act_opt;
+        Assert.NotNull(act_filter);
+        if (act_filter == null) return;
+        Assert.Equal(arg, act_filter.Key);
+        var enumerator = act_filter.Apply(this.data).GetEnumerator();
+        Assert.True(enumerator.MoveNext());
+        var act = enumerator.Current;
+        Assert.Equal(data[4], act);
     }
 }
 

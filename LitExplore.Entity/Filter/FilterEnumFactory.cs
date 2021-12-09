@@ -6,8 +6,6 @@ public static class FilterEnumFactory
 
     static FilterEnumFactory()
     {
-        EmptyFilter<PublicationDto>.Get();
-
         initFilterTypeMap();
     }
 
@@ -19,11 +17,9 @@ public static class FilterEnumFactory
         // FilterEnumFactory.T_To_filterT.Add(typeof(ArticleDto), FilterType.ART);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="t"></param>
-    /// <returns></returns> Extension method for filter type
+
+    /// <summary> Save parse of an type to FilterType. Returns FilterType.None if no
+    /// mapping for the input type exist. </summary>
     public static FilterType GetFilterType(this Type t)
     {
         FilterType ret;

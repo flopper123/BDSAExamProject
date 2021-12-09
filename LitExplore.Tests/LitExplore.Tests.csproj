@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LitExplore\LitExplore.csproj" />
     <ProjectReference Include="..\LitExplore.Core\LitExplore.Core.csproj" />
     <ProjectReference Include="..\LitExplore.Entity\LitExplore.Entity.csproj" />
   </ItemGroup>

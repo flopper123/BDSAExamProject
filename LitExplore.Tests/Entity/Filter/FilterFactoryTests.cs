@@ -1,6 +1,13 @@
 namespace LitExplore.Tests.Entity.Filter;
 
 public class FilterFactoryTests {
+
+    public List<(EFilter, Type)> _exp = new List<(EFilter, Type)> {
+        // (EFilter.PUB, typeof(EmptyFilter<PublicationDto>)),
+        (EFilter.PUB_STR_TITLE_CONTAINS, typeof(TitleFilter)),
+        (EFilter.PUB_UINT64_REF_MINSIZE, typeof(MinRefsFilter)),
+    };
+
     [Fact]
     public void CanGetEmptyPubFByFilterType() {
         Type act = FilterFactory.Get((UInt64) FilterType.PUB);
@@ -16,7 +23,7 @@ public class FilterFactoryTests {
     }
 
     [Fact]
-    public void CanGetAllConcreteTypes() {
+    public void CanGetAllConcreteTypesWithFilter() {
         Type[] exp = { typeof(TitleFilter), typeof(MinRefsFilter) };
 
         var act = FilterFactory.GetConcreteFilters(Assembly.Load("LitExplore.Entity"));
@@ -25,27 +32,6 @@ public class FilterFactoryTests {
             Assert.True(act.Contains(t), $"Failed to find {t} among concrete filters of filter factory"
                                          + $"\n\tConcrete filters contains {act.Count()} in total");
         }
-    }
-
-    /*
-    public List<(EFilter, Type)> _exp = new List<(EFilter, Type)> {
-       // (EFilter.PUB, typeof(EmptyFilter<PublicationDto>)),
-        (EFilter.PUB_STR_TITLE_CONTAINS, typeof(TitleFilter)),
-        (EFilter.PUB_UINT64_REF_MINSIZE, typeof(MinRefsFilter)),
-    };
-
-
-    [Fact]
-    public void printMap() {
-        string msg = "Map: ";
-        var map = FilterFactory.GetMap();
-
-        msg += map.Count + "@count";
-        foreach ((EFilter eid, Type t) in map) {
-            msg += $"\n\t(EFilter@{eid}, Type@{t}";
-        }
-
-        Assert.True(false, msg);
     }
 
     [Fact]
@@ -65,7 +51,6 @@ public class FilterFactoryTests {
             );
         }
     }
-
 
     [Fact]
     public void IfCantGetFromEidKeyNotFoundThrown() {
@@ -98,5 +83,13 @@ public class FilterFactoryTests {
             Assert.Equal(exp, act);
         }   
     }
-    */
+
+    [Theory]
+    [InlineData(typeof(MinRefsFilter), EFilter.PUB_UINT64_REF_MINSIZE, 10)]
+    [InlineData(typeof(TitleFilter), EFilter.PUB_STR_TITLE_CONTAINS, "0xDEADBEEF")]
+    public void CanConstructFromEIDAndObjectArgs(Type exp, EFilter eid, params Object[] args) {
+        object? act_filter = FilterFactory.Construct(eid, args);
+        Assert.NotNull(act_filter);
+        if (act_filter != null) Assert.Equal(exp, act_filter.GetType());
+    }
 }

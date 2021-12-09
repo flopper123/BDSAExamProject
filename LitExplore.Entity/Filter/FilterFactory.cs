@@ -98,4 +98,17 @@ public static class FilterFactory {
     public static Type Get(EFilter eid) {
         return FilterFactory.eid_to_type[eid];
     }
+    
+    /// <summary>
+    /// The callee of the function is responsible for casting to Filter<T>,
+    /// where T is the expected type of data the filter operates on
+    /// </summary>
+    /// <param name="eid"> EID of the filter created </param>
+    /// <param name="args"> Constructor parameters for the filter created </param>
+    /// <returns></returns>
+    public static object? Construct(EFilter eid, params object?[] args) {
+        
+        Type filter_t = Get(eid);
+        return Activator.CreateInstance(filter_t, args);
+    }
 }

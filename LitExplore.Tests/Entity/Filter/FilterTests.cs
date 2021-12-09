@@ -52,5 +52,5 @@ public class FilterTests
         // Assert actual
         Assert.True(act.MoveNext(), "Failed to move to first enumeration");
         Assert.Equal(filter, act.Current);
-    }    
+    }
 }
