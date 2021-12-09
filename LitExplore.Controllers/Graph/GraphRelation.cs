@@ -7,6 +7,26 @@ using System.Linq;
 
 public class GraphRelation
 {
+  // Returns relation of publication to all other publications
+  public List<(PublicationDto, double)> GetRelations(PublicationDto pub, List<PublicationDto> pubs) 
+  {
+    return pubs.Select(rPub => (rPub, GetRelation(pub, rPub))).ToList();
+  }
+
+  // Returns relation between first pub to second
+  public double GetRelation(PublicationDto pub1, PublicationDto pub2)
+  {
+    // Collect
+    double title = GetTitleRelation(pub1, pub2);
+    double refs  = GetReferenceRelation(pub1, pub2);
+
+    // Weight
+    double max = 2.0 + 1.5;
+    double fac = title * 2.0 + refs * 1.5;
+
+    // Normalize
+    return fac / max; 
+  }
 
   // Returns true if titles are the same
   public double GetTitleRelation(PublicationDto pub1, PublicationDto pub2)
