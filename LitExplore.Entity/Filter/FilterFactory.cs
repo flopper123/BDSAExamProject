@@ -9,6 +9,11 @@ using System.Reflection;
 public class FilterFactory {
 
     private static Assembly _assembly = Assembly.Load("LitExplore.Core");
+    private static FilterDeserializer deserializer = new FilterDeserializer();
+
+    public static Filter<T> Deserialize<T>(String serialization) {
+        return EmptyFilter<T>.Get();
+    }
 
     public static Filter<T> Create<T>(String className, params Object[]? args)
     {

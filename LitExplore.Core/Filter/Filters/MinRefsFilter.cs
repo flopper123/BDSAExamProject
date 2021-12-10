@@ -1,5 +1,6 @@
 namespace LitExplore.Core.Filter;
 
+[JsonObject]
 public class MinRefsFilter : FilterDecorator<PublicationDto> {
 
     public MinRefsFilter(int min) : this(min, null) { }

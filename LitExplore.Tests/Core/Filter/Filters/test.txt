@@ -1,0 +1,14 @@
+"Previous": "{
+	"Previous": '"{ "Previous": "{
+      "Previous": "{ "Depth": 0 }",
+      "Depth": 1,
+      "PredicateArgs": "0x"
+    }",
+      "Depth": 2,
+      "PredicateArgs": "DE"
+    }",
+      "Depth": 3,
+      "PredicateArgs": "AD"
+    }",
+  "Depth": 4,
+  "PredicateArgs": "BEEF"

@@ -1,13 +1,12 @@
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components;
 using LitExplore.Controllers;
-
 using LitExplore.Entity;
 using LitExplore.Entity.Filter;
 
-
-using System;
 using System.Reflection;
+using System;
+using Newtonsoft.Json;
 
 using static System.Console;
 
@@ -19,7 +18,6 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

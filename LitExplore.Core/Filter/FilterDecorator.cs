@@ -11,6 +11,7 @@ namespace LitExplore.Core.Filter;
 /// <typeparam name="T"></typeparam>
 public abstract class FilterDecorator<T> : Filter<T> {
 
+    [JsonProperty]
     protected Filter<T> prv;
     protected readonly UInt32 _depth;
     

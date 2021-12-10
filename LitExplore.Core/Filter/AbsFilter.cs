@@ -1,5 +1,5 @@
 namespace LitExplore.Core.Filter;
-
+using System.Text;
 public abstract class Filter<T> {
     // The top-level predicate this filter applies.
     protected Predicate<T> predicate;
@@ -12,6 +12,17 @@ public abstract class Filter<T> {
     
     protected Filter(Predicate<T> predicate) {
         this.predicate = predicate;
+    }
+
+    public virtual string Serialize() {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("{\n");
+        foreach (Filter<T> f in GetHistory()) {
+            sb.Append(f.ToString());
+            sb.Append("\n");
+        }
+        sb.Append("}");
+        return sb.ToString();
     }
 
     /// <summary>
@@ -30,6 +41,8 @@ public abstract class Filter<T> {
         yield return this;
     }
     
+    public virtual string P_Args_ToString() { return "null"; }
+
     /// <summary>
     /// Applies the predicate to the input @tar, and returns
     /// a subset of @tar. All elements in the returned subset,
@@ -42,6 +55,6 @@ public abstract class Filter<T> {
     }
 
     override public string ToString() {
-        return $"Filter #{this.GetType().Name}: depth@{Depth}";
+        return $"(name={this.GetType().FullName}, depth={this.Depth}, p_args={P_Args_ToString()})";
     }
 }
