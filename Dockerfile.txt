@@ -1,14 +1,21 @@
 # https://hub.docker.com/_/microsoft-dotnet
+FROM node:16.13.1 AS nodejs
+
+COPY . /test
+WORKDIR /test/LitExplore.UI
+
+RUN npm install
+RUN npm run buildcss 
+
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
 
 ENV Logging__Console__FormatterName=simple
 
 COPY . /source
 
-COPY ./LitExplore.UI/wwwroot /source/LitExplore.Server/wwwroot
-
-WORKDIR /source
-
+COPY --from=nodejs /test/LitExplore.Server/wwwroot ./source/LitExplore.Server/wwwroot
 
 WORKDIR /source/LitExplore.Server
 
