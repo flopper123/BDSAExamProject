@@ -1,5 +1,7 @@
 namespace LitExplore.Tests.Entity.Filter;
 
+using LitExplore.Core.Filter;
+
 class FilterEven : FilterDecorator<int> {
     public FilterEven() : base(n => n % 2 == 0) {}
 }

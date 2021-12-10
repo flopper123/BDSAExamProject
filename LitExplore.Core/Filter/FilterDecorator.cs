@@ -1,4 +1,4 @@
-namespace LitExplore.Entity.Filter;
+namespace LitExplore.Core.Filter;
 
 /// <summary>
 /// Auxiliary class for chaining together different filters.
@@ -34,19 +34,6 @@ public abstract class FilterDecorator<T> : Filter<T> {
     /// </summary>
     public override UInt32 Depth {
         get { return _depth; }
-    }
-
-    /// <summary>
-    /// Compresses this filter and its history to its database representation,
-    /// i.e. a collection of tuples containing:
-    /// The name of filter, and the args to construct that filter.
-    /// </summary>
-    public override virtual IEnumerable<(String name, Object?[] args)> Compress() {
-
-        yield return prv.Compress();
-        if (p_args == null) {
-
-        }
     }
 
     public dynamic? PredicateArgs {

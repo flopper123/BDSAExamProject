@@ -12,7 +12,6 @@ public record PublicationCreateDto
 {
     [Required]
     public string Title { get; init; } = null!;
-
     public ISet<ReferenceDto> References { get; init; } = null!;
 }
 

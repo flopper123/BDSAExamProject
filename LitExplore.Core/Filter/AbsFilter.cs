@@ -1,6 +1,4 @@
-namespace LitExplore.Entity.Filter;
-
-using System.Reflection;
+namespace LitExplore.Core.Filter;
 
 public abstract class Filter<T> {
     // The top-level predicate this filter applies.
@@ -11,7 +9,7 @@ public abstract class Filter<T> {
         get { return 1u; }
         protected set {}
     }
-
+    
     protected Filter(Predicate<T> predicate) {
         this.predicate = predicate;
     }
@@ -21,7 +19,7 @@ public abstract class Filter<T> {
     /// containing:
     /// The name of filter, and the args to construct that filter.
     /// </summary>
-    public abstract IList<(String name, Object?[] args)> Compress();
+    // public abstract IList<(String name, Object?[] args)> Compress();
 
     /// <summary>
     /// Return an ordered ienumerable where the starting element is the first applied 

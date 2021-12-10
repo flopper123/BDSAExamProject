@@ -19,6 +19,8 @@ public class LitExploreContext : DbContext, ILitExploreContext
     // TO:DO consider cleaning
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        //builder.Entity<Filter>().HasNoKey;
+
         builder.Entity<Publication>().HasKey(p => p.Title);
         builder.Entity<Publication>().Property(p => p.Title).IsRequired();
 

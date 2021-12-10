@@ -25,7 +25,7 @@ public class PublicationRepository : AbsRepository, IPublicationRepository
 
         _context.Publications.Add(pub);
         await _context.SaveChangesAsync();
-
+        
         return new PublicationDto
         {
             Title = pub.Title,

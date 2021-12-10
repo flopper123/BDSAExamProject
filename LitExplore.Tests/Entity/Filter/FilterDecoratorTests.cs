@@ -1,7 +1,6 @@
-
 namespace LitExplore.Tests.Entity.Filter;
 
-using LitExplore.Entity.Filter;
+using LitExplore.Core.Filter;
 
 // Tests for filter decorations
 public class FilterDecoratorTests
@@ -140,7 +139,7 @@ public class FilterDecoratorTests
     {
         string arg = "0xDEADBEEF";
 
-        Filter<PublicationDto>? act_opt = Filter.Create<PublicationDto>("TitleFilter", arg);
+        Filter<PublicationDto>? act_opt = FilterFactory.Create<PublicationDto>("TitleFilter", arg);
         Assert.NotNull(act_opt);
 
         TitleFilter? act_filter = (TitleFilter?) act_opt;

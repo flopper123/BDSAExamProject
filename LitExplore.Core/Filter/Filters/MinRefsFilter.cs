@@ -1,4 +1,4 @@
-namespace LitExplore.Entity.Filter;
+namespace LitExplore.Core.Filter;
 
 public class MinRefsFilter : FilterDecorator<PublicationDto> {
 

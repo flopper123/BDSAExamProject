@@ -1,4 +1,4 @@
-namespace LitExplore.Entity.Filter;
+namespace LitExplore.Core.Filter;
 
 using System.Reflection;
 
@@ -14,7 +14,7 @@ public class EmptyFilter<T> : Filter<T>
     protected static EmptyFilter<T>? _this;
 
     protected EmptyFilter() : base(t => true) {}
-
+    
     public override UInt32 Depth {
         get { return 0; }
     }
