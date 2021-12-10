@@ -10,7 +10,7 @@ namespace LitExplore.Entity.Filter;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public abstract class FilterDecorator<T> : Filter<T> {
-    
+
     protected Filter<T> prv;
     protected readonly UInt32 _depth;
     
@@ -34,6 +34,19 @@ public abstract class FilterDecorator<T> : Filter<T> {
     /// </summary>
     public override UInt32 Depth {
         get { return _depth; }
+    }
+
+    /// <summary>
+    /// Compresses this filter and its history to its database representation,
+    /// i.e. a collection of tuples containing:
+    /// The name of filter, and the args to construct that filter.
+    /// </summary>
+    public override virtual IEnumerable<(String name, Object?[] args)> Compress() {
+
+        yield return prv.Compress();
+        if (p_args == null) {
+
+        }
     }
 
     public dynamic? PredicateArgs {

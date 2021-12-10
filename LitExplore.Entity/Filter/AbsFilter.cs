@@ -17,6 +17,13 @@ public abstract class Filter<T> {
     }
 
     /// <summary>
+    /// Compresses this filter and its history to a collection of tuples
+    /// containing:
+    /// The name of filter, and the args to construct that filter.
+    /// </summary>
+    public abstract IList<(String name, Object?[] args)> Compress();
+
+    /// <summary>
     /// Return an ordered ienumerable where the starting element is the first applied 
     /// filter in this sequence of filters.
     /// </summary>
