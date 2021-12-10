@@ -4,11 +4,6 @@
     <ProjectReference Include="..\LitExplore.Controllers\LitExplore.Controllers.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="npm install" />
-    <Exec Command="npm run buildcss" />
-  </Target>
-
   <ItemGroup>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
     <ProjectReference Include="..\LitExplore.Entity\LitExplore.Entity.csproj" />

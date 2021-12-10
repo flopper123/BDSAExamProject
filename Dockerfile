@@ -1,25 +1,32 @@
 # https://hub.docker.com/_/microsoft-dotnet
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
+ENV Logging__Console__FormatterName=simple
+
 COPY . /source
 WORKDIR /source/LitExplore
-RUN dotnet restore
 
-RUN dotnet publish --configuration Release --output /app1
+RUN dotnet restore
+RUN dotnet publish --configuration Release --output /app
 
 #if the node is set between WORKDIR and run dotnet restore
 #it will complain that it can't find "app1" when copying
 FROM node:16.13.1
-COPY ["package.json", "package-lock.json", "./"]
+WORKDIR /app
+
 RUN npm install
-COPY . .
-CMD [ -d "node_modules" ] && npm run start || npm ci && npm run start
+RUN npm run buildcss 
+
 #the outcommented above does not help solving the problem
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
-WORKDIR /app1
-COPY --from=build /app1 ./
+#RUN dotnet publish --configuration Release --output /app1
+#RUN dotnet run --project .
 
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+
+WORKDIR /app
+
+COPY --from=build /app ./
 
 EXPOSE 5141/tcp
 ENV ASPNETCORE_URLS http://*:5141
