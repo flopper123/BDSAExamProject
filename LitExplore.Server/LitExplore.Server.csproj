@@ -11,18 +11,7 @@
     <ProjectReference Include="..\LitExplore.Core\LitExplore.Core.csproj" />
     <ProjectReference Include="..\LitExplore.Entity\LitExplore.Entity.csproj" />
     <ProjectReference Include="..\LitExplore.UI\LitExplore.UI.csproj" />
-    <Folder Include="..\LitExplore.UI\wwwroot" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent> 
-    <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
-  </PropertyGroup>
-  
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="npm run buildinstall" />
-    <Exec Command="npm run buildcss" />
-  </Target>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">

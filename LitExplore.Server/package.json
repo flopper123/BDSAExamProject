@@ -1,8 +1,0 @@
-
-{
-  "name": "litexplore-server-ui",
-  "scripts": {
-    "buildinstall": "cd ../LitExplore.UI/ && npm install",
-    "buildcss": "cd ../LitExplore.UI/ && npm run buildcss"
-  }
-}
