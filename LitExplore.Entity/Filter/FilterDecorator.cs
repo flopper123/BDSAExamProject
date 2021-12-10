@@ -10,11 +10,20 @@ namespace LitExplore.Entity.Filter;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public abstract class FilterDecorator<T> : Filter<T> {
+    
     protected Filter<T> prv;
     protected readonly UInt32 _depth;
     
+    // args for predicate
+    // null if no args
+    protected dynamic? p_args;
+
     // If prv is null, this is the last filter in the chain
-    public FilterDecorator(Predicate<T> p, Filter<T>? prv_ = null) : base(p) {
+    public FilterDecorator(Predicate<T> p) : this(p, null, null) {}
+
+    // If prv is null, this is the last filter in the chain
+    public FilterDecorator(Predicate<T> p, dynamic? args, Filter<T>? prv_ = null) : base(p) {
+        p_args = args;
         prv = prv_ ?? EmptyFilter<T>.Get();
         this._depth = base.Depth + prv.Depth;
     }
@@ -25,6 +34,10 @@ public abstract class FilterDecorator<T> : Filter<T> {
     /// </summary>
     public override UInt32 Depth {
         get { return _depth; }
+    }
+
+    public dynamic? PredicateArgs {
+        get { return this.p_args; }
     }
 
     /// <summary>

@@ -135,32 +135,19 @@ public class FilterDecoratorTests
         Assert.Equal(0UL, EmptyFilter<int>.Get().Depth);
     }
 
-
-    // Integration with FilterFactory
-    [Theory]
-    [InlineData("IAlsoConstructedSuccesfully")]
-    [InlineData("IConstructedSuccesfully")]
-    public void CanConstructTitleFilterFromEIDAndObjectArgs(string arg) {
-
-        object? act_opt = FilterFactory.Construct(TitleFilter.Id, arg);
-        Assert.NotNull(act_opt);
-        TitleFilter? act_filter = (TitleFilter?) act_opt;
-        Assert.NotNull(act_filter);
-        if (act_filter == null) return;
-        Assert.Equal(arg, act_filter.Key);
-    }
-
     [Fact]
     public void CanApplyConstructedTitleFilter()
     {
-
         string arg = "0xDEADBEEF";
-        object? act_opt = FilterFactory.Construct(TitleFilter.Id, arg);
+
+        Filter<PublicationDto>? act_opt = Filter.Create<PublicationDto>("TitleFilter", arg);
         Assert.NotNull(act_opt);
+
         TitleFilter? act_filter = (TitleFilter?) act_opt;
         Assert.NotNull(act_filter);
         if (act_filter == null) return;
-        Assert.Equal(arg, act_filter.Key);
+
+        Assert.Equal(arg, (string) (act_filter.PredicateArgs ?? ""));
         var enumerator = act_filter.Apply(this.data).GetEnumerator();
         Assert.True(enumerator.MoveNext());
         var act = enumerator.Current;

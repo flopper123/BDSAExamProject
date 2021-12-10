@@ -1,19 +1,36 @@
 namespace LitExplore.Entity.Filter;
 
+using System.Reflection;
 
 /// <summary>
-/// This class is the frontend for all static methods from Filter exposed to the rest of the program.
-/// It uses all the auxiliary static methods defined in LitExplore.Entity.Filter 
-/// and wraps them neatly.
+/// FilterFactory class for static construction of filters from a classname and object array
 /// </summary>
 public static class Filter {
-    /*
-    // TO:DO make filterenumfact and fact non static and load them staticly in this class instead
-    private static FilterEnumFactory _factory = new FilterEnumFactory();
 
-    public static Filter<T> Create<T>(EFilter eid, Object param) {
-        
+    private static Assembly _assembly = Assembly.Load("LitExplore.Entity");
+
+    public static Filter<T> Create<T>(String className, params Object[]? args)
+    {
+        Filter<T>? filter = null;
+        try
+        {
+            filter = (Filter<T>?)_assembly.CreateInstance(
+                "LitExplore.Entity.Filter." + className, true,
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance,
+                null, args, null, null);
+            if (filter == null) throw new NullReferenceException("Failed creation, filter is null");
+
+        }
+        catch (Exception e)
+        {
+            throw new ArgumentException("\nSomething went wrong during creation of filter..\n\t" +
+                                        "Couldn't create the requested object", e);
+        }
+
+        return (Filter<T>)filter;
     }
-    */
 
+    public static Filter<T> Create<T>(FilterDto dto) {
+        throw new NotImplementedException();
+    }
 }

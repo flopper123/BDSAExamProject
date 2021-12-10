@@ -2,10 +2,6 @@ namespace LitExplore.Tests.Entity.Filter;
 
 class FilterEven : FilterDecorator<int> {
     public FilterEven() : base(n => n % 2 == 0) {}
-    
-    public override EFilter GetId() {
-        return EFilter.NONE;
-    }
 }
 
 // Tests for Filter<T> and EmptyFilter 
