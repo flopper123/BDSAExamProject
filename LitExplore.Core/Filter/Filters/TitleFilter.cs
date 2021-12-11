@@ -20,6 +20,8 @@ public class TitleFilter : FilterDecorator<PublicationDto>
     // and tries to parse them to an object array containing an instantiation of those objects
     public static Object[] DeserializePArgs(string pargs_serialized) 
     {
+        Console.WriteLine("DeserializePArgs started:");
+        Console.WriteLine(pargs_serialized);
         int i = 0;
         foreach((string t, string val) in ExtractArgs(pargs_serialized)) {
             if (t != "System.String")

@@ -5,6 +5,7 @@ using LitExplore.Core;
 using LitExplore.Core.Filter;
 using LitExplore.Core.Filter.Filters;
 using System.Text;
+using Xunit.Abstractions;
 
 using static LitExplore.Core.Filter.FilterPArgField;
 
@@ -14,8 +15,12 @@ public class TitleFilterTest
     private Filter<PublicationDto> filter;
     private IList<PublicationDto> pubData;
     
-    public TitleFilterTest()
+    private readonly ITestOutputHelper output;
+
+    public TitleFilterTest(ITestOutputHelper output)
     {
+        this.output = output;
+
         pubData = new List<PublicationDto>() {
             new PublicationDto { Title = "0xDEAD", References = new HashSet<ReferenceDto>()},
             new PublicationDto { Title = "BEEF", References = new HashSet<ReferenceDto>()},
@@ -55,7 +60,7 @@ public class TitleFilterTest
     public void CanDeserialize()
     {
         TitleFilter exp = (TitleFilter)filter;
-        var act = (TitleFilter) FilterFactory.Create<PublicationDto>(exp.Serialize());
+        var act = (TitleFilter) FilterFactory.Deserialize<PublicationDto>(exp.Serialize());
         Assert.Equal(exp.Depth, act.Depth);
         Assert.Equal(exp.Serialize(), act.Serialize());
     }
@@ -64,7 +69,7 @@ public class TitleFilterTest
     public void CanApplyDeserialization()
     {
         var exp = new List<PublicationDto> { pubData[0], pubData[2] };
-        var act = (TitleFilter) FilterFactory.Create<PublicationDto>(filter.Serialize());
+        var act = (TitleFilter) FilterFactory.Deserialize<PublicationDto>(filter.Serialize()); 
         foreach (var dto in act.Apply(pubData)) {
             Assert.True(exp.Contains(dto), $"Couldn't find {dto} in expected list of dtos.");
         }

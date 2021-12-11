@@ -40,12 +40,14 @@ public static class FilterPArgsParser {
     {
         foreach (string p_arg in pArgs.Split(FilterPArgField.PARG_SEPERATOR, RemoveEmptyEntries))
         {
-
+            // Console.WriteLine("<<<Started parsing of " + p_arg + ">>>");
             string[] splitByFields = p_arg.Split(FilterPArgField.FIELD_SEPERATOR, RemoveEmptyEntries);
             string type = splitByFields[0].Split(FilterPArgField.VALUE_SEPERATOR, RemoveEmptyEntries)[1];
             string value = splitByFields[1].Split(FilterPArgField.VALUE_SEPERATOR, RemoveEmptyEntries)[1];
             type = type.Replace(FilterPArgField.LINE_END, String.Empty);
             value = value.Replace(FilterPArgField.LINE_END, String.Empty);
+            value = value.Replace(FilterField.END, String.Empty);
+            // Console.WriteLine($"Yielding extracted p_args: type@{type} ~ value@{value}");
             yield return (type, value);
         }
     }

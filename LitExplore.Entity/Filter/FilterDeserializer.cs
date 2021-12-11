@@ -29,28 +29,36 @@ internal static class StringExtension {
     }
 }
 
-/// TO:DO Implement functionality to deserialize object
 internal class FilterDeserializer
 {
     static readonly string PARGS_SERIAL_METHOD = "DeserializePArgs";
 
+    void PrintArr(Object[] arr, string name) {
+        Console.WriteLine($"{name}: Printing size@{arr.Length} object arr ");
+        for (int i = 0; i < arr.Length; i++) {
+            Console.WriteLine($"\t type@{arr[i].GetType()} ~ val@{arr[i].ToString()}");
+        }
+    }
+
     private (string, Object[]) DeserializeSingle(Assembly assembly, string fs)
     {
         // three fields so we split in three
+        Console.WriteLine($"DeserializeSingle started serialized filter@{fs}");
         string[] fields = fs.Split(FIELD_SEPERATOR, 3, RemoveEmptyEntries);
-
+        PrintArr((Object[])fields, $"Fields after remove of {FIELD_SEPERATOR}");
         string cl_name = fields[NAME_I].Split(VALUE_SEPERATOR, 2, RemoveEmptyEntries | TrimEntries)[1];
+        Console.WriteLine($"Class@{cl_name}");
         int depth = fields[DEPTH_I].Split(VALUE_SEPERATOR, 2, RemoveEmptyEntries | TrimEntries)[1]
                                    .ToInt();
-
+        Console.WriteLine($"Depth@{depth}");
         if (depth == 0) throw new ArgumentException("Second argument is invalid, expected depth to be a valid int");
 
         Type? cl_type = assembly.GetType(cl_name);
+        Console.WriteLine($"Assembly_CLASS_TYPE@{cl_type}");
 
         if (cl_type == null) throw new ArgumentNullException($"Excpected Type of {cl_name}, but was not found in the current context of {assembly.FullName}");
 
         MethodInfo? pargs_serializer = cl_type.GetMethod(PARGS_SERIAL_METHOD);
-
         if (pargs_serializer == null)
         {
             var err_msg = $"Expected method \"{PARGS_SERIAL_METHOD}\" on typeof({cl_type})";
@@ -58,32 +66,40 @@ internal class FilterDeserializer
         }
 
         string arg_str = fields[P_ARGS_I].Split(VALUE_SEPERATOR, 2, RemoveEmptyEntries)[1];
-        // ADD ON ARG_STR VIA FilterPArgsParser.ExtractPArgs(arg_str);
-
+        PrintArr(fields[P_ARGS_I].Split(VALUE_SEPERATOR, 2, RemoveEmptyEntries), "arg_str before indexing");
         Object?[] serializer_arg = new object?[] { arg_str };
-        Object[] pargs = (Object[]) (pargs_serializer.Invoke(null, serializer_arg) ?? new Object[] {});
-
-        return (cl_name, pargs);
+        Object[]? pargs = (Object[]?) (pargs_serializer.Invoke(null, serializer_arg));
+        return (cl_name, (pargs ?? new Object[] {}));
     }  
 
-    // No exceptions - GUARANTEED
-    internal Filter<T> Deserialize<T>(Assembly assembly, Filter f) {
-        // serialization
-        string fs = f.Serialization;
-        StringReader reader = new StringReader(f.Serialization);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T">Filter<T> type to construct</typeparam>
+    /// <param name="assembly"> Assembly to search </param>
+    /// <param name="fs"> Serialized filter string </param>
+    /// <returns></returns>
+    internal Filter<T> Deserialize<T>(Assembly assembly, string fs) {
+        StringReader reader = new StringReader(fs);
 
-        Filter<T> current = EmptyFilter<T>.Get();
+        Filter<T>? current = EmptyFilter<T>.Get();
         string? line;
 
         while ((line = reader.ReadLine()) != null) {
             (string fName, Object[] fPArgs) = DeserializeSingle(assembly, line);
-            
-            // Insert current filter into arguments
-            Object[] pargs = new Object[fPArgs.Length + 1];
-            fPArgs.CopyTo(pargs, 0);
-            fPArgs[fPArgs.Length - 1] = current;
+            Console.WriteLine();
+            Console.WriteLine("======= Deserialize START ====== ");
+            Console.WriteLine();
+            PrintArr(fPArgs, fName);
 
-            current = FilterFactory.Create<T>(fName, fPArgs);
+            Object[] pargs = new Object[fPArgs.Length + 1];
+            for (int i = 0; i < pargs.Length-1; i++) {
+                pargs[i] = fPArgs[i];
+            }
+            pargs[fPArgs.Length] = current;
+            current = FilterFactory.Create<T>(fName, pargs);
+
+            Console.WriteLine("======== Deserialize END =======");
         }
 
         return current;

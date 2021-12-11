@@ -136,7 +136,6 @@ public class FilterDecoratorTests
     public void CanApplyConstructedTitleFilter()
     {
         string arg = "0xDEADBEEF";
-
         Filter<PublicationDto>? act_opt = FilterFactory.Create<PublicationDto>("TitleFilter", arg);
         Assert.NotNull(act_opt);
 

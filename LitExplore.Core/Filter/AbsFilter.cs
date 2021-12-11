@@ -52,7 +52,7 @@ public abstract class Filter<T> {
     }
 
     public virtual string PArgsToString() { 
-        return $"{FilterField.START}null{FilterField.END}"; 
+        return $"{FilterField.START}{FilterField.END}"; // Object[0] == null ??
     }
 
     /// <summary>
