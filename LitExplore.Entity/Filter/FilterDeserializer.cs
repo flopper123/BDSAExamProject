@@ -9,7 +9,7 @@ using static StringSplitOptions;
 
 internal static class StringExtension {
         
-    public static int ToInt(this string str) {
+    internal static int ToInt(this string str) {
 
         bool hasFound = false;
         int ret = 0;
@@ -60,9 +60,7 @@ internal class FilterDeserializer
         return (cl_name, (pargs ?? new Object[] {}));
     }  
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     /// <typeparam name="T">Filter<T> type to construct</typeparam>
     /// <param name="assembly"> Assembly to search </param>
     /// <param name="fs"> Serialized filter string </param>
@@ -76,11 +74,12 @@ internal class FilterDeserializer
         while ((line = reader.ReadLine()) != null) {
             (string fName, Object[] fPArgs) = DeserializeSingle(assembly, line);
 
+            // Add current filter, as last argument for the pending filters constructor
             Object[] pargs = new Object[fPArgs.Length + 1];
-            for (int i = 0; i < pargs.Length-1; i++) {
-                pargs[i] = fPArgs[i];
-            }
+            for (int i = 0; i < pargs.Length - 1; i++) { pargs[i] = fPArgs[i]; }
             pargs[fPArgs.Length] = current;
+
+
             current = FilterFactory.Create<T>(fName, pargs);
 
         }

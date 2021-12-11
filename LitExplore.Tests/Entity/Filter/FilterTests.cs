@@ -18,7 +18,7 @@ public class FilterTests
     public FilterTests() {
         filter = new FilterEven();
     }
-    
+
     // Apply filter
     [Theory]
     [InlineData(

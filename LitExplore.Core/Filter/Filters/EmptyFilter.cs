@@ -9,7 +9,6 @@ using System.Reflection;
 /// we need to implement equality such that two empty filters wont be equal.
 /// </summary>
 /// <typeparam name="T"> The type of object to filter </typeparam>
-[JsonObject]
 public class EmptyFilter<T> : Filter<T> 
 {
     protected static EmptyFilter<T>? _this;

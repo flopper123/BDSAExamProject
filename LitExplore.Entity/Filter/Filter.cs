@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 public class Filter {
     [Key]
     [Required]
-    public int UserId {get; init;}
+    public ulong UserId {get; init;}
 
     [Required]
     public string Serialization { get; init; } = null!;
