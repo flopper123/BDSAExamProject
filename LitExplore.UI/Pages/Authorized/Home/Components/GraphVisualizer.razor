@@ -3,6 +3,8 @@
 @using LitExplore.Controllers
 @using LitExplore.Controllers.Graph
 
+@using LitExplore.UI.Pages.Authorized.Home.Components.Graph
+
 @inject GraphController controller
 
 <div class="">
@@ -10,7 +12,7 @@
   {
     <p>Loading graph...</p>
   } else {
-    <p>Loaded!</p>
+    <DynamicGraph graph=@graph></DynamicGraph>
   }
 </div>
 
