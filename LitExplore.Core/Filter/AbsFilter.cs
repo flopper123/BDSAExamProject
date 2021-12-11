@@ -2,20 +2,6 @@ namespace LitExplore.Core.Filter;
 
 using System.Text;
 
-///==== Not Needed ==== ///
-// public enum FilterField
-// {
-//     NAME,
-//     DEPTH,
-//     P_ARGS,
-// }   
-
-// public enum FilterArgField 
-// {
-//     TYPE,
-//     VALUE,
-// }
-
 public abstract class Filter<T> {
     // The top-level predicate this filter applies.
     protected Predicate<T> predicate;
@@ -51,7 +37,10 @@ public abstract class Filter<T> {
         yield return this;
     }
 
-    public virtual string PArgsToString() { 
+    /// <summary>
+    /// Returns a serialization of the arguments given to implementing classes constructors.
+    /// </summary>
+    public virtual string SerializePArgs() { 
         return $"{FilterField.START}{FilterField.END}"; // Object[0] == null ??
     }
 
@@ -77,7 +66,7 @@ public abstract class Filter<T> {
         sb.Append($"{FilterField.DEPTH}{FilterField.VALUE_SEPERATOR}{this.Depth}");
         sb.Append(FilterField.FIELD_SEPERATOR);
 
-        sb.Append($"{FilterField.P_ARGS}{FilterField.VALUE_SEPERATOR}{PArgsToString()}");
+        sb.Append($"{FilterField.P_ARGS}{FilterField.VALUE_SEPERATOR}{SerializePArgs()}");
         sb.Append(FilterField.END);
 
         return sb.ToString();

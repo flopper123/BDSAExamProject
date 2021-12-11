@@ -1,9 +1,13 @@
 namespace LitExplore.Entity.Filter;
 
-using System.Reflection;
+using System.ComponentModel.DataAnnotations;
 
-// Entity equivalent of FilterDto
+// Database representation of a filter for a specific user.
 public class Filter {
-    int UserId {get; init;}
+    [Key]
+    [Required]
+    public int UserId {get; init;}
+
+    [Required]
     public string Serialization { get; init; } = null!;
 }

@@ -13,16 +13,12 @@ public class TitleFilter : FilterDecorator<PublicationDto>
 
     public TitleFilter(string key, Filter<PublicationDto>? _prv)
         : base(dto => dto.Title.Contains(key, StringComparison.OrdinalIgnoreCase), key, _prv)
-    {
-    }
+    {}
     
     // Receives a seriealized string representation of the PArgs
     // and tries to parse them to an object array containing an instantiation of those objects
     public static Object[] DeserializePArgs(string pargs_serialized) 
     {
-        Console.WriteLine("DeserializePArgs started:");
-        Console.WriteLine(pargs_serialized);
-        int i = 0;
         foreach((string t, string val) in ExtractArgs(pargs_serialized)) {
             if (t != "System.String")
             {
@@ -32,7 +28,6 @@ public class TitleFilter : FilterDecorator<PublicationDto>
         }
         return new Object[] { };
     }
-    
     
     protected override IEnumerable<(string type, string str_vals)> getPArgsStringTuple() {
         yield return ("System.String", (p_args ?? "null").ToString());

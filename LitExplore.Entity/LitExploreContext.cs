@@ -1,25 +1,22 @@
-using System.Security.AccessControl;
-using System.IO;
-using System.Reflection;
-using LitExplore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.UserSecrets;
-using static System.IO.Path;
-using static System.IO.Directory;
 namespace LitExplore.Entity;
+
+using LitExplore.Entity.Filter;
 
 public class LitExploreContext : DbContext, ILitExploreContext
 {
     public DbSet<Reference> References => Set<Reference>();
     public DbSet<Publication> Publications => Set<Publication>();
 
+    public DbSet<LitExplore.Entity.Filter.Filter> History => Set<LitExplore.Entity.Filter.Filter>();
+
     public LitExploreContext(DbContextOptions<LitExploreContext> options) : base(options) { }
 
     // TO:DO consider cleaning
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        //builder.Entity<Filter>().HasNoKey;
+        builder.Entity<LitExplore.Entity.Filter.Filter>().HasKey(f => f.UserId);
+        builder.Entity<LitExplore.Entity.Filter.Filter>().Property(f => f.UserId).IsRequired();
+        builder.Entity<LitExplore.Entity.Filter.Filter>().Property(f => f.Serialization).IsRequired();
 
         builder.Entity<Publication>().HasKey(p => p.Title);
         builder.Entity<Publication>().Property(p => p.Title).IsRequired();

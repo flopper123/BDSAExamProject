@@ -33,28 +33,17 @@ internal class FilterDeserializer
 {
     static readonly string PARGS_SERIAL_METHOD = "DeserializePArgs";
 
-    void PrintArr(Object[] arr, string name) {
-        Console.WriteLine($"{name}: Printing size@{arr.Length} object arr ");
-        for (int i = 0; i < arr.Length; i++) {
-            Console.WriteLine($"\t type@{arr[i].GetType()} ~ val@{arr[i].ToString()}");
-        }
-    }
-
     private (string, Object[]) DeserializeSingle(Assembly assembly, string fs)
     {
         // three fields so we split in three
-        Console.WriteLine($"DeserializeSingle started serialized filter@{fs}");
         string[] fields = fs.Split(FIELD_SEPERATOR, 3, RemoveEmptyEntries);
-        PrintArr((Object[])fields, $"Fields after remove of {FIELD_SEPERATOR}");
         string cl_name = fields[NAME_I].Split(VALUE_SEPERATOR, 2, RemoveEmptyEntries | TrimEntries)[1];
-        Console.WriteLine($"Class@{cl_name}");
         int depth = fields[DEPTH_I].Split(VALUE_SEPERATOR, 2, RemoveEmptyEntries | TrimEntries)[1]
                                    .ToInt();
-        Console.WriteLine($"Depth@{depth}");
+
         if (depth == 0) throw new ArgumentException("Second argument is invalid, expected depth to be a valid int");
 
         Type? cl_type = assembly.GetType(cl_name);
-        Console.WriteLine($"Assembly_CLASS_TYPE@{cl_type}");
 
         if (cl_type == null) throw new ArgumentNullException($"Excpected Type of {cl_name}, but was not found in the current context of {assembly.FullName}");
 
@@ -66,7 +55,6 @@ internal class FilterDeserializer
         }
 
         string arg_str = fields[P_ARGS_I].Split(VALUE_SEPERATOR, 2, RemoveEmptyEntries)[1];
-        PrintArr(fields[P_ARGS_I].Split(VALUE_SEPERATOR, 2, RemoveEmptyEntries), "arg_str before indexing");
         Object?[] serializer_arg = new object?[] { arg_str };
         Object[]? pargs = (Object[]?) (pargs_serializer.Invoke(null, serializer_arg));
         return (cl_name, (pargs ?? new Object[] {}));
@@ -87,10 +75,6 @@ internal class FilterDeserializer
 
         while ((line = reader.ReadLine()) != null) {
             (string fName, Object[] fPArgs) = DeserializeSingle(assembly, line);
-            Console.WriteLine();
-            Console.WriteLine("======= Deserialize START ====== ");
-            Console.WriteLine();
-            PrintArr(fPArgs, fName);
 
             Object[] pargs = new Object[fPArgs.Length + 1];
             for (int i = 0; i < pargs.Length-1; i++) {
@@ -99,7 +83,6 @@ internal class FilterDeserializer
             pargs[fPArgs.Length] = current;
             current = FilterFactory.Create<T>(fName, pargs);
 
-            Console.WriteLine("======== Deserialize END =======");
         }
 
         return current;

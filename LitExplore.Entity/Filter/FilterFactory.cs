@@ -7,8 +7,8 @@ using System.Reflection;
 /// <summary>
 /// FilterFactory class for static construction of filters from a classname and object array
 /// </summary>
-public class FilterFactory {
-
+public class FilterFactory 
+{
     static readonly Assembly _assembly = Assembly.Load("LitExplore.Core");
     static readonly string EXP_PATH = $"LitExplore.Core.Filter.Filters";
     private static FilterDeserializer deserializer = new FilterDeserializer();
@@ -17,12 +17,6 @@ public class FilterFactory {
         return deserializer.Deserialize<T>(_assembly, fs);
     }
 
-    static void PrintArr(Object[] arr, string name) {
-        Console.WriteLine($"{name}: Printing size@{arr.Length} object arr ");
-        for (int i = 0; i < arr.Length; i++) {
-            Console.WriteLine($"\t type@{arr[i].GetType()} ~ val@{arr[i].ToString()}");
-        }
-    }
     public static Filter<T> Create<T>(String className, params Object[] args)
     {
 
@@ -33,8 +27,6 @@ public class FilterFactory {
         Filter<T>? filter = null;
         try
         {
-            Console.WriteLine($"Trying to Instance Class: {name} : With args@{args.Length}"); // ${null}??
-            Console.WriteLine($"\ttype@{args[0].GetType()} ~ value@{args[0].ToString()}");
             filter = (Filter<T>?)_assembly.CreateInstance(
                 name, true,
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance,
@@ -58,7 +50,6 @@ public class FilterFactory {
             throw new ArgumentException("\nSomething went wrong during creation of filter..\n\t" +
                                         "Couldn't create the requested object", e);
         }
-        Console.WriteLine("Finished :D ");
         /*
         Trying to Instance Class: LitExplore.Core.Filter.Filters.TitleFilter : With args@1
         type@System.String ~ value@0xDEADBEEF

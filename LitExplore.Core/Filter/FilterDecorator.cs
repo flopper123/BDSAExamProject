@@ -75,7 +75,7 @@ public abstract class FilterDecorator<T> : Filter<T> {
     
     protected abstract IEnumerable<(string type, string str_vals)> getPArgsStringTuple();
 
-    public override string PArgsToString()
+    public override string SerializePArgs()
     {
         StringBuilder sb = new StringBuilder();
         sb.Append(FilterField.START);
