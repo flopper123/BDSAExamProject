@@ -2,12 +2,41 @@
 
 @using LitExplore.Controllers.Graph
 
-<div class="">
-  <p>@node.Title</p>
+<div class="w-6 h-6 bg-red-@_red rounded-full flex justify-center items-center border-2 border-white-600">
+  <div class="w-full h-full mix-blend-multiply bg-blue-@_blue rounded-full overflow-x-hidden overflow-y-hidden"></div>
 </div>
 
 @code {
   [Parameter]
-  public VisualGraphNode node { get; set; }
+  public VisualGraphNode node {
+    get {
+      return _node;
+    }
+    set {
+      (double x, double y) = value.Point;
+
+      _red = colorFromFactor(x);
+      _blue = colorFromFactor(y);
+
+      _node = value;
+    }
+  }
+
+  private VisualGraphNode _node;
+  private int _red;
+  private int _blue;
+
+  
+  // Takes in a double between [0-1]
+  // returns a mapped int, f, from values (100, 200, 300, ..., 900)
+  private int colorFromFactor(double factor) {
+    factor *= 10.0d;
+
+    int f = (int) Math.Round(factor);
+
+    f *= 100;
+
+    return Math.Min(Math.Max(f, 100), 900);
+  }
 
 }

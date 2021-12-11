@@ -18,6 +18,12 @@ public class GraphController
         var graphRelation = new GraphRelation();
         var relations = graphRelation.GetManyToManyRelations(publications);
 
-        return VisualGraph.FromList(relations);
+        // Generate graph
+        var graph = VisualGraph.FromList(relations);
+        
+        // Normalize graph
+        var normalizer = new GraphNormalizer();
+
+        return normalizer.Normalize(graph);
     }
 }
