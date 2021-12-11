@@ -1,13 +1,15 @@
-namespace LitExplore.Entity;
-
 using LitExplore.Entity.Filter;
+using Microsoft.EntityFrameworkCore;
 
-public interface ILitExploreContext : IDisposable
+namespace LitExplore.Entity
 {
+  public interface ILitExploreContext : IDisposable
+  {
     DbSet<Reference> References { get; }
     DbSet<Publication> Publications { get; }
-    DbSet<UserFilter> History { get; }
 
+    DbSet<UserFilter> History {get;}
     int SaveChanges();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+  }
 }

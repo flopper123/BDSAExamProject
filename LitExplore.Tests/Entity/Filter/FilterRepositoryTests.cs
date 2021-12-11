@@ -8,21 +8,25 @@ public class FilterRepositoryTests : AbsRepositoryTests<FilterRepository<Publica
     // init db
     override protected void seed()
     {
+
+        UserFilter f1 = new UserFilter{UserId=1,Serialization = new TitleFilter("0x",null).Serialize()};
+        UserFilter f2 = new UserFilter{UserId=2, Serialization = new TitleFilter("Coast", new MinRefsFilter(3, null)).Serialize()};
         // seed actions here
-        Reference ref1 = new Reference { Title = "Test pub 1" };
-        Reference ref2 = new Reference { Title = "Test pub 2" };
+        
 
-        context.References.AddRange(
-            ref1, ref2
+        context.History.AddRange(
+            f1,f2
         );
 
-        Publication pub1 = new Publication { Title = "Test pub 1", References = new List<Reference> { ref2 } };
+    }
 
-        context.Publications.AddRange(
-          pub1,
-          new Publication { Title = "Test pub 2", References = new List<Reference> { ref1 } },
-          new Publication { Title = "Test pub 3", References = new List<Reference> { ref1, ref2 } }
-        );
+    [Fact]
+    public void TempCheckToseeIfMigrationWorked()
+    {
+        ulong UserId = 1UL; 
+        var firstuser = context.History.Find(UserId);
+
+        Assert.NotNull(firstuser);
     }
 
     [Fact]
