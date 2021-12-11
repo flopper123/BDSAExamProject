@@ -8,8 +8,6 @@ using static System.Console;
 
 public static class ReflectionUtil
 {
-    // TO:DO add tests for both methods
-
     /// <summary>
     /// Returns all non-generic/abstract types that implement the input open generic type in the current scope 
     /// of the parameter assembly.
@@ -63,6 +61,7 @@ public static class ReflectionUtil
                 err_msg += $"Expected field \"{exp_name}\"@typeof({exp_type}) on typeof({src})" ;
             
                 throw new MissingFieldException(err_msg);
+
             } else if (field.FieldType != exp_type) {
 
                 err_msg += $"Wrong type of \"{exp_name}\"@field:\n\t\t\t";

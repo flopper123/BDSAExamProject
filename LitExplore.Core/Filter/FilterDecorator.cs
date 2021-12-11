@@ -1,5 +1,8 @@
 namespace LitExplore.Core.Filter;
 
+using System.Text;
+using static LitExplore.Core.Filter.FilterPArgField;
+
 /// <summary>
 /// Auxiliary class for chaining together different filters.
 /// Any new filter should extend this class, and send the desired 
@@ -11,7 +14,6 @@ namespace LitExplore.Core.Filter;
 /// <typeparam name="T"></typeparam>
 public abstract class FilterDecorator<T> : Filter<T> {
 
-    [JsonProperty]
     protected Filter<T> prv;
     protected readonly UInt32 _depth;
     
@@ -33,13 +35,8 @@ public abstract class FilterDecorator<T> : Filter<T> {
     /// How many filters this decoration applies in total. Should be same as 
     /// count of enumerable returned by GetHistory(). 
     /// </summary>
-    public override UInt32 Depth {
-        get { return _depth; }
-    }
-
-    public dynamic? PredicateArgs {
-        get { return this.p_args; }
-    }
+    public override UInt32 Depth { get { return _depth; } }
+    public dynamic? PredicateArgs { get { return this.p_args; } }
 
     /// <summary>
     /// Returns an IEnumerable containing the entire filter history span of this
@@ -74,5 +71,23 @@ public abstract class FilterDecorator<T> : Filter<T> {
     /// <returns> IEnumerable<T> where all elements satisfy the entire history of filters. </returns>
     public override IEnumerable<T> Apply(IEnumerable<T> tar) {
         return base.Apply(prv.Apply(tar));
+    }
+    
+    protected abstract IEnumerable<(string type, string str_vals)> getPArgsStringTuple();
+
+    public override string PArgsToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append(FilterField.START);
+        foreach ((string type, string val) in getPArgsStringTuple())
+        {
+            sb.Append($"{LINE_START}{TYPE}{VALUE_SEPERATOR}{type}");
+            sb.Append(FIELD_SEPERATOR);
+            sb.Append($"{VALUE}{VALUE_SEPERATOR}{val}{LINE_END}");
+            sb.Append(PARG_SEPERATOR);
+        }
+        // Remove P_ARG seperator for last element
+        sb[sb.Length - 1] = FilterField.END[0];
+        return sb.ToString();
     }
 }

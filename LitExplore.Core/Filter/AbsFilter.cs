@@ -1,5 +1,21 @@
 namespace LitExplore.Core.Filter;
+
 using System.Text;
+
+///==== Not Needed ==== ///
+// public enum FilterField
+// {
+//     NAME,
+//     DEPTH,
+//     P_ARGS,
+// }   
+
+// public enum FilterArgField 
+// {
+//     TYPE,
+//     VALUE,
+// }
+
 public abstract class Filter<T> {
     // The top-level predicate this filter applies.
     protected Predicate<T> predicate;
@@ -16,32 +32,28 @@ public abstract class Filter<T> {
 
     public virtual string Serialize() {
         StringBuilder sb = new StringBuilder();
-        sb.Append("{\n");
+        sb.Append(FilterField.START);
         foreach (Filter<T> f in GetHistory()) {
             sb.Append(f.ToString());
-            sb.Append("\n");
+            sb.Append(Environment.NewLine);
         }
-        sb.Append("}");
+        sb[sb.Length - 1] = FilterField.END[0];
         return sb.ToString();
     }
 
-    /// <summary>
-    /// Compresses this filter and its history to a collection of tuples
-    /// containing:
-    /// The name of filter, and the args to construct that filter.
-    /// </summary>
-    // public abstract IList<(String name, Object?[] args)> Compress();
 
     /// <summary>
     /// Return an ordered ienumerable where the starting element is the first applied 
     /// filter in this sequence of filters.
     /// </summary>
     /// <returns> The filter history as an generic IEnumerable<Filter<T>> </returns>
-    public virtual IEnumerable<Filter<T>> GetHistory() {
+    public virtual IEnumerable<Filter<T>> GetHistory() {{}
         yield return this;
     }
-    
-    public virtual string P_Args_ToString() { return "null"; }
+
+    public virtual string PArgsToString() { 
+        return $"{FilterField.START}null{FilterField.END}"; 
+    }
 
     /// <summary>
     /// Applies the predicate to the input @tar, and returns
@@ -55,6 +67,19 @@ public abstract class Filter<T> {
     }
 
     override public string ToString() {
-        return $"(name={this.GetType().FullName}, depth={this.Depth}, p_args={P_Args_ToString()})";
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(FilterField.START);
+
+        sb.Append($"{FilterField.NAME}{FilterField.VALUE_SEPERATOR}{this.GetType().FullName}");
+        sb.Append(FilterField.FIELD_SEPERATOR);
+
+        sb.Append($"{FilterField.DEPTH}{FilterField.VALUE_SEPERATOR}{this.Depth}");
+        sb.Append(FilterField.FIELD_SEPERATOR);
+
+        sb.Append($"{FilterField.P_ARGS}{FilterField.VALUE_SEPERATOR}{PArgsToString()}");
+        sb.Append(FilterField.END);
+
+        return sb.ToString();
     }
 }

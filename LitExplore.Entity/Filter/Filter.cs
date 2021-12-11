@@ -4,6 +4,6 @@ using System.Reflection;
 
 // Entity equivalent of FilterDto
 public class Filter {
-    int userId {get; set;}
-    public string filterJson { get; set; } = null!;
+    int UserId {get; set;}
+    public string Serialization { get; set; } = null!;
 }

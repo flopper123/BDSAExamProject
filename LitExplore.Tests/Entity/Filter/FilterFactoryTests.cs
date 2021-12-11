@@ -1,6 +1,7 @@
 namespace LitExplore.Tests.Entity.Filter;
 
 using LitExplore.Core.Filter;
+using LitExplore.Core.Filter.Filters;
 
 public class FilterFactoryTests {
     [Theory]

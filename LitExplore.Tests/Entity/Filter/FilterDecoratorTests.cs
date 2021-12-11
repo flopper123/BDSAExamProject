@@ -1,7 +1,5 @@
 namespace LitExplore.Tests.Entity.Filter;
 
-using LitExplore.Core.Filter;
-
 // Tests for filter decorations
 public class FilterDecoratorTests
 {

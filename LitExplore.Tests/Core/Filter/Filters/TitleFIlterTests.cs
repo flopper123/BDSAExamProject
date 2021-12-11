@@ -3,13 +3,17 @@ namespace LitExplore.Tests.Core.Filter;
 using Newtonsoft.Json;
 using LitExplore.Core;
 using LitExplore.Core.Filter;
+using LitExplore.Core.Filter.Filters;
+using System.Text;
+
+using static LitExplore.Core.Filter.FilterPArgField;
 
 // Tests for Filter<T> and EmptyFilter 
 public class TitleFilterTest
 {
     private Filter<PublicationDto> filter;
     private IList<PublicationDto> pubData;
-
+    
     public TitleFilterTest()
     {
         pubData = new List<PublicationDto>() {
@@ -20,42 +24,66 @@ public class TitleFilterTest
         filter = new TitleFilter("0x");
     }
 
-    //JsonConvert.SerializeObject(YourPOCOHere, Formatting.Indented, 
-    //new JsonSerializerSettings 
-    //{ 
-    //        ReferenceLoopHandling = ReferenceLoopHandling.Serialize
-    //});
-
     [Fact]
     public void CanStringify()
     {
-        string exp = "NOT_IMPLEMENTED"; // insert string literal
+        StringBuilder exp = new StringBuilder();
+        // Start of all pargs
+        exp.Append(FilterField.START);
+        exp.Append($"{FilterField.START}{FilterField.NAME}{FilterField.VALUE_SEPERATOR}");
+        exp.Append("LitExplore.Core.Filter.Filters.TitleFilter");
+        exp.Append($"{FilterField.FIELD_SEPERATOR}{FilterField.DEPTH}{FilterField.VALUE_SEPERATOR}");
+        exp.Append("1");
+        exp.Append($"{FilterField.FIELD_SEPERATOR}{FilterField.P_ARGS}{FilterField.VALUE_SEPERATOR}");
+        // PArgs
+        exp.Append(FilterField.START);
+        exp.Append($"{LINE_START}{TYPE}{VALUE_SEPERATOR}System.String{FIELD_SEPERATOR}"
+                  +$"{VALUE}{VALUE_SEPERATOR}0x{LINE_END}");
+        // end of current parg
+        exp.Append(FilterField.END); 
+        // End of All pargs
+        exp.Append(FilterField.END);
+
+        // END of serialization
+        exp.Append(FilterField.END);
+
         string act = filter.Serialize();
-        Assert.Equal(exp, act);
+        Assert.Equal(exp.ToString(), act);
     }
 
-    // [Fact]
-    // public void CanDeserializeJson()
-    // {
-    //     TitleFilter exp = (TitleFilter)filter;
-    //     var act = (TitleFilter?)JsonConvert.DeserializeObject(exp.ToJson());
-    //     Assert.NotNull(act);
-    //     if (act == null) return;
-    //     Assert.Equal(exp.Depth, act.Depth);
-    //     Assert.Equal(exp.GetHashCode(), act.GetHashCode());
-    // }
+    [Fact]
+    public void CanDeserialize()
+    {
+        TitleFilter exp = (TitleFilter)filter;
+        var act = (TitleFilter) FilterFactory.Create<PublicationDto>(exp.Serialize());
+        Assert.Equal(exp.Depth, act.Depth);
+        Assert.Equal(exp.Serialize(), act.Serialize());
+    }
+
+    [Fact]
+    public void CanApplyDeserialization()
+    {
+        var exp = new List<PublicationDto> { pubData[0], pubData[2] };
+        var act = (TitleFilter) FilterFactory.Create<PublicationDto>(filter.Serialize());
+        foreach (var dto in act.Apply(pubData)) {
+            Assert.True(exp.Contains(dto), $"Couldn't find {dto} in expected list of dtos.");
+        }
+    }
 
     [Fact]
     public void CanStringifyChain()
     {
-        Filter<PublicationDto> f_act =
-            new TitleFilter("BEEF",
-                new TitleFilter("AD",
-                    new TitleFilter("DE", this.filter)
-            ));
-        string act = f_act.Serialize();
-        string exp = "NOT_IMPLEMENTED";
-        Assert.True(false, act);
+        var f1 = this.filter;
+        var f2 = new TitleFilter("DE", f1);
+        var f3 = new TitleFilter("AD", f2);
+        var f4 = new TitleFilter("BEEF", f3);
+        StringBuilder exp = new StringBuilder();
+        exp.Append(FilterField.START);
+        exp.Append($"{f1}\n{f2}\n{f3}\n{f4}");
+        exp.Append(FilterField.END);
+
+        string act = f4.Serialize();
+        Assert.Equal(exp.ToString(), act);
     }
 
     [Fact]
@@ -67,5 +95,11 @@ public class TitleFilterTest
         // Assert actual
         Assert.True(act.MoveNext(), "Failed to move to first enumeration");
         Assert.Equal(filter, act.Current);
+    }
+
+    [Fact]
+    public void RegexTestGettingSerialized()
+    {
+
     }
 }
