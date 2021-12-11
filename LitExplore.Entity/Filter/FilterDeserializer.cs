@@ -7,28 +7,6 @@ using System.Reflection;
 using static LitExplore.Core.Filter.FilterField;
 using static StringSplitOptions;
 
-internal static class StringExtension {
-        
-    internal static int ToInt(this string str) {
-
-        bool hasFound = false;
-        int ret = 0;
-
-        for (int i = 0; i < str.Length; i++) {
-
-            char c = str[i];
-            if (c >= '0' && c <= '9') {
-                ret *= 10;
-                ret += (int) (c - '0');
-                hasFound = true;
-            } else if (hasFound) {
-                break;
-            }
-        }
-        return ret;
-    }
-}
-
 internal class FilterDeserializer
 {
     static readonly string PARGS_SERIAL_METHOD = "DeserializePArgs";

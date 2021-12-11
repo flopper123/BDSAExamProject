@@ -22,7 +22,7 @@ public class MinRefsFilter : FilterDecorator<PublicationDto> {
             {
                 throw new ArgumentException("Expected one P_Arg argument of type System.Int");
             }
-            return new Object[] { val };
+            return new Object[] { val.ToInt() };
         }
         return new Object[] { };
     }

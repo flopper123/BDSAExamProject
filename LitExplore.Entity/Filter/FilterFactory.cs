@@ -59,7 +59,7 @@ public class FilterFactory
         return (Filter<T>)filter;
     }
 
-    public static Filter<T> Create<T>(Filter dto) {
+    public static Filter<T> Create<T>(UserFilter dto) {
         return deserializer.Deserialize<T>(_assembly, dto.Serialization);
     }
 }

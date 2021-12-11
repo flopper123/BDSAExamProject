@@ -95,4 +95,3 @@ public class FilterRepositoryTests : AbsRepositoryTests<FilterRepository<Publica
         //TO:DO Implement test Should be easy Will implement this the next time I look at it if its still here -- Mads.
     }
 }
-}

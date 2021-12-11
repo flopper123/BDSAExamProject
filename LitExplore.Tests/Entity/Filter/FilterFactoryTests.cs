@@ -8,16 +8,16 @@ public class FilterFactoryTests {
     [InlineData(typeof(MinRefsFilter), 10)]
     [InlineData(typeof(TitleFilter), "0xDEADBEEF")]
     public void Create_by_Type(Type exp, params Object[] args) {
-        Filter<PublicationDto> act_filter = FilterFactory.Create<PublicationDto>(exp.ToString(), args);
-        Assert.Equal(exp, act_filter.GetType());
+        Filter<PublicationDto> act_filter = FilterFactory.Create<PublicationDto>(exp.Name, args);
+        Assert.Equal(exp.Name, act_filter.GetType().Name);
     }
 
     [Theory]
     [InlineData("MinRefsFilter", 10)]
     [InlineData("TitleFilter", "0xDEADBEEF")]
-    public void Create_by_Name(string exp, params Object[] args) {
+    public void Create_by_UnqualifiedName(string exp, params Object[] args) {
         Filter<PublicationDto> act_filter = FilterFactory.Create<PublicationDto>(exp, args);
-        Assert.Equal(exp, act_filter.GetType().ToString());
+        Assert.Equal(exp, act_filter.GetType().Name);
     }
 
     [Fact]
