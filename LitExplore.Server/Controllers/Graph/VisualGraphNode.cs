@@ -8,6 +8,10 @@ public class VisualGraphNode
 
   public (double x, double y) Point { get; set; }
 
+  // Helper methods
+  public string Title { get => Publication.Title; }
+  public ISet<ReferenceDto> References { get => Publication.References; }
+
   public RelationsHandler Relations;
 
   public VisualGraphNode(PublicationDto pub, (double x, double y) point) {

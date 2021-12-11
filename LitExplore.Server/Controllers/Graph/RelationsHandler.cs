@@ -4,9 +4,9 @@ namespace LitExplore.Server.Controllers.Graph;
 using LitExplore.Core;
 
 
-public class RelationsHandler : List<(PublicationDto pub, double factor)>
+public class RelationsHandler : List<(VisualGraphNode node, double factor)>
 {
-  public static RelationsHandler FromList(List<(PublicationDto, double)> list) {
+  public static RelationsHandler FromList(List<(VisualGraphNode, double)> list) {
     RelationsHandler rh = new RelationsHandler();
     rh.AddRange(list);
     return rh; 

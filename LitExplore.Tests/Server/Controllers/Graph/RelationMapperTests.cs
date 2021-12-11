@@ -11,6 +11,20 @@ public class RelationMapperTests
 {
   public static List<PublicationDto> Publications = GraphTestData.GetPublications();
 
+
+  [Fact]
+  public void CanReturnAListOfGraphNodes() {
+    // Arrange
+    var rm = new RelationMapper();
+
+    // Act
+    List<VisualGraphNode> nodes = rm.MapPublications(Publications);
+
+    // Assert
+    Assert.Equal(Publications.Count, nodes.Count); // Make sure we have the same number of elements
+  }
+
+
   public static IEnumerable<object[]> GetPublicationData => Publications.Select(p => new object[] { p });
 
   [Theory]

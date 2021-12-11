@@ -9,6 +9,11 @@ using System.Linq;
 public class RelationMapper
 {
 
+  // Maps a list of publications to visual graph nodes
+  public List<VisualGraphNode> MapPublications(List<PublicationDto> publications) {
+    return publications.Select(pub => MapPublication(pub)).ToList<VisualGraphNode>();
+  }
+
   // Maps a publication to (x, y) using heuristics
   public VisualGraphNode MapPublication(PublicationDto pub) {
     

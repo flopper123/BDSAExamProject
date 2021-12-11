@@ -1,19 +1,24 @@
 namespace LitExplore.Server.Controllers;
 
+using LitExplore.Server.Controllers.Graph;
+
 public class GraphController
 {
     public GraphController() {}
     
-    /*public Task<List<VisualGraphNode>> GetGraphRepresentationAsync() {
+    public async Task<List<VisualGraphNode>> GetGraphRepresentationAsync() {
         // Fetch graph
-        PublicationRepository.;
+        
 
         // Find graph relations
+        var graphRelation = new GraphRelation();
 
         // Heuristic map
 
         // Iteratively fall towards eachother
 
         // Normalize
-    }*/
+
+        return new List<VisualGraphNode>();
+    }
 }

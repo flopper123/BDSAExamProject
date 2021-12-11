@@ -1,53 +1,32 @@
 
-namespace LitExplore.Server;
-
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using LitExplore.Server.Controllers;
-using LitExplore.UI;
-using Microsoft.Extensions.FileProviders;
 
-using System.Reflection;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program {
+// Add services to the container.
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+builder.Services.AddSingleton<GraphController>();
 
-  public static void Main(string[] args) {
+var app = builder.Build();
 
-    /**
-    * File that initializes the server
-    *
-    */
-
-
-    var builder = WebApplication.CreateBuilder(args);
-
-    // Add services to the container.
-    builder.Services.AddRazorPages();
-    builder.Services.AddServerSideBlazor();
-    builder.Services.AddSingleton<GraphController>();
-
-    var app = builder.Build();
-
-    // Configure the HTTP request pipeline.
-    if (!app.Environment.IsDevelopment())
-    {
-      app.UseExceptionHandler("/Error");
-      // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-      app.UseHsts();
-    }
-
-    app.UseHttpsRedirection();
-
-    
-
-    app.UseStaticFiles();
-
-    app.UseRouting();
-
-    app.MapBlazorHub();
-    app.MapFallbackToPage("/_Host");
-
-    app.Run();
-
-  }
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+  app.UseExceptionHandler("/Error");
+  // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+  app.UseHsts();
 }
+
+app.UseHttpsRedirection();
+
+
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
+
+app.Run();
