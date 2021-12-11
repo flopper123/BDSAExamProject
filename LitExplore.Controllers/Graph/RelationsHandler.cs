@@ -1,5 +1,5 @@
 
-namespace LitExplore.Server.Controllers.Graph;
+namespace LitExplore.Controllers.Graph;
 
 using LitExplore.Core;
 

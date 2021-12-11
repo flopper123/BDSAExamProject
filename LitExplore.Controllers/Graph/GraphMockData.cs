@@ -1,8 +1,11 @@
-namespace LitExplore.Tests.Server.Controllers.Graph;
+namespace LitExplore.Controllers.Graph;
 
-using LitExplore.Server.Controllers.Graph;
+using LitExplore.Core;
 
-public class GraphTestData
+/**
+ * ! REMOVE THIS FILE AND UPDATE GRAPH CONTROLLER ONCE REPOS AND GRAPH IS FULLY SETUP
+ */
+public class GraphMockData
 {
 
   public static List<ReferenceDto> GetReferences() {

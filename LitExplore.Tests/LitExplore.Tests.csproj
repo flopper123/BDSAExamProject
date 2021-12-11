@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LitExplore.Server\LitExplore.Server.csproj" />
+    <ProjectReference Include="..\LitExplore.Controllers\LitExplore.Controllers.csproj" />
     <ProjectReference Include="..\LitExplore.Core\LitExplore.Core.csproj" />
     <ProjectReference Include="..\LitExplore.Entity\LitExplore.Entity.csproj" />
   </ItemGroup>

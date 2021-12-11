@@ -1,0 +1,23 @@
+@namespace LitExplore.UI.Pages.Authorized.Home.Components
+
+@using LitExplore.Controllers
+@using LitExplore.Controllers.Graph
+
+@inject GraphController controller
+
+<div class="">
+  @if (graph == null)
+  {
+    <p>Loading graph...</p>
+  } else {
+    <p>Loaded!</p>
+  }
+</div>
+
+@code {
+  private VisualGraph? graph;
+
+  protected override async Task OnInitializedAsync() {
+    graph = await controller.GetGraphRepresentationAsync();
+  }
+}

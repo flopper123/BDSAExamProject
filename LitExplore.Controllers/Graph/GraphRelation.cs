@@ -1,4 +1,4 @@
-namespace LitExplore.Server.Controllers.Graph;
+namespace LitExplore.Controllers.Graph;
 
 using System;
 using System.Linq;

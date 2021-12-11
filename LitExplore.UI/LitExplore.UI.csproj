@@ -7,4 +7,7 @@
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LitExplore.Controllers\LitExplore.Controllers.csproj" />
+  </ItemGroup>
 </Project>

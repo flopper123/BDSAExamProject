@@ -1,5 +1,5 @@
 
-using LitExplore.Server.Controllers;
+using LitExplore.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
