@@ -1,0 +1,25 @@
+@namespace LitExplore.UI.Pages.Authorized.Home.Components.Graph
+
+@using LitExplore.Controllers.Graph
+
+<div class="">
+  <Relations node=@_node></Relations>
+  <Node node=@_node></Node>
+</div>
+
+@code {
+
+  private VisualGraphRelationNode _node;
+
+  [Parameter]
+  public VisualGraphRelationNode node {
+    get => _node;
+    set {
+      pos = GraphUtil.ToVisualPoint(value.Node.Point);
+      _node = value;
+    }
+  }
+
+  private (double x, double y) pos;
+
+}

@@ -1,4 +1,4 @@
-namespace LitExplore.Server.Controllers.Graph;
+namespace LitExplore.Controllers.Graph;
 
 using LitExplore.Core;
 
@@ -8,6 +8,11 @@ using System.Linq;
 // Maps a relation to (x, y) where x and y are in the range of [0-1]
 public class RelationMapper
 {
+
+  // Maps a list of publications to visual graph nodes
+  public List<VisualGraphNode> MapPublications(List<PublicationDto> publications) {
+    return publications.Select(pub => MapPublication(pub)).ToList<VisualGraphNode>();
+  }
 
   // Maps a publication to (x, y) using heuristics
   public VisualGraphNode MapPublication(PublicationDto pub) {

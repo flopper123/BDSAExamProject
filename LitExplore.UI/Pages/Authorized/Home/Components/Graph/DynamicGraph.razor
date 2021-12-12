@@ -1,0 +1,16 @@
+@namespace LitExplore.UI.Pages.Authorized.Home.Components.Graph
+
+@using LitExplore.Controllers.Graph
+
+<div class="relative h-full w-11/12">
+  @foreach (var node in graph)
+  {
+    <DynamicRelationedNode node=@node></DynamicRelationedNode>
+  }
+</div>
+
+@code {
+  [Parameter]
+  public VisualGraph graph { get; set; }
+
+}

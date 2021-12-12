@@ -1,0 +1,26 @@
+@namespace LitExplore.UI.Pages.Authorized.Home.Components
+
+@using LitExplore.Controllers
+@using LitExplore.Controllers.Graph
+
+@using LitExplore.UI.Pages.Authorized.Home.Components.Graph
+
+@inject GraphController controller
+
+<div class="h-full w-11/12">
+  @if (graph == null)
+  {
+    <p>Loading graph...</p>
+  } else {
+    <DynamicGraph graph=@graph></DynamicGraph>
+  }
+</div>
+
+@code {
+  private VisualGraph? graph;
+
+  protected override async Task OnInitializedAsync()
+  {
+    graph = await controller.GetGraphRepresentationAsync();
+  }
+}

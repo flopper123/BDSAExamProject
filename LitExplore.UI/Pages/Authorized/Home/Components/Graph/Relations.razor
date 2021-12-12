@@ -1,0 +1,70 @@
+@namespace LitExplore.UI.Pages.Authorized.Home.Components.Graph
+
+@using LitExplore.Controllers.Graph
+
+<div class="absolute w-full h-full">
+  <svg
+    width="100%" height="100%"
+    x="100%" y="100%"
+  >
+    @foreach (var relation in relations)
+    {
+      <line
+        x1="@GraphUtil.GetPercentage(_node.Node.Point.x)%"
+        y1="@GraphUtil.GetPercentage(_node.Node.Point.y)%"
+        x2="@GraphUtil.GetPercentage(relation.Point.x)%"
+        y2="@GraphUtil.GetPercentage(relation.Point.y)%"
+        shape-rendering="geometricPrecision"
+        stroke="white"
+        stroke-width="2"
+      />
+    }
+  </svg>
+</div>
+
+
+@code {
+
+  [Parameter]
+  public VisualGraphRelationNode node {
+    get { return _node; }
+    set {
+
+      var pubTitles = value.Node.References.Select(r => r.Title).ToList();
+
+      _node = value;
+      
+      var containsAny =
+        (List<string> l0, List<string> l1)
+          => l0.Aggregate(
+            false,
+            (a, c) => l1.Contains(c) || a,
+            v => v
+          );
+
+      relations = value.Relations
+        .Where(
+          rel => containsAny(
+            value.Node.References.Select(r => r.Title).ToList(),
+            rel.node.References.Select(r => r.Title).ToList()
+          )
+        )
+        .Select(
+          rel => rel.node
+        )
+        .ToList();
+
+      
+    }
+  }
+
+  protected override void OnInitialized() {
+    GraphUtil.AddSub(() => StateHasChanged());
+  }
+
+  private VisualGraphRelationNode _node;
+
+  private List<VisualGraphNode> relations;
+
+
+}

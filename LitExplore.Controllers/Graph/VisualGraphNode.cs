@@ -1,4 +1,4 @@
-namespace LitExplore.Server.Controllers.Graph;
+namespace LitExplore.Controllers.Graph;
 
 using LitExplore.Core;
 
@@ -6,7 +6,11 @@ public class VisualGraphNode
 {
   public PublicationDto Publication { get; init; } = null!;
 
-  public (double x, double y) Point { get; set; }
+  public (double x, double y) Point;
+
+  // Helper methods
+  public string Title { get => Publication.Title; }
+  public ISet<ReferenceDto> References { get => Publication.References; }
 
   public RelationsHandler Relations;
 

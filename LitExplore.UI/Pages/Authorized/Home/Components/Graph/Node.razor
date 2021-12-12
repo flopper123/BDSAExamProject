@@ -1,0 +1,160 @@
+@namespace LitExplore.UI.Pages.Authorized.Home.Components.Graph
+
+@using LitExplore.Controllers.Graph
+
+<div class="absolute z-10" style="left: @_pos.x%; top: @_pos.y%;">
+  <div class="relative -top-3 -left-3">
+    <div class="w-6 h-6 bg-red-@_red rounded-full flex justify-center items-center border-2 border-white-600">
+      <div class="w-full h-full mix-blend-multiply bg-blue-@_blue rounded-full overflow-x-hidden overflow-y-hidden"></div>
+    </div>
+  </div>
+</div>
+
+@code {
+
+  [Parameter]
+  public VisualGraphRelationNode node
+  {
+    get {
+      return _node;
+    }
+    set {
+      (double x, double y) = value.Node.Point;
+
+      _red = colorFromFactor(x);
+      _blue = colorFromFactor(y);
+
+      _node = value;
+
+      pos = value.Node.Point;
+
+      runGraphAnimationLoop();
+    }
+  }
+
+  private VisualGraphRelationNode _node;
+  
+  private (double x, double y) pos {
+    get { return _pos; }
+    set {
+      _pos = GraphUtil.ToVisualPoint(value);
+    }
+  }
+
+  private (double x, double y) _pos;
+
+  private int _red;
+  private int _blue;
+
+  
+  // Takes in a double between [0-1]
+  // returns a mapped int, f, from values (100, 200, 300, ..., 900)
+  private int colorFromFactor(double factor)
+  {
+    factor *= 10.0d;
+
+    int f = (int) Math.Round(factor);
+
+    f *= 100;
+
+    return Math.Min(Math.Max(f, 100), 900);
+  }
+  
+  private async Task runGraphAnimationLoop()
+  {
+    // Distance function
+    Func<(double, double), (double, double), double> dist = (
+      (double x, double y) p0,
+      (double x, double y) p1)
+        => Math.Sqrt(Math.Pow(p0.x - p1.x, 2.0d) + Math.Pow(p0.y - p1.y, 2.0d));
+    
+    // Run loop forever
+    while (true) {
+
+      // Get vector
+      (double x, double y) vec = _node.Relations.Aggregate(
+        (x: 0.0d, y: 0.0d), // Inital vector
+        (v, n) => {
+
+          // Points
+          (double x, double y) from = _node.Node.Point;
+          (double x, double y) to   = n.node.Point;
+
+          // Get distance
+          double d = dist(from, to);
+
+
+          double factor = Math.Min(n.factor, 0.95);
+          
+
+          // Get weighted distance
+          // This can be done like this,
+          //    since both factor and distance is in range 0-1
+          double w = factor - (1-d);
+
+          //if (w > 0.2) w = 0.2;
+
+          // Vector from -> to
+          (double x, double y) ftVec = (
+            to.x - from.x,
+            to.y - from.y
+          );
+
+          // Use weight on vec
+          ftVec.x *= w;
+          ftVec.y *= w;
+
+          // Add to accumulated vector
+          return (
+            v.x + ftVec.x,
+            v.y + ftVec.y
+          );
+        },
+        v => {
+          // Get total count
+          double count = _node.Relations.Count;
+
+          // Make sure we do not divide by 0
+          if (count == 0) return (0.0d, 0.0d);
+
+          // Return vector
+          // The (x, y) values should now always be between 0-1
+          return (
+            v.x / count,
+            v.y / count
+          );
+        }
+      );
+
+      // How often the animation should run
+      double fps = 10.0d;
+
+      // Delta time
+      double dt = 1.0d / fps;
+
+      double strength = 0.5d;
+
+      // Update vector with dt and strength
+      vec.x *= dt * strength;
+      vec.y *= dt * strength;
+
+      // Update point
+      _node.Node.Point.x += vec.x;
+      _node.Node.Point.y += vec.y;
+
+      // Update visual
+      pos = _node.Node.Point;
+
+      // Delay time
+      int delay = (int)( dt * 1000.0d );
+
+      // Update visually
+      StateHasChanged();
+      GraphUtil.Notify();
+
+      // Sleep for delay ms
+      await Task.Delay(delay);
+    }
+  }
+
+}

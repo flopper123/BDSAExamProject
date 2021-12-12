@@ -1,6 +1,6 @@
-namespace LitExplore.Tests.Server.Controllers.Graph;
+namespace LitExplore.Tests.Controllers.Graph;
 
-using LitExplore.Server.Controllers.Graph;
+using LitExplore.Controllers.Graph;
 
 public class GraphTestData
 {
