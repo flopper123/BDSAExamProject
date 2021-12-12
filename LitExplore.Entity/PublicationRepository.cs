@@ -52,23 +52,7 @@ public class PublicationRepository : AbsRepository, IPublicationRepository
                     Title = r.Title
                 }).ToHashSet() // This fails because it needs to be fetched from _context.References
             };
-
-        //var psr = await _context.Publications.FindAsync(pubTitle);
-        //if (psr is null)
-        //{
-        // return 404 NotFound
-        //}
-
-        // ICollection<Reference> found = new List<Reference>();
-        // foreach (var foundReference in psr.References)
-        // {
-        //     
-        // }
-
-        // var pubrefs = _context.References;
-        //     //_context.Publications.Select(p => p).Where(t => t.Title == pubTitle);
-        //     return await new Task<PublicationDto> (() => new PublicationDto());
-
+            
         return await pub.FirstOrDefaultAsync(); // should return 404--or-equivalent if not found.
     }
 
@@ -141,17 +125,4 @@ public class PublicationRepository : AbsRepository, IPublicationRepository
     }
 
     public override void Dispose() { }
-
-    /*
-    private async IAsyncEnumerable<Reference> GetReferencesAsync(ISet<ReferenceDto> publicationReferences)
-    {
-        var existing = await _context.References.Select(r => r)
-            .Where(r => publicationReferences.Any(tr => tr.Title == r.Title)).ToDictionaryAsync(r => r.Title);
-
-        foreach (ReferenceDto referenceDto in publicationReferences)
-        {
-            yield return existing.TryGetValue(referenceDto.Title, out var r) ? r : new Reference { Title = referenceDto.Title }; // Might need to call create ref to context.. this will then create new references.
-        }
-    }
-    */
 }
