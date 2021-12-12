@@ -7,7 +7,7 @@
 
 @inject GraphController controller
 
-<div class="">
+<div class="h-full w-11/12">
   @if (graph == null)
   {
     <p>Loading graph...</p>
@@ -19,7 +19,8 @@
 @code {
   private VisualGraph? graph;
 
-  protected override async Task OnInitializedAsync() {
+  protected override async Task OnInitializedAsync()
+  {
     graph = await controller.GetGraphRepresentationAsync();
   }
 }

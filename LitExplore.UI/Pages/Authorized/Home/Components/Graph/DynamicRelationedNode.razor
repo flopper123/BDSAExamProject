@@ -3,12 +3,23 @@
 @using LitExplore.Controllers.Graph
 
 <div class="">
-  <Relations node=@node></Relations>
-  <Node node=@node.Node></Node>
+  <Relations node=@_node></Relations>
+  <Node node=@_node></Node>
 </div>
 
 @code {
+
+  private VisualGraphRelationNode _node;
+
   [Parameter]
-  public VisualGraphRelationNode node { get; set; }
+  public VisualGraphRelationNode node {
+    get => _node;
+    set {
+      pos = GraphUtil.ToVisualPoint(value.Node.Point);
+      _node = value;
+    }
+  }
+
+  private (double x, double y) pos;
 
 }

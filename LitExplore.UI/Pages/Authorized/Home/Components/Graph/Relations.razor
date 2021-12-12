@@ -2,12 +2,50 @@
 
 @using LitExplore.Controllers.Graph
 
-<div class="">
-  <p>@node.Node.References.Count</p>
+<div class="absolute w-full h-full">
+  <svg
+    width="100%" height="100%"
+    x="100%" y="100%"
+  >
+    @foreach (var relation in node.Relations)
+    {
+      <line
+        x1="@pos.x%"
+        y1="@pos.y%"
+        x2="@GraphUtil.GetPercentage(relation.node.Point.x)%"
+        y2="@GraphUtil.GetPercentage(relation.node.Point.y)%"
+        shape-rendering="geometricPrecision"
+        stroke="white"
+        stroke-width="2"
+      />
+    }
+  </svg>
 </div>
 
+
 @code {
+
   [Parameter]
-  public VisualGraphRelationNode node { get; set; }
+  public VisualGraphRelationNode node {
+    get { return _node; }
+    set {
+      pos = value.Node.Point;
+
+      _node = value;
+    }
+  }
+
+  private VisualGraphRelationNode _node;
+
+  private (double x, double y) pos
+  {
+    get { return _pos; }
+    set
+    {
+      _pos = GraphUtil.ToVisualPoint(value);
+    }
+  }
+
+  private (double x, double y) _pos;
 
 }

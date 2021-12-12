@@ -6,7 +6,7 @@ public class VisualGraphNode
 {
   public PublicationDto Publication { get; init; } = null!;
 
-  public (double x, double y) Point { get; set; }
+  public (double x, double y) Point;
 
   // Helper methods
   public string Title { get => Publication.Title; }
