@@ -14,7 +14,7 @@ public interface IFilterRepository<T>
     /// If the userId doesn't have a saved filter, the method returns an instance 
     /// of EmptyFilter<T>
     /// </returns>
-    Task<Filter<T>> ReadAsync(UInt64 userId);
+    Task<Filter<T>?> ReadAsync(UInt64 userId);
 
 
     /// <summary>

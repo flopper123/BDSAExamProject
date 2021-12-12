@@ -9,5 +9,5 @@ public class UserFilter {
     public ulong UserId {get; init;}
 
     [Required]
-    public string Serialization { get; init; } = null!;
+    public string Serialization { get; set; } = null!;
 }

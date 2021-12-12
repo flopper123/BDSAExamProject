@@ -13,11 +13,9 @@ public class FilterRepositoryTests : AbsRepositoryTests<FilterRepository<Publica
         UserFilter f2 = new UserFilter{UserId=2, Serialization = new TitleFilter("Coast", new MinRefsFilter(3, null)).Serialize()};
         // seed actions here
         
-
         context.History.AddRange(
             f1,f2
         );
-
     }
 
     [Fact]
@@ -33,69 +31,57 @@ public class FilterRepositoryTests : AbsRepositoryTests<FilterRepository<Publica
     public async Task ReadAsync_Returns_Filter_Given_UserID()
     {
         // Arrange
-        var expected = new TitleFilter("0x",null); // TODO: Build A proper filter.
+        var exp = new TitleFilter("0x",null);
         var userId = 1UL;
 
         // Act
-        Filter<PublicationDto> act = await repository.ReadAsync(userId);
+        Filter<PublicationDto>? act = await repository.ReadAsync(userId);
 
         // Assert
+        Assert.NotNull(act);
+        if (act == null) return;
+        Assert.Equal(exp.GetType(), act.GetType());
+        Assert.Equal(exp.Depth, act.Depth);
+        Assert.Equal(exp.Serialize(), act.Serialize());
+    }
+    
+    public static IEnumerable<Object[]> GetUidFilter() {
+        yield return new Object[] { new TitleFilter("0xDEAD") };
+        yield return new Object[] { new TitleFilter("0xDEAD", new TitleFilter("AXFALSE")) };
+        yield return new Object[] { new MinRefsFilter(10) };
+    }
+
+    [Theory]
+    [MemberData(nameof(GetUidFilter))]
+    public async Task UpdateAsync_UpdatesAndReturns_Updated(Filter<PublicationDto> filter)
+    {
+        UInt64 uid = 1337UL;
         
-        Assert.Equal(expected, act);
-    }
-
-    IEnumerable<Filter<PublicationDto>> GetUidFilter() {
-        yield return new TitleFilter("0xDEAD");
-        yield return new TitleFilter("0xDEAD", new TitleFilter("AXFALSE"));
-        yield return new MinRefsFilter(10);
-    }
-
-    [Theory]
-    [MemberData("GetUidFilter")]
-    public async Task UpdateAsync_Returns_Updated(Filter<PublicationDto> filter)
-    {
-        var base_filter = new TitleFilter("I DONT WORK");
-        await repository.UpdateAsync(1337UL, base_filter);
-        var act_status = await repository.UpdateAsync(1337UL, filter);
-        Assert.Equal(Status.Updated, act_status);
-    }
-
-    [Theory]
-    [MemberData("GetUidFilter")]
-    public async Task UpdateAsync_Returns_Created(Filter<PublicationDto> filter)
-    {
-        var act_status = await repository.UpdateAsync(1337UL, filter);
-        Assert.Equal(Status.Created, act_status);
-    }
-
-    [Theory]
-    [MemberData("GetUidFilter")]
-    public async Task UpdateAsync_Actually_Updates(Filter<PublicationDto> filter)
-    {
-        var base_filter = new TitleFilter("I DONT WORK");
-        var base_fs = base_filter.Serialize();
-        await repository.UpdateAsync(1337UL, base_filter);
-
-        // Retrieve and ensure 1337 user points to base_filter
-
-        var act_status = await repository.UpdateAsync(1337UL, filter);
+        var base_filter = new TitleFilter("I dont exist");
+        await repository.UpdateAsync(uid, base_filter);
         
-
-        // Retrieve and ensure 1337 user points to input filter.
-        // filter.Serialize
+        var act_status = await repository.UpdateAsync(uid, filter);
+        Assert.Equal(Status.Updated, await repository.UpdateAsync(uid, filter));
+        
+        UserFilter? act = context.History.Find(uid);
+        Assert.NotNull(act);
+        if (act == null) return;
+        
+        Assert.Equal(filter.Serialize(), act.Serialization);
     }
 
     [Theory]
-    [MemberData("GetUidFilter")]
-    public async Task UpdateAsync_Actually_Creates(Filter<PublicationDto> filter)
+    [MemberData(nameof(GetUidFilter))]
+    public async Task UpdateAsync_CreatesAndReturns_Created(Filter<PublicationDto> filter)
     {
-        var act_status = await repository.UpdateAsync(1337UL, filter);
-        Assert.Equal(Status.Created, act_status);
-    }
-
-    [Fact]
-    public async Task DeleteAsync_Given_Title_Returns_Deleted()
-    {
-        //TO:DO Implement test Should be easy Will implement this the next time I look at it if its still here -- Mads.
+        UInt64 uid = 1337UL;
+        var base_filter = new TitleFilter("I dont exist");
+        Assert.Equal(Status.Created, await repository.UpdateAsync(uid, base_filter));
+        
+        UserFilter? act = context.History.Find(uid);
+        Assert.NotNull(act);
+        if (act == null) return;
+//
+        Assert.Equal(base_filter.Serialize(), act.Serialization);
     }
 }
