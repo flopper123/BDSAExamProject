@@ -1,4 +1,14 @@
+
+
 # Lit Explore - Analysis Design and Software Architecture
+The program is run through a Linux Docker container.
+## How to run program:
+$ docker-compose up
+
+## How to run unit tests:
+$ docker-compose up --rm tests
+
+
 ## Overleaf edit link: 
 https://www.overleaf.com/1463845817gbvjhrggqmsy
 

@@ -3,13 +3,11 @@
 version: '3.9'
 
 services:
-  test:
+  tests:
     image: mcr.microsoft.com/dotnet/sdk:6.0
     volumes:
       - .:/code
-    command:
-      - /bin/bash
-      - /code/unittests.sh
+    command: bash -c "cd /code && dotnet test"
 
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -42,7 +40,7 @@ services:
       - source: connection_string
         target: ConnectionStrings__LitExplore
     volumes: #C:\Users\Thomas\Desktop\school\sem3\bdsa\BDSAExamProject
-      - ../../../../../.aspnet/https:/https/
+      - ./secrets/:/https/
 
 secrets:
   db_password:
