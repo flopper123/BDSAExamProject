@@ -1,0 +1,22 @@
+
+@namespace LitExplore.UI.Pages.Authorized.Home.Components
+
+
+<div class="bg-gray-800 text-white py-3 pl-5 pb-4 border-b-2 border-blue-900">
+  <div class="flex ml-2">
+    <FilterName Text="" Seperator=":::" />
+
+    @foreach (var filter in filters)
+    {
+      <FilterName Text="@filter" Seperator=">" />
+    }
+
+    <FilterName Text="visualize" Seperator="" />
+  </div>
+</div>
+
+@code {
+  private List<string> filters = new List<string> {
+    "select", "filter", "search", "filter"
+  };
+}

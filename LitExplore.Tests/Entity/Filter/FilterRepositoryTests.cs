@@ -75,13 +75,12 @@ public class FilterRepositoryTests : AbsRepositoryTests<FilterRepository<Publica
     public async Task UpdateAsync_CreatesAndReturns_Created(Filter<PublicationDto> filter)
     {
         UInt64 uid = 1337UL;
-        var base_filter = new TitleFilter("I dont exist");
-        Assert.Equal(Status.Created, await repository.UpdateAsync(uid, base_filter));
+        Assert.Equal(Status.Created, await repository.UpdateAsync(uid, filter));
         
         UserFilter? act = context.History.Find(uid);
         Assert.NotNull(act);
         if (act == null) return;
 //
-        Assert.Equal(base_filter.Serialize(), act.Serialization);
+        Assert.Equal(filter.Serialize(), act.Serialization);
     }
 }
