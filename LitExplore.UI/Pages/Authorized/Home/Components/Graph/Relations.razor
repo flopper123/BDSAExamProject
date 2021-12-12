@@ -7,13 +7,13 @@
     width="100%" height="100%"
     x="100%" y="100%"
   >
-    @foreach (var relation in node.Relations)
+    @foreach (var relation in relations)
     {
       <line
-        x1="@pos.x%"
-        y1="@pos.y%"
-        x2="@GraphUtil.GetPercentage(relation.node.Point.x)%"
-        y2="@GraphUtil.GetPercentage(relation.node.Point.y)%"
+        x1="@GraphUtil.GetPercentage(_node.Node.Point.x)%"
+        y1="@GraphUtil.GetPercentage(_node.Node.Point.y)%"
+        x2="@GraphUtil.GetPercentage(relation.Point.x)%"
+        y2="@GraphUtil.GetPercentage(relation.Point.y)%"
         shape-rendering="geometricPrecision"
         stroke="white"
         stroke-width="2"
@@ -29,23 +29,42 @@
   public VisualGraphRelationNode node {
     get { return _node; }
     set {
-      pos = value.Node.Point;
+
+      var pubTitles = value.Node.References.Select(r => r.Title).ToList();
 
       _node = value;
+      
+      var containsAny =
+        (List<string> l0, List<string> l1)
+          => l0.Aggregate(
+            false,
+            (a, c) => l1.Contains(c) || a,
+            v => v
+          );
+
+      relations = value.Relations
+        .Where(
+          rel => containsAny(
+            value.Node.References.Select(r => r.Title).ToList(),
+            rel.node.References.Select(r => r.Title).ToList()
+          )
+        )
+        .Select(
+          rel => rel.node
+        )
+        .ToList();
+
+      
     }
+  }
+
+  protected override void OnInitialized() {
+    GraphUtil.AddSub(() => StateHasChanged());
   }
 
   private VisualGraphRelationNode _node;
 
-  private (double x, double y) pos
-  {
-    get { return _pos; }
-    set
-    {
-      _pos = GraphUtil.ToVisualPoint(value);
-    }
-  }
+  private List<VisualGraphNode> relations;
 
-  private (double x, double y) _pos;
 
 }

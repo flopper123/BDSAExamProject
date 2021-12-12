@@ -28,7 +28,7 @@
 
       pos = value.Node.Point;
 
-      //runGraphAnimationLoop();
+      runGraphAnimationLoop();
     }
   }
 
@@ -84,13 +84,15 @@
           double d = dist(from, to);
 
 
-          double factor = n.factor > 0.5 ? n.factor : n.factor * 1.2;
+          double factor = Math.Min(n.factor, 0.95);
           
 
           // Get weighted distance
           // This can be done like this,
           //    since both factor and distance is in range 0-1
-          double w = d - n.factor;
+          double w = factor - (1-d);
+
+          //if (w > 0.2) w = 0.2;
 
           // Vector from -> to
           (double x, double y) ftVec = (
@@ -125,7 +127,7 @@
       );
 
       // How often the animation should run
-      double fps = 30.0d;
+      double fps = 10.0d;
 
       // Delta time
       double dt = 1.0d / fps;
@@ -146,7 +148,9 @@
       // Delay time
       int delay = (int)( dt * 1000.0d );
 
+      // Update visually
       StateHasChanged();
+      GraphUtil.Notify();
 
       // Sleep for delay ms
       await Task.Delay(delay);

@@ -20,14 +20,14 @@ public class GraphMockData
 
     var refs = GetReferences(); 
 
-    var pub0 = new PublicationDto { Title = "Advanced ML in Denmark", References = new HashSet<ReferenceDto> { refs[0], refs[1], refs[2], refs[3] } };
+    var pub0 = new PublicationDto { Title = "Advanced ML in Denmark", References = new HashSet<ReferenceDto> { refs[0], refs[1], refs[2] } };
 
-    var pub1 = new PublicationDto { Title = "CS speedup using downloadable RAM", References = new HashSet<ReferenceDto> { refs[1], refs[2], refs[3] } };
+    var pub1 = new PublicationDto { Title = "CS speedup using downloadable RAM", References = new HashSet<ReferenceDto> { refs[1], refs[2]  } };
 
-    var pub2 = new PublicationDto { Title = "How SKRRRT may outperform google lmao", References = new HashSet<ReferenceDto> { refs[1], refs[2], refs[3] } };
+    var pub2 = new PublicationDto { Title = "How SKRRRT may outperform google lmao", References = new HashSet<ReferenceDto> { refs[1], refs[2] } };
 
-    var pub3 = new PublicationDto { Title = "idk what to write anymore", References = new HashSet<ReferenceDto> { refs[1], refs[2], refs[4] } };
-    var pub4 = new PublicationDto { Title = "yeeeet", References = new HashSet<ReferenceDto> { refs[2], refs[3], refs[4] } };
+    var pub3 = new PublicationDto { Title = "idk what to write anymore", References = new HashSet<ReferenceDto> { refs[1], refs[2] } };
+    var pub4 = new PublicationDto { Title = "yeeeet", References = new HashSet<ReferenceDto> { refs[3], refs[4] } };
     var pub5 = new PublicationDto { Title = "maybe just skrrrt", References = new HashSet<ReferenceDto> { refs[3], refs[4] } };
     var pub6 = new PublicationDto { Title = "whats 9 + 10?", References = new HashSet<ReferenceDto> { refs[4] } };
     var pub7 = new PublicationDto { Title = "gg go next", References = new HashSet<ReferenceDto>() };
