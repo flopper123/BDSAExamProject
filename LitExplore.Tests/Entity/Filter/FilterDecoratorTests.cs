@@ -115,7 +115,7 @@ public class FilterDecoratorTests
     [InlineData(10)]
     [InlineData(30)]
     [InlineData(50)]
-    [InlineData(100_00)]
+    [InlineData(1_000)]
     public void TestDepthOfChainedFilters(UInt32 exp) {
 
         Filter<PublicationDto> fAct = new TitleFilter("Pony");

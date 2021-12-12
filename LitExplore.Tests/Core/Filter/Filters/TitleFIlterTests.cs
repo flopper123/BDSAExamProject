@@ -84,7 +84,7 @@ public class TitleFilterTest
         var f4 = new TitleFilter("BEEF", f3);
         StringBuilder exp = new StringBuilder();
         exp.Append(FilterField.START);
-        exp.Append($"{f1}\n{f2}\n{f3}\n{f4}");
+        exp.Append($"{f1}{Environment.NewLine}{f2}{Environment.NewLine}{f3}{Environment.NewLine}{f4}");
         exp.Append(FilterField.END);
 
         string act = f4.Serialize();

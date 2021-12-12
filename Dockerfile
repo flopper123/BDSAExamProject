@@ -5,7 +5,6 @@ ENV Logging__Console__FormatterName=simple
 
 COPY . /source
 
-COPY ./LitExplore.UI/wwwroot /source/LitExplore.Server/wwwroot
 
 WORKDIR /source
 
