@@ -1,12 +1,4 @@
-using System.Reflection.PortableExecutable;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using LitExplore.Core;
-using LitExplore.Entity;
-using Xunit;
 
 namespace LitExplore.Tests.Entity
 {   

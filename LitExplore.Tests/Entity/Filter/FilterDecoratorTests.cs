@@ -1,4 +1,3 @@
-
 namespace LitExplore.Tests.Entity.Filter;
 
 // Tests for filter decorations
@@ -25,6 +24,10 @@ public class FilterDecoratorTests
                 References = new HashSet<ReferenceDto> { new ReferenceDto{Title = "Alabama Show Down"}, 
                                                          new ReferenceDto{Title = "Copenhagen Show Down"},
                                                          new ReferenceDto{Title = "Swedish Show Down"}}
+            },
+            new PublicationDto {
+                Title = "0xDEADBEEF",
+                References = new HashSet<ReferenceDto> { }
             },
         };
     }
@@ -104,9 +107,47 @@ public class FilterDecoratorTests
         int i = 0;
         foreach (Filter<PublicationDto> fAct in act) {
             var fExp = exp[i++];
-            Assert.Equal(fAct, fExp);
+            Assert.Equal(fExp, fAct);
         }
     }
 
+    [Theory]
+    [InlineData(10)]
+    [InlineData(30)]
+    [InlineData(50)]
+    [InlineData(100_00)]
+    public void TestDepthOfChainedFilters(UInt32 exp) {
+
+        Filter<PublicationDto> fAct = new TitleFilter("Pony");
+        for (UInt32 i = 1; i < exp; i++) {
+            fAct = new TitleFilter("Pony", fAct);
+        }
+
+        Assert.Equal(exp, (UInt32) fAct.GetHistory().Count());
+        Assert.Equal(exp, fAct.Depth);
+    }
+
+    [Fact]
+    public void TestDepthForEmptyFilter() {
+        Assert.Equal(0UL, EmptyFilter<int>.Get().Depth);
+    }
+
+    [Fact]
+    public void CanApplyConstructedTitleFilter()
+    {
+        string arg = "0xDEADBEEF";
+        Filter<PublicationDto>? act_opt = FilterFactory.Create<PublicationDto>("TitleFilter", arg);
+        Assert.NotNull(act_opt);
+
+        TitleFilter? act_filter = (TitleFilter?) act_opt;
+        Assert.NotNull(act_filter);
+        if (act_filter == null) return;
+
+        Assert.Equal(arg, (string) (act_filter.PredicateArgs ?? ""));
+        var enumerator = act_filter.Apply(this.data).GetEnumerator();
+        Assert.True(enumerator.MoveNext());
+        var act = enumerator.Current;
+        Assert.Equal(data[4], act);
+    }
 }
 

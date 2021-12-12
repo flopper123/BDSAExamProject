@@ -1,23 +1,24 @@
 namespace LitExplore.Tests.Entity.Filter;
 
+using LitExplore.Core.Filter;
+
 class FilterEven : FilterDecorator<int> {
     public FilterEven() : base(n => n % 2 == 0) {}
-    
-    public override EFilter GetId() {
-        return EFilter.NONE;
+
+    protected override IEnumerable<(string, string)> getPArgsStringTuple() {
+        yield return ("", "");
     }
 }
 
 // Tests for Filter<T> and EmptyFilter 
 public class FilterTests
 {
-
     private Filter<int> filter;
 
     public FilterTests() {
         filter = new FilterEven();
     }
-    
+
     // Apply filter
     [Theory]
     [InlineData(
@@ -53,5 +54,6 @@ public class FilterTests
         // Assert actual
         Assert.True(act.MoveNext(), "Failed to move to first enumeration");
         Assert.Equal(filter, act.Current);
-    }    
+        Assert.False(act.MoveNext());
+    }
 }

@@ -2,4 +2,5 @@
 global using System;
 global using System.Collections.Generic;
 global using LitExplore.Core;
+global using LitExplore.Core.Utilities;
 global using LitExplore.Entity;

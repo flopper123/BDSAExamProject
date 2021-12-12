@@ -1,4 +1,6 @@
-namespace LitExplore.Entity.Filter;
+namespace LitExplore.Core.Filter;
+
+using System.Reflection;
 
 /// <summary>
 /// The predicate of an empty filter is always true, hence it doesnt filter.. 
@@ -12,10 +14,9 @@ public class EmptyFilter<T> : Filter<T>
     protected static EmptyFilter<T>? _this;
 
     protected EmptyFilter() : base(t => true) {}
-
-    public override EFilter GetId() {
-        if (typeof(T) == typeof(PublicationDto)) return EFilter.PUB;
-        else return EFilter.NONE;
+    
+    public override UInt32 Depth {
+        get { return 0; }
     }
 
     /// <summary>
