@@ -1,16 +1,13 @@
-using LitExplore.Core.Graph;
-using Xunit;
-
 namespace LitExplore.Tests.Core.Graph;
 
-public class VertexTests
+public class NodeTests
 {
     INode<int> tree = null!;
     
     // Any even number
     UInt64 tree_N = 100UL;
 
-    public VertexTests() {
+    public NodeTests() {
         
         tree = new Node<int>(0);
         var cur = tree;

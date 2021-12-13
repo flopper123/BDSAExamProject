@@ -1,16 +1,12 @@
 namespace LitExplore.Tests.Core.Tree;
 
-using Xunit;
-using LitExplore.Core.Graph;
-
-
-public class GraphTests
+public class TreeTests
 {
     // Contains test data for vertices from 0 to N
     ITree<int> src = null!;
     const UInt32 N = 100;
 
-    public GraphTests()
+    public TreeTests()
     {
 
         // root
@@ -19,10 +15,8 @@ public class GraphTests
 
         for (int i = 1; i < N - 1; i += 2)
         {
-            var v2 = new Node<int>(i);
-            var v3 = new Node<int>(i + 1);
-            v2.Parent = par;
-            v3.Parent = par;
+            var v2 = new Node<int>(i, par);
+            var v3 = new Node<int>(i + 1, par);
 
             Assert.True(src.Add(v2), $"Failed to add element #{i} - {v2}");
             Assert.True(src.Add(v3), $"Failed to add element #{i} - {v3}");
@@ -39,11 +33,11 @@ public class GraphTests
     public void CanDeleteOne()
     {
         // Arrange
-        ITree<UInt64> act = new Tree<UInt64>(new Node<UInt64>(0xD3ADB33F));
-        INode<UInt64> toDelete = new Node<UInt64>(0xD3ADB33F);
+        ITree<UInt64> act = new Tree<UInt64>(new Node<UInt64>(0xDEADBEEF));
+        INode<UInt64> toDelete = new Node<UInt64>(0xDEADBEEF);
 
         // Act
-        Assert.True(act.Delete(toDelete), $"Failed deletion of {toDelete}");
+        Assert.True(act.Delete(toDelete.Data), $"Failed deletion of {toDelete.Data}");
     }
 
     [Fact]
@@ -53,7 +47,7 @@ public class GraphTests
         {
             INode<int> exp = new Node<int>(i);
             Assert.True(i + 1 == (int)src.Size, $"loop {N - i - 1}, before delete");
-            Assert.True(src.Delete(exp), $"Failed deletion of {exp}, at loop {N - i}");
+            Assert.True(src.Delete(exp.Data), $"Failed deletion of {exp}, at loop {N - i}");
             Assert.True(i == (int)src.Size, $"loop {N - i - 1}, after delete");
         }
     }
@@ -73,11 +67,11 @@ public class GraphTests
         actEnumerator.MoveNext(); //this is nessesary because stupid >:(
 
         // Assert
-        Assert.True(root.Data == actEnumerator.Current, $"\tActual data is {actEnumerator.Current}\n\tExpected was {root.Data}");
+        Assert.True(root.Data == actEnumerator.Current.Data, $"\tActual data is {actEnumerator.Current.Data}\n\tExpected was {root.Data}");
         Assert.True(actEnumerator.MoveNext(), "Could not move to next expected Item");
-        Assert.True(v1.Data == actEnumerator.Current, $"\tActual data is {actEnumerator.Current}\n\tExpected was {v1.Data}");
+        Assert.True(v1.Data == actEnumerator.Current.Data, $"\tActual data is {actEnumerator.Current.Data}\n\tExpected was {v1.Data}");
         Assert.True(actEnumerator.MoveNext(), "Could not move to next expected Item");
-        Assert.True(v2.Data == actEnumerator.Current, $"\tActual data is {actEnumerator.Current}\n\tExpected was {v2.Data}");
+        Assert.True(v2.Data == actEnumerator.Current.Data, $"\tActual data is {actEnumerator.Current.Data}\n\tExpected was {v2.Data}");
     }
     [Fact]
     public void CanGetEnumerator100Elements()
@@ -89,7 +83,7 @@ public class GraphTests
         var actEnumerator = src.GetEnumerator();
         while (actEnumerator.MoveNext())
         {
-            tmp.Add(actEnumerator.Current);
+            tmp.Add(actEnumerator.Current.Data);
         }
 
         // Assert

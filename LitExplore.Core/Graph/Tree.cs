@@ -45,45 +45,43 @@ public class Tree<T> : ITree<T>
         return true;
     }
 
-    public bool Delete(INode<T> v)
+    public bool Delete(T v)
     {
-        if (Root == null)
-        {
-            return false;
-        }
+        if (Root == null) return false;
 
         //  Find v.Data
-        INode<T>? tar = Root.Find(v.Data);
+        INode<T>? tar = Root.Find(v);
 
-        if (tar == null)
+        if (tar == null) return false;
+        if (tar.IsRoot())
         {
-            return false;
+            Root = null;
+            return true;
         }
 
-        tar.Parent.Children.Remove(tar);
-        return true;
+        return tar.Parent.Children.Remove(tar);;
     }
     
     /// <summary>
     ///  Returns all data in the Tree. 
     ///  The data is returned in the order matching a depth-first-search of the tree in the Tree.
     /// </summary>
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+    IEnumerator<INode<T>> IEnumerable<INode<T>>.GetEnumerator()
     {
-        foreach (var childData in getChildrenData(Root!))
+        foreach (var childData in dfs(Root!))
         {
             yield return childData;
         }
 
-        IList<T> getChildrenData(INode<T> child)
+        IList<INode<T>> dfs(INode<T> node)
         {
-            var tmp = new List<T>();
-            tmp.Add(child.Data);
-            if (!child.IsLeaf())
+            var tmp = new List<INode<T>>();
+            tmp.Add(node);
+            if (!node.IsLeaf())
             {
-                foreach (var grandChild in child.Children)
+                foreach (var child in node.Children)
                 {
-                    tmp.AddRange(getChildrenData(grandChild));
+                    tmp.AddRange(dfs(child));
                 }
             }
             return tmp;
