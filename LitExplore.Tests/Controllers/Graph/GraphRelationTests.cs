@@ -19,7 +19,6 @@ public class GraphRelationTests
     // Test nodes created from publications
     var mapper = new RelationMapper();
     nodes = mapper.MapPublications(publications);
-
   }
 
 

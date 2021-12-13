@@ -30,10 +30,10 @@ public class FilterRepository<T> : AbsRepository, IFilterRepository<T>
     /// Updates the context such that UserId points to Filter
     /// - If another entry already exists for the given user
     ///   it will overwrite the saved filter by replcaing it 
-    ///   with @filter and return Status.CREATED
+    ///   with @filter and return Status.UPDATED
     /// 
     /// - If no entry exists for the user, it will add the new 
-    ///   entry and return Status.UPDATED
+    ///   entry and return Status.CREATED
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="filter"></param>
@@ -42,7 +42,9 @@ public class FilterRepository<T> : AbsRepository, IFilterRepository<T>
     {
         string fs = filter.Serialize();
         UserFilter? uid_filter = (await _context.History.FindAsync(userId));
+
         Status status = Status.Updated;
+
         if (uid_filter != null) uid_filter.Serialization = fs;
         else {
             await _context.History.AddAsync(

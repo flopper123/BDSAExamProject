@@ -18,6 +18,7 @@ public abstract class Filter<T> {
 
     public virtual bool ShouldRemove(T v) { return predicate(v); }
 
+    // Serialization is tailored for linux, doesn't account for windows line endings.
     public virtual string Serialize() {
         StringBuilder sb = new StringBuilder();
         sb.Append(FilterField.START);

@@ -22,8 +22,7 @@ class PublicationGraph : Graph<PublicationTitle, PublicationDetails>
     public override NodeDetails<PublicationDetails> ToDetails(INode<PublicationTitle> key)
     {
         PublicationDetails? details = null;
-        try { details = _details[key.Data]; } 
-        catch (KeyNotFoundException e) {}
+        try { details = _details[key.Data]; } catch (KeyNotFoundException) {}
         return new NodeDetails<PublicationDetails> { Details = details, Depth = key.Depth, Size = key.Size };
     }
 

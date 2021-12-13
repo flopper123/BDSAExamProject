@@ -19,5 +19,7 @@ public record PublicationDetails : PublicationDto
     // Holds information about time of publication (year, month, day)
     public DateTime Time {get; init;} = DateTime.Now;
 
-    IReadOnlyCollection<String> Keywords {get; init;} = new List<String>().AsReadOnly();
+    public string Abstract { get; init; } = "?";
+
+    public IReadOnlyCollection<String> Keywords {get; init;} = new List<String>().AsReadOnly();
 }
