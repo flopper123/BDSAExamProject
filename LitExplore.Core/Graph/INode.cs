@@ -1,19 +1,19 @@
 namespace LitExplore.Core.Graph;
 
-public interface IVertex<T>
+public interface INode<T>
     where T : IEquatable<T>
 {
     /// <returns> 
-    /// The data associated with this IVertex, i.e. 
+    /// The data associated with this INode, i.e. 
     /// the data this vertex contains.
     /// </returns>
     T Data { get; init; }
 
     /// <returns> The parent of this Vertex </returns>
-    IVertex<T> Parent { get; set; }
+    INode<T> Parent { get; set; }
 
     /// <returns> Returns an IList containing all children of the given vertex </returns>
-    IList<IVertex<T>> Children { get; set; }
+    IList<INode<T>> Children { get; set; }
 
     /// <summary> 
     /// Searches the tree rooted at this vertex for a vertex for which
@@ -24,7 +24,7 @@ public interface IVertex<T>
     /// If find is succesful, a pointer to the requested vertex. 
     /// If find is not succesful, null is returned.
     /// </returns>
-    IVertex<T>? Find(T needle);
+    INode<T>? Find(T needle);
 
     /// <returns> Returns the depth of this vertex in the current graph </returns>
     UInt64 Depth { get; set; }

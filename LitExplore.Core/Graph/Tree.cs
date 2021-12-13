@@ -1,6 +1,6 @@
 namespace LitExplore.Core.Graph;
 
-public class Graph<T> : IGraph<T>
+public class Tree<T> : ITree<T>
     where T : IEquatable<T>
 {
     private bool disposedValue;
@@ -10,27 +10,27 @@ public class Graph<T> : IGraph<T>
         get => (Root == null) ? 0 : Root.Size;
     }
 
-    // ? since we can have a graph, where root has been removed already
-    public IVertex<T>? Root { get; set; }
+    // ? since we can have a Tree, where root has been removed already
+    public INode<T>? Root { get; set; }
 
-    public Graph()
+    public Tree()
     {
         Root = null;
     }
 
-    public Graph(IVertex<T> root)
+    public Tree(INode<T> root)
     {
         Root = root;
     }
 
-    public bool Add(IVertex<T> v)
+    public bool Add(INode<T> v)
     {
         if (Root == null) Root = v.Parent;
         else
         {
 
             T needle = v.Parent.Data;
-            IVertex<T>? tar = Root.Find(needle);
+            INode<T>? tar = Root.Find(needle);
 
             if (tar == null) return false;
             else
@@ -45,7 +45,7 @@ public class Graph<T> : IGraph<T>
         return true;
     }
 
-    public bool Delete(IVertex<T> v)
+    public bool Delete(INode<T> v)
     {
         if (Root == null)
         {
@@ -53,7 +53,7 @@ public class Graph<T> : IGraph<T>
         }
 
         //  Find v.Data
-        IVertex<T>? tar = Root.Find(v.Data);
+        INode<T>? tar = Root.Find(v.Data);
 
         if (tar == null)
         {
@@ -65,8 +65,8 @@ public class Graph<T> : IGraph<T>
     }
     
     /// <summary>
-    ///  Returns all data in the graph. 
-    ///  The data is returned in the order matching a depth-first-search of the tree in the graph.
+    ///  Returns all data in the Tree. 
+    ///  The data is returned in the order matching a depth-first-search of the tree in the Tree.
     /// </summary>
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
@@ -75,7 +75,7 @@ public class Graph<T> : IGraph<T>
             yield return childData;
         }
 
-        IList<T> getChildrenData(IVertex<T> child)
+        IList<T> getChildrenData(INode<T> child)
         {
             var tmp = new List<T>();
             tmp.Add(child.Data);

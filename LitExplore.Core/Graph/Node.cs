@@ -1,16 +1,16 @@
 namespace LitExplore.Core.Graph;
 
-public class Vertex<T> : IVertex<T>
+public class Node<T> : INode<T>
     where T : IEquatable<T>
 {
-    private IVertex<T> _parent = null!;
+    private INode<T> _parent = null!;
 
     public T Data { get; init; }
 
     // TO:DO add tests for depth
     public UInt64 Depth { get; set; }
-    public IList<IVertex<T>> Children { get; set; } = null!;
-    public IVertex<T> Parent {
+    public IList<INode<T>> Children { get; set; } = null!;
+    public INode<T> Parent {
         get { 
             return _parent; 
         }
@@ -22,7 +22,7 @@ public class Vertex<T> : IVertex<T>
         }
     }
 
-    // worst case O(N), where N is size of subtree rooted at this vertex.
+    // worst case O(N), where N is size of subtree rooted at this Node.
     public UInt64 Size
     {
         get
@@ -36,29 +36,29 @@ public class Vertex<T> : IVertex<T>
         }
     }
 
-    public Vertex(T data)
+    public Node(T data)
     {
         Data = data;
         Depth = 1UL;
         Parent = this;
-        Children = new List<IVertex<T>>();
+        Children = new List<INode<T>>();
     }
 
-    /// <param name="data"> Source data to hold in vertex </param>
-    /// <param name="parent"> A pointer to the parent for the constructed vertex </param>
+    /// <param name="data"> Source data to hold in Node </param>
+    /// <param name="parent"> A pointer to the parent for the constructed Node </param>
     /// <exception cref="ArgumentException"> 
     /// Throws argument exception if input param @parent.Data equals other param @data.
     /// </exception>
-    public Vertex(T data, IVertex<T> parent)
+    public Node(T data, INode<T> parent)
     {
         if (data.Equals(parent.Data)) {
-            throw new ArgumentException("Vertex constructor received invalid argument.\n\t" +
-                                        "Parent must not be itself; please use Vertex(T data) if you want to set a root vertex.\n");
+            throw new ArgumentException("Node constructor received invalid argument.\n\t" +
+                                        "Parent must not be itself; please use Node(T data) if you want to set a root Node.\n");
         }
 
         Data = data;
         Parent = parent;
-        Children = new List<IVertex<T>>();
+        Children = new List<INode<T>>();
     }
 
     public bool IsRoot() { return (Parent == this); }
@@ -69,11 +69,11 @@ public class Vertex<T> : IVertex<T>
     /// </summary>
     /// <param name="needle"> Target to search for  </param>
     /// <returns></returns>
-    public IVertex<T>? Find(T needle)
+    public INode<T>? Find(T needle)
     {
         if (Data.Equals(needle)) return this;
 
-        IVertex<T>? tar = null;
+        INode<T>? tar = null;
 
         foreach (var child in this.Children)
         {
@@ -90,6 +90,6 @@ public class Vertex<T> : IVertex<T>
 
     public override string ToString()
     {
-        return $"Vertex depth@{Depth} data@{Data.ToString()}";
+        return $"Node depth@{Depth} data@{Data.ToString()}";
     }
 }
