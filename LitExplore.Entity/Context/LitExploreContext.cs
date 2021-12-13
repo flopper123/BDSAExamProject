@@ -14,6 +14,7 @@ public class LitExploreContext : DbContext, ILitExploreContext
         builder.Entity<UserFilter>().Property(f => f.UserId).IsRequired();
         builder.Entity<UserFilter>().Property(f => f.Serialization).IsRequired();
 
+        //To make sure that it is set.
         builder.Entity<Publication>().HasKey(p => p.Title);
         builder.Entity<Publication>().Property(p => p.Title).IsRequired();
 
