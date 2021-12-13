@@ -1,4 +1,6 @@
-namespace LitExplore.Tests.Entity.Filter;
+namespace LitExplore.Tests.Entity.Repositories;
+
+using LitExplore.Entity.Repositories;
 
 // In memory testing of publication repository
 public class FilterRepositoryTests : AbsRepositoryTests<FilterRepository<PublicationDto>>

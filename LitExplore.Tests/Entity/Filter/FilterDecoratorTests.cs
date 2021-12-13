@@ -9,25 +9,26 @@ public class FilterDecoratorTests
         data = new List<PublicationDto>() {
             new PublicationDto {
                 Title = "His Little Pony",
-                References = new HashSet<ReferenceDto> { }
+                References = new HashSet<PublicationTitle> { }
             },
             new PublicationDto {
                 Title = "My Little Pony",
-                References = new HashSet<ReferenceDto> { new ReferenceDto{Title = "Alabama Show Down"}}
+                References = new HashSet<PublicationTitle> { new PublicationTitle{Title = "Alabama Show Down"}}
             },
             new PublicationDto {
                 Title = "My Little Ox",
-                References = new HashSet<ReferenceDto> { new ReferenceDto{Title = "Alabama Show Down"}}
+                References = new HashSet<PublicationTitle> { new PublicationTitle{Title = "Alabama Show Down"}}
             },
             new PublicationDto {
                 Title = "My Large Pony",
-                References = new HashSet<ReferenceDto> { new ReferenceDto{Title = "Alabama Show Down"}, 
-                                                         new ReferenceDto{Title = "Copenhagen Show Down"},
-                                                         new ReferenceDto{Title = "Swedish Show Down"}}
+                References = new HashSet<PublicationTitle> { new PublicationTitle{Title = "Alabama Show Down"}, 
+                                                             new PublicationTitle{Title = "Copenhagen Show Down"},
+                                                             new PublicationTitle{Title = "Swedish Show Down"}
+                }
             },
             new PublicationDto {
                 Title = "0xDEADBEEF",
-                References = new HashSet<ReferenceDto> { }
+                References = new HashSet<PublicationTitle> { }
             },
         };
     }

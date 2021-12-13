@@ -1,5 +1,3 @@
-
-using Xunit;
 namespace LitExplore.Tests.Controllers.Graph;
 
 using LitExplore.Controllers.Graph;

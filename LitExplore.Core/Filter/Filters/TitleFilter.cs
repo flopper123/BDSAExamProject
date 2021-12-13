@@ -1,9 +1,5 @@
 namespace LitExplore.Core.Filter.Filters;
 
-using System.Text;
-using static LitExplore.Core.Filter.FilterPArgsParser;
-using static FilterPArgField;
-
 /// <summary>
 /// Case-Insensitive contains search Title of a PublicationDto
 /// </summary>

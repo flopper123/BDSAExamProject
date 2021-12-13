@@ -1,7 +1,5 @@
-using System.Diagnostics;
-
-namespace LitExplore.Tests.Entity
-{   
+namespace LitExplore.Tests.Entity.Repositories;
+    /*
     // In memory testing of publication repository
     public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
     {        
@@ -116,4 +114,4 @@ namespace LitExplore.Tests.Entity
             //TO:DO Implement test Should be easy Will implement this the next time I look at it if its still here -- Mads.
         }
     }
-}
+    */

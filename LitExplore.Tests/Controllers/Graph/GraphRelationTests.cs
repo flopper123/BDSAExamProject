@@ -1,15 +1,12 @@
-using Xunit;
-
 namespace LitExplore.Tests.Controllers.Graph;
 
 using LitExplore.Controllers.Graph;
 
 public class GraphRelationTests
 {
-
   public List<PublicationDto> publications;
   public List<VisualGraphNode> nodes;
-  public List<ReferenceDto> references;
+  public List<PublicationTitle> references;
 
   public GraphRelationTests()
   {

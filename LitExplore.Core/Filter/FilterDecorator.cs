@@ -73,6 +73,11 @@ public abstract class FilterDecorator<T> : Filter<T> {
         return base.Apply(prv.Apply(tar));
     }
     
+    public override bool ShouldRemove(T v) {
+        // use || instead of | to ensure both doesnt get tested.
+        return base.ShouldRemove(v) || prv.ShouldRemove(v); 
+    }
+
     protected abstract IEnumerable<(string type, string str_vals)> getPArgsStringTuple();
 
     public override string SerializePArgs()

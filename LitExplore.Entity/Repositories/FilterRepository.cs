@@ -1,7 +1,7 @@
-namespace LitExplore.Entity.Filter;
+namespace LitExplore.Entity.Repositories;
 
-using System.Threading.Tasks;
 using LitExplore.Core.Filter;
+using LitExplore.Entity.Filter;
 
 /// <summary>
 /// FilterRepository

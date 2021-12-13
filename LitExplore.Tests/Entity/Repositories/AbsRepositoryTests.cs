@@ -1,16 +1,4 @@
-using System.Reflection.PortableExecutable;
-using System;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using LitExplore.Core;
-using LitExplore.Entity;
-using Xunit;
-
-
-namespace LitExplore.Tests.Entity;
+namespace LitExplore.Tests.Entity.Repositories;
 
 /// <summary>
 /// Abstract testing class for EntityFrameworkCore repositories. 

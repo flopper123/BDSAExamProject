@@ -1,4 +1,4 @@
-namespace LitExplore.Entity.Filter;
+namespace LitExplore.Entity.Entities;
 
 using System.ComponentModel.DataAnnotations;
 

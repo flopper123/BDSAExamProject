@@ -22,9 +22,9 @@ public class TitleFilterTest
         this.output = output;
 
         pubData = new List<PublicationDto>() {
-            new PublicationDto { Title = "0xDEAD", References = new HashSet<ReferenceDto>()},
-            new PublicationDto { Title = "BEEF", References = new HashSet<ReferenceDto>()},
-            new PublicationDto { Title = "0xDEADBEEF", References = new HashSet<ReferenceDto>()}
+            new PublicationDto { Title = "0xDEAD", References = new HashSet<PublicationTitle>()},
+            new PublicationDto { Title = "BEEF", References = new HashSet<PublicationTitle>()},
+            new PublicationDto { Title = "0xDEADBEEF", References = new HashSet<PublicationTitle>()}
         };
         filter = new TitleFilter("0x");
     }
@@ -100,11 +100,5 @@ public class TitleFilterTest
         // Assert actual
         Assert.True(act.MoveNext(), "Failed to move to first enumeration");
         Assert.Equal(filter, act.Current);
-    }
-
-    [Fact]
-    public void RegexTestGettingSerialized()
-    {
-
     }
 }

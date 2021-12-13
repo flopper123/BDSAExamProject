@@ -1,5 +1,4 @@
-
-namespace LitExplore.Entity;
+namespace LitExplore.Entity.Repositories;
 
 /// <summary>
 /// Auxiliary class to generalize some of the repository code. 

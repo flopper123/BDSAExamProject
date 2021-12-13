@@ -16,6 +16,8 @@ public abstract class Filter<T> {
         this.predicate = predicate;
     }
 
+    public virtual bool ShouldRemove(T v) { return predicate(v); }
+
     public virtual string Serialize() {
         StringBuilder sb = new StringBuilder();
         sb.Append(FilterField.START);
