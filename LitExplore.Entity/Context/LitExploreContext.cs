@@ -14,10 +14,14 @@ public class LitExploreContext : DbContext, ILitExploreContext
         builder.Entity<UserFilter>().Property(f => f.UserId).IsRequired();
         builder.Entity<UserFilter>().Property(f => f.Serialization).IsRequired();
 
-        //To make sure that it is set.
+        //All the other properties are required aswell but through data anotations.
         builder.Entity<Publication>().HasKey(p => p.Title);
         builder.Entity<Publication>().Property(p => p.Title).IsRequired();
-
+        builder.Entity<Publication>().HasMany<KeyWord>(k => k.Keywords);
+        builder.Entity<Publication>().HasMany<PublicationTitle>(t => t.References);
+        builder.Entity<KeyWord>().ToTable("KeyWords");
+        
+        builder.Entity<PublicationTitle>().HasKey(t => t.Title);
         /*
         builder.Entity<Publication>()
             .HasMany<Reference>(p => p.References)
