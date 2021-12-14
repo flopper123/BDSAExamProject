@@ -4,6 +4,7 @@ using LitExplore.Entity.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LitExplore.Entity.Migrations
 {
     [DbContext(typeof(LitExploreContext))]
-    partial class LitExploreContextModelSnapshot : ModelSnapshot
+    [Migration("20211214092115_Cleanup_restructure")]
+    partial class Cleanup_restructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

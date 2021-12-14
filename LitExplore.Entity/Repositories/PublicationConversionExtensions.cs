@@ -11,10 +11,10 @@ internal static class PublicationConversionExtensions
             Title = p.Title,
             Author = p.Author,
             Abstract = p.Abstract,
-            References = p.References.Select(r => new PublicationTitle { Title = r })
+            References = p.References.Select(r => new PublicationTitle { Title = r.Title })
                                      .ToHashSet<PublicationTitle>(),
             Time = p.Time,
-            Keywords = p.Keywords.ToList().AsReadOnly(),
+            Keywords = p.Keywords.Select(k=> k.Keyword).ToList().AsReadOnly(), //? Does this continue or stops at one item??
         };
     }
 
@@ -33,9 +33,10 @@ internal static class PublicationConversionExtensions
             Title = p.Title,
             Author = p.Author,
             Abstract = p.Abstract,
-            References = p.References.Select(r => r.Title).ToList(),
+            //! Either Have different naming or else it have to be concrete namespaced.
+            References = p.References.Select(r => new LitExplore.Entity.Entities.PublicationTitle{Title = r.Title}).ToList(),
             Time = p.Time,
-            Keywords = p.Keywords.ToList(),
+            Keywords = p.Keywords.Select(k => new KeyWord{Keyword = k}).ToList(), //? This damn EF..
         };
     }
 }
