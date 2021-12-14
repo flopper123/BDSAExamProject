@@ -4,6 +4,8 @@ public class LitExploreContext : DbContext, ILitExploreContext
 {
     public DbSet<Publication> Publications => Set<Publication>();
     public DbSet<UserFilter> History => Set<UserFilter>();
+    public DbSet<KeyWord> KeyWords => Set<KeyWord>();
+    public DbSet<PublicationTitle> References => Set<PublicationTitle>();
 
     public LitExploreContext(DbContextOptions<LitExploreContext> options) : base(options) { }
 
@@ -18,10 +20,12 @@ public class LitExploreContext : DbContext, ILitExploreContext
         builder.Entity<Publication>().HasKey(p => p.Title);
         builder.Entity<Publication>().Property(p => p.Title).IsRequired();
 
-        // builder.Entity<KeyWord>.HasOne<Publication>(p => p.)
-        // {
-            
-        // }
+        // modelBuilder.Entity<Student>()
+        //     .HasOne<Grade>(s => s.Grade)
+        //     .WithMany(g => g.Students)
+        //     .HasForeignKey(s => s.CurrentGradeId);
+
+
         builder.Entity<Publication>().HasMany<KeyWord>(k => k.Keywords);
         builder.Entity<Publication>().HasMany<PublicationTitle>(t => t.References);
         builder.Entity<KeyWord>().ToTable("KeyWords");
@@ -36,7 +40,7 @@ public class LitExploreContext : DbContext, ILitExploreContext
         builder.Entity<Publication>()
             .HasIndex(t => t.Title)
             .IsUnique();
-
+        base.OnModelCreating(builder);
         //builder.Entity<Publication>().HasMany<Reference>(r=>r.References);
     }
 }

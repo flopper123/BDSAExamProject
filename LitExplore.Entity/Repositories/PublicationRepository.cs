@@ -30,6 +30,7 @@ public class PublicationRepository : AbsRepository, IPublicationRepository
         else
         {
             db_pub = publication.ConvertToPublication();
+            throw new Exception($"ToUpdate {db_pub.ToString()}");
             status = Status.Updated;
         }
 
