@@ -17,6 +17,11 @@ public class LitExploreContext : DbContext, ILitExploreContext
         //All the other properties are required aswell but through data anotations.
         builder.Entity<Publication>().HasKey(p => p.Title);
         builder.Entity<Publication>().Property(p => p.Title).IsRequired();
+
+        // builder.Entity<KeyWord>.HasOne<Publication>(p => p.)
+        // {
+            
+        // }
         builder.Entity<Publication>().HasMany<KeyWord>(k => k.Keywords);
         builder.Entity<Publication>().HasMany<PublicationTitle>(t => t.References);
         builder.Entity<KeyWord>().ToTable("KeyWords");

@@ -26,7 +26,8 @@ public class Publication //: PublicationTitle
     //! 2 ways either have the Keywords as an entity, or do some text parsing and save it as a string.
 }
 
-public class PublicationTitle{ //TODO: Maybe move to seperate class dunno.. keeping it as the core elements.
+public class PublicationTitle
+{ //TODO: Maybe move to seperate class dunno.. keeping it as the core elements.
     
     //! Apparently I'm not allowed to have the key in a class that gets : in other class.
     [Required]

@@ -54,8 +54,7 @@ public class FilterRepository<T> : AbsRepository, IFilterRepository<T>
         }
 
         await _context.SaveChangesAsync();
-
-        // no variables to update in current version
+        
         return status; 
     }
 

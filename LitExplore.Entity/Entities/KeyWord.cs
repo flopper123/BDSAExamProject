@@ -5,5 +5,7 @@ namespace LitExplore.Entity.Entities;
 public class KeyWord
 {
     [Key]
-    public string Keyword {get; set;} = "KeyWord"; // TODO: Change to something else.
+    public string Keyword {get; set;} = "?"; 
+
+    public Publication? Publication {get; set;}
 }

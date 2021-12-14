@@ -22,10 +22,11 @@ public class TitleFilterTest
         this.output = output;
 
         pubData = new List<PublicationDto>() {
-            new PublicationDto { Title = "0xDEAD", References = new HashSet<PublicationTitle>()},
-            new PublicationDto { Title = "BEEF", References = new HashSet<PublicationTitle>()},
-            new PublicationDto { Title = "0xDEADBEEF", References = new HashSet<PublicationTitle>()}
+            new PublicationDto { Title = "0xDEAD" },
+            new PublicationDto { Title = "BEEF" },
+            new PublicationDto { Title = "0xDEADBEEF"},
         };
+        
         filter = new TitleFilter("0x");
     }
 

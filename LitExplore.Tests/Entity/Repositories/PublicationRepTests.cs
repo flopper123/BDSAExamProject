@@ -1,117 +1,149 @@
 namespace LitExplore.Tests.Entity.Repositories;
-    /*
-    // In memory testing of publication repository
-    public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
-    {        
-        public PublicationRepTests() : base() {}
 
-        // init db
-        override protected void seed()
+using LitExplore.Tests.Util; 
+
+// In memory testing of publication repository
+public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
+{
+    // Size of seed
+    const UInt64 SIZE = 3;
+
+    public PublicationRepTests() : base() {}
+
+    // init db
+    override protected void seed()
+    {
+        // seed actions here
+        PublicationTitle ref1 = new PublicationTitle { Title = "Test pub 1" };
+        PublicationTitle ref2 = new PublicationTitle { Title = "Test pub 2" };
+        Publication pub1 = new Publication{ Title = "Test pub 1", References = new List<PublicationTitle> {ref2}};
+        context.Publications.AddRange(
+          pub1,
+          new Publication { Title = "Test pub 2", References = new List<PublicationTitle> { ref1 } },
+          new Publication { Title = "Test pub 3", References = new List<PublicationTitle> { ref1, ref2 } }
+        );
+    }
+
+    [Fact]
+    public async Task UpdateOfKeywordsIsCorrect() {
+        var exp_title = "Test pub 3";
+        // Arrange
+        PublicationDtoDetails exp = new PublicationDtoDetails
         {
-            // seed actions here
-            Reference ref1 = new Reference { Title = "Test pub 1" };
-            Reference ref2 = new Reference { Title = "Test pub 2" };
-            
-            context.References.AddRange(
-                ref1, ref2     
-            );
+            Title = exp_title,
+            Keywords = new List<string> { "Vikinger", "Saxerne", "0xDEADBEEF" },
+        };
 
-            Publication pub1 = new Publication{ Title = "Test pub 1", References = new List<Reference> {ref2}};
+        Status act_status = await repository.UpdateAsync(exp);
 
-            context.Publications.AddRange(
-              pub1,
-              new Publication { Title = "Test pub 2", References = new List<Reference> { ref1 } },
-              new Publication { Title = "Test pub 3", References = new List<Reference> { ref1, ref2 } }
-            );
+        Publication? act = context.Publications.Find(exp_title);
+        Assert.NotNull(act);
+        Assert.NotNull(act.Keywords);
+        var act_keys = act.Keywords;
+        var exp_keys = exp.Keywords;
+        Assert.Equal(exp_keys.Count(), act_keys.Count());
+        foreach (KeyWord k in act_keys) {
+            Assert.True(exp_keys.Contains(k.Keyword), $"Expected keys doesn't contain {k.Keyword}");
         }
-
-        [Fact]
-        public async Task CreateAsync_Given_PublicationCreateDto_Returns_Created_And_PublicationDto()
+        Assert.Equal(Status.Updated, act_status);
+        foreach (String keyword in exp.Keywords)
         {
-            // Arrange
-            PublicationCreateDto exp = new PublicationCreateDto
-            {
-                Title = "My Little Pony",
-                References = new HashSet<ReferenceDto> { new ReferenceDto{Title = "Alabama Show Down"}}
-            };
 
-            // Act
-            PublicationDto? act = await repository.CreateAsync(exp);
-            
-            // Assert
-            if (act == null) { Assert.NotNull(act); return; }
-            Assert.Equal("My Little Pony", act.Title);
-            Assert.True(act.References.Contains(new ReferenceDto{Title = "Alabama Show Down"}));        
-        }
-        
-        [Fact]
-        public async Task ReadAsync_given_Title_exists_returns_PublicationDto() 
-        {
-            // Arrange
-            // The reference representation of this DTO is being seeded to the db in seed()
-            ReferenceDto exp = new ReferenceDto{ Title = "Test pub 2" };
-            // Act
-            PublicationDto? act = await repository.ReadAsync("Test pub 1");
-            
-            // Assert
-            if (act == null) { Assert.NotNull(act); return; }
-            Assert.Equal("Test pub 1", act.Title);
-            Assert.True(act.References.Count != 0, "Actual references is empty");
-            Assert.True(act.References.Contains(exp), 
-                "Actual references != expected references act.references \n\t" + 
-                $"Actual ref: \n\t\tType @{act.References.GetType()} \n\t\tCount @{act.References.Count}, \n\t\tFirst element @{act.References.GetEnumerator().Current}\n\t" +
-                $"Expected ref: \n\t\tType @{exp.GetType()}, \n\t\t Expected@{exp.ToString()}");            
-        }
-
-        [Fact]
-        public async Task ReadAsync_Returns_ReadOnlyCollection_Of_PublicationDto()
-        {
-            // Arrange & Act
-            List<PublicationDto> actCol = (await repository.ReadAsync()).ToList();
-
-            // Assert
-            Assert.Equal(3, actCol.Count); // 3 are being seeded
-
-            // Refactored tests to use Linq 
-            actCol.ForEach(async act_dto => {
-                var tmp = await context.Publications.FindAsync(act_dto.Title);
-                if (tmp == null) { Assert.NotNull(tmp); return; }
-                Assert.Equal(tmp.Title, act_dto.Title);
-                // TO:DO add reference checks 
-            });
-        }
-
-        [Fact]
-        public async Task UpdateAsync_GivenUpdateDto_Returns_Updated()
-        {
-            PublicationUpdateDto updateDto = new PublicationUpdateDto // This will be set more fully when program runs.
-            {
-                Title = "Test pub 1",
-                References = new HashSet<ReferenceDto> {new ReferenceDto {Title = "Test Pub 2"}},
-            };
-
-            var result = repository.UpdateAsync(updateDto);
-            var exp = await context.Publications.FindAsync(updateDto.Title); 
-            
-            // TO:DO Might think about how strictly we check title since
-            // "Test PUB" is not equal to "test pub" 
-            
-            Assert.NotNull(exp); // check that it found it.
-
-            Debug.Assert(exp != null, nameof(exp) + " != null"); // For deeper errors. 
-            Assert.Equal(exp.Title, updateDto.Title);
-                
-            // Do something to check the references.
-            //TO:DO check for references.
-
-
-            // TO:DO Might want to test return as well ??
-        }
-
-        [Fact]
-        public async Task DeleteAsync_Given_Title_Returns_Deleted()
-        {
-            //TO:DO Implement test Should be easy Will implement this the next time I look at it if its still here -- Mads.
         }
     }
-    */
+
+    [Fact]
+    public async Task UpdateAsync_Given_KnownPublicationDtoTitle_Returns_Updated()
+    {
+        var exp_title = "Test pub 1";
+        // Assert its already in db
+        Assert.NotNull(await repository.ReadAsync(new PublicationDtoTitle { Title = exp_title }));
+
+        // Arrange
+        PublicationDtoDetails exp = new PublicationDtoDetails
+        {
+            Title = exp_title,
+            References = new HashSet<PublicationDtoTitle> { new PublicationDtoTitle { Title = "Alabama Show Down" } },
+            Author = "Harald Blåtand",
+            Keywords = new List<string> { "Vikinger", "Saxerne", "0xDEADBEEF" },
+            Time = DateTime.MaxValue,
+            Abstract = "For Glory and Fellowship & second breakfast"
+        };
+
+        // Act
+        Status act_status = await repository.UpdateAsync(exp);
+        Assert.Equal(Status.Updated, act_status);
+
+        PublicationDtoDetails? act = await repository.ReadAsync(new PublicationDtoTitle { Title = exp_title });
+        Assert.True(act != null, $"Failed retrieval of #{exp_title}");
+
+        // Assert
+        Assert.True(exp.CustomEquals(act = null!), $"Expected {exp.ToString()}\nReceived: {act.ToString()}");
+        Assert.Equal(exp, act); // use record equals
+    }
+
+
+    [Fact]
+    public async Task UpdateAsync_Given_PublicationDtoTitle_Returns_Created()
+    {
+        var exp_title = "NON_EXISTENT";
+        // Arrange
+        PublicationDtoDetails exp = new PublicationDtoDetails
+        {
+            Title = exp_title,
+            References = new HashSet<PublicationDtoTitle> { new PublicationDtoTitle { Title = "Alabama Show Down" } },
+            Author = "Harald Blåtand",
+            Keywords = new List<string> { "Vikinger", "Saxerne", "0xDEADBEEF" },
+            Time = DateTime.MaxValue,
+            Abstract = "For Glory and Fellowship & second breakfast"
+        };
+        // Act
+        Status act_status = await repository.UpdateAsync(exp);
+        Assert.Equal(Status.Created, act_status);
+
+        PublicationDtoDetails? act = await repository.ReadAsync(new PublicationDtoTitle { Title = exp_title });
+        Assert.True(act != null, $"Failed retrieval of #{exp_title}");
+
+        // Assert
+        Assert.True(exp.CustomEquals(act), $"Expected {exp.ToString()}\nReceived: {act.ToString()}");
+    }
+
+    [Fact]
+    public async Task ReadAsync_given_Title_exists_returns_CorrectDto()
+    {
+        // Arrange
+        // The reference representation of this DTO is being seeded to the db in seed()
+        PublicationDtoDetails exp = new PublicationDtoDetails
+        {
+            Title = "Test pub 1",
+            References = new HashSet<PublicationDtoTitle> { 
+                new PublicationDtoTitle { Title = "Test pub 2" } 
+            }
+        };
+    
+        // Act
+        PublicationDtoDetails? act = await repository.ReadAsync(new PublicationDtoTitle { Title = "Test pub 1" } );
+
+        Assert.True(exp.References.Count == act.References.Count, $"The recieved reference count of {act.References.Count} did not return with the expected count {exp.References.Count}.");
+        // Assert
+        Assert.NotNull(act);
+        if (act == null) return;
+        Assert.True(exp.CustomEquals(act), $"Expected {exp.ToString()}\nReceived: {act.ToString()}");
+    }
+
+    [Fact]
+    public async Task ReadAllAsync_Returns_IAsyncEnumerable()
+    {
+        // Arrange & Act
+        var act = repository.ReadAllAsync();
+        var i = 0;
+        // Assert.Equal(typeof(IAsyncEnumerable<PublicationDtoDetails>), act.GetType());
+        await foreach (PublicationDtoDetails pDetails in act)
+        {
+            PublicationDtoTitle exp_title = new PublicationDtoTitle { Title = $"Test pub" };
+            Assert.Contains(exp_title.Title, pDetails.Title);
+            i++;
+        }
+        Assert.Equal(SIZE, (UInt64) i);
+    }
+}

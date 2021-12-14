@@ -9,12 +9,35 @@ public class PublicationRepository : AbsRepository, IPublicationRepository
 {
     public PublicationRepository(ILitExploreContext ctx) : base(ctx) { }
 
-    public Task<Status> UpdateAsync(PublicationDetails publication)
+    /// <summary>
+    /// Updates the context such that the title of @publication 
+    /// maps to the details
+    /// 
+    /// - If another entry already exists for the given title
+    ///   it will overwrite the saved details by replcaing it 
+    ///   with @publication and return Status.UPDATED
+    /// 
+    /// - If no entry exists for the user, it will add the new 
+    ///   entry and return Status.CREATED
+    /// </summary>
+    public async Task<Status> UpdateAsync(PublicationDtoDetails publication)
     {
-        throw new NotImplementedException();
+        Publication? db_pub = (await _context.Publications.FindAsync(publication.Title));
+
+        Status status = Status.Created;
+
+        if (db_pub == null) await _context.Publications.AddAsync(publication.ConvertToPublication()); 
+        else
+        {
+            db_pub = publication.ConvertToPublication();
+            status = Status.Updated;
+        }
+
+        await _context.SaveChangesAsync();
+        return status;
     }
 
-    public async Task<Status> DeleteAsync(PublicationTitle key) //O(N)
+    public async Task<Status> DeleteAsync(PublicationDtoTitle key) //O(N)
     {
         Publication? p = await _context.Publications.FindAsync(key.Title);
         
@@ -25,15 +48,15 @@ public class PublicationRepository : AbsRepository, IPublicationRepository
         return Status.Deleted;
     }
 
-    public async Task<PublicationDetails?> ReadAsync(PublicationTitle pubTitle)
+    public async Task<PublicationDtoDetails?> ReadAsync(PublicationDtoTitle pubTitle)
     {
-        Publication? pub = await _context.Publications.FindAsync(pubTitle);
+        Publication? pub = await _context.Publications.FindAsync(pubTitle.Title);
         return (pub != null) ? pub.ConvertToDetails() : null;
     }
     
     /// Should return all elements of the collection in async one by one, 
     /// but not sure if it works or how to test
-    public async IAsyncEnumerable<PublicationDetails> ReadAllAsync()
+    public async IAsyncEnumerable<PublicationDtoDetails> ReadAllAsync()
     {
         var all =  _context.Publications.GetAsyncEnumerator(); //O(N) _
         while (await all.MoveNextAsync()) {
@@ -41,10 +64,6 @@ public class PublicationRepository : AbsRepository, IPublicationRepository
         }
     }
 
-
-    public override void Dispose()
-    {
-        throw new NotImplementedException();
-    }
-
+    // TO:DO implement at some point
+    public override void Dispose() {}
 }

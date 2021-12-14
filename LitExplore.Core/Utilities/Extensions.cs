@@ -27,7 +27,7 @@ namespace LitExplore.Core.Utilities
 
 
         public static async Task<List<T>> ToListAsync<T>(this IAsyncEnumerable<T> items,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default) // Powers 
         {
             var results = new List<T>();
             await foreach (var item in items.WithCancellation(cancellationToken)

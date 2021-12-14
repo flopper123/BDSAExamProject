@@ -57,7 +57,7 @@ public class GraphRelation
     if (node1.References.Count == 0 || node2.References.Count == 0) return 0.0;
 
     // Keeps track of not shared references
-    var references = new HashSet<PublicationTitle>();
+    var references = new HashSet<PublicationDtoTitle>();
 
     // Find the amount of references they do not share
     node1.References

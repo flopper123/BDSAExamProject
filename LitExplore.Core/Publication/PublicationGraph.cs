@@ -1,15 +1,15 @@
 namespace LitExplore.Core.Publication;
 
-class PublicationGraph : Graph<PublicationTitle, PublicationDetails>
+class PublicationGraph : Graph<PublicationDtoTitle, PublicationDtoDetails>
 {
     PublicationGraph() : base() {}
 
-    public override void AddDetails(PublicationDetails details) { base._details.Add(details, details); }
+    public override void AddDetails(PublicationDtoDetails details) { base._details.Add(details, details); }
 
-    public override void Apply(Filter<NodeDetails<PublicationDetails>> filter)
+    public override void Apply(Filter<NodeDetails<PublicationDtoDetails>> filter)
     {
         // Apply filtering recursively in a depth first manér to all trees
-        foreach (Tree<PublicationTitle> tree in this)
+        foreach (Tree<PublicationDtoTitle> tree in this)
         {
             if (filter.ShouldRemove(ToDetails(tree.Root = null!))) {
                 Roots.Remove(tree);
@@ -19,17 +19,17 @@ class PublicationGraph : Graph<PublicationTitle, PublicationDetails>
         }
     }
 
-    public override NodeDetails<PublicationDetails> ToDetails(INode<PublicationTitle> key)
+    public override NodeDetails<PublicationDtoDetails> ToDetails(INode<PublicationDtoTitle> key)
     {
-        PublicationDetails? details = null;
+        PublicationDtoDetails? details = null;
         try { details = _details[key.Data]; } catch (KeyNotFoundException) {}
-        return new NodeDetails<PublicationDetails> { Details = details, Depth = key.Depth, Size = key.Size };
+        return new NodeDetails<PublicationDtoDetails> { Details = details, Depth = key.Depth, Size = key.Size };
     }
 
-    public override UInt64 Delete(PublicationTitle v)
+    public override UInt64 Delete(PublicationDtoTitle v)
     {
         UInt64 ret = 0;
-        foreach(Tree<PublicationTitle> t in base.Roots) {
+        foreach(Tree<PublicationDtoTitle> t in base.Roots) {
             if (t.Root == null) throw new NullReferenceException("Empty tree detected! Resulted in a NullReferenceException");
             if (t.Root.Data.Equals(v)) {
                 Roots.Remove(t);
@@ -42,9 +42,9 @@ class PublicationGraph : Graph<PublicationTitle, PublicationDetails>
     }
     
     /// Auxiliary method for doing recursive filtering calls.
-    private void filterChildren(INode<PublicationTitle> n, Filter<NodeDetails<PublicationDetails>> filter) {
+    private void filterChildren(INode<PublicationDtoTitle> n, Filter<NodeDetails<PublicationDtoDetails>> filter) {
         for (int i = 0; i < n.Children.Count; i++) {
-            INode<PublicationTitle> child = n.Children[i];
+            INode<PublicationDtoTitle> child = n.Children[i];
             if (filter.ShouldRemove(ToDetails(child))) 
             {
                 n.Children.RemoveAt(i);

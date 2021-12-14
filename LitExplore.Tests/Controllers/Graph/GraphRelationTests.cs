@@ -6,7 +6,7 @@ public class GraphRelationTests
 {
   public List<PublicationDto> publications;
   public List<VisualGraphNode> nodes;
-  public List<PublicationTitle> references;
+  public List<PublicationDtoTitle> references;
 
   public GraphRelationTests()
   {

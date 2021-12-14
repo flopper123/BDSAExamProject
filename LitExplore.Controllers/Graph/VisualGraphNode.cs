@@ -10,7 +10,7 @@ public class VisualGraphNode
 
   // Helper methods
   public string Title { get => Publication.Title; }
-  public ISet<PublicationTitle> References { get => Publication.References; }
+  public ISet<PublicationDtoTitle> References { get => Publication.References; }
 
   public RelationsHandler Relations;
 

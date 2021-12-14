@@ -1,18 +1,18 @@
 ﻿namespace LitExplore.Core.Publication;
 
-public record PublicationTitle
+public record PublicationDtoTitle
 {
     [Key]
     [Required]
     public string Title {get; init;} =null!; // The null! tells the compiler that this wont ever be null.
 }
 
-public record PublicationDto : PublicationTitle
+public record PublicationDto : PublicationDtoTitle
 {
-    public ISet<PublicationTitle> References { get; init; } = new HashSet<PublicationTitle>(); // Should be empty not null if references is empty
+    public ISet<PublicationDtoTitle> References { get; init; } = new HashSet<PublicationDtoTitle>(); // Should be empty not null if references is empty
 }
 
-public record PublicationDetails : PublicationDto
+public record PublicationDtoDetails : PublicationDto
 {
     public string Author { get; init; } = "?";
 
