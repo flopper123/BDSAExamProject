@@ -83,8 +83,6 @@ public class PublicationGraphTests
 
     [Fact]
     public void CanEnumerate() {
-        throw new NotSupportedException();
-        /*
         PublicationGraph graph = new PublicationGraph();
         var fst = new PublicationDtoDetails { Title = "fst" };
         var snd = new PublicationDtoDetails { Title = "snd" };
@@ -93,19 +91,15 @@ public class PublicationGraphTests
 
         int exp = 2;
         int act = 0;
-        foreach (var n in _graph) act++;
+        foreach (PublicationNode n in graph.GetNodes()) act++;
         Assert.Equal(exp, act);
-        */
     }
 
     [Fact]
     public void CanEnumerateAllElements() {
-        throw new NotSupportedException();
-    /*
         int i = 0;
-        foreach (var n in _graph) i++;
+        foreach (PublicationNode n in _graph.GetNodes()) i++;
         Assert.Equal(N, i);
-    */
     }
 
     // Parralel filtering of the entire graph

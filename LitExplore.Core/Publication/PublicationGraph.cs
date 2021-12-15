@@ -5,7 +5,7 @@ using System.Linq;
 using LitExplore.Core.Filter;
 using LitExplore.Core.Graph;
 
-public class PublicationGraph : IEnumerable<PublicationNode> {
+public class PublicationGraph {
     
     Dictionary<string, PublicationNode> nodes = new Dictionary<string, PublicationNode>();
 
@@ -14,10 +14,19 @@ public class PublicationGraph : IEnumerable<PublicationNode> {
 
     public int Size { get { return this.nodes.Count(); } }
 
+    public IEnumerable<PublicationNode> GetNodes() {
+        foreach (PublicationNode n in nodes.Values) {
+            yield return n;
+        }
+    }
+
     // Parralel filtering of the entire graph
     public void Filter(Filter<NodeDetails<PublicationNode>> filter) {
+
         var toRemove = new ConcurrentBag<PublicationNode>();
+
         Parallel.ForEach(nodes.Values, n => {
+
             var d = new NodeDetails<PublicationNode>(n);
             if (filter.ShouldRemove(d)) toRemove.Add(n);
         });
@@ -109,18 +118,5 @@ public class PublicationGraph : IEnumerable<PublicationNode> {
         }
 
         return node;
-    }
-
-    public IEnumerator<PublicationNode> GetEnumerator()
-    {
-        return this.GetEnumerator();
-    }
-
-    // Yields values in dictionary in a non-ordered sequence
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        foreach(PublicationNode n in this.nodes.Values) {
-            yield return n;
-        }
     }
 }
