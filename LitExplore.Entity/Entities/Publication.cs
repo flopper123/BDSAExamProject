@@ -21,7 +21,7 @@ public class Publication //: PublicationTitle
     public DateTime Time { get; set; } = DateTime.Now;
 
     [Required]
-    public virtual ICollection<KeyWord> Keywords { get; set; } = new List<KeyWord>();
+    public ICollection<KeyWord> Keywords { get; set; } = new List<KeyWord>();
     //! Because stupid entityFramework dont save collections of primitives you wil build it yourself.
     //! 2 ways either have the Keywords as an entity, or do some text parsing and save it as a string.
 }

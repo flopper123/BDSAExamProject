@@ -15,6 +15,7 @@ public class PublicationRepository : AbsRepository, IPublicationRepository
     /// 
     /// - If another entry already exists for the given title
     ///   it will overwrite the saved details by replcaing it 
+    ///   thereby deleting data present in the old entry.
     ///   with @publication and return Status.UPDATED
     /// 
     /// - If no entry exists for the user, it will add the new 
@@ -29,8 +30,10 @@ public class PublicationRepository : AbsRepository, IPublicationRepository
         if (db_pub == null) await _context.Publications.AddAsync(publication.ConvertToPublication()); 
         else
         {
-            db_pub = publication.ConvertToPublication();
-            throw new Exception($"ToUpdate {db_pub.ToString()}");
+            // this overrides the complete obj hence the loss of refs..
+            // okay issue was not updating the obj .. but updating the fields in the obj instead. sigh!!
+            db_pub.UpdatePublication(publication.ConvertToPublication()); //! Destructive update.
+            
             status = Status.Updated;
         }
 

@@ -26,11 +26,12 @@ public class LitExploreContext : DbContext, ILitExploreContext
         //     .HasForeignKey(s => s.CurrentGradeId);
 
 
-        builder.Entity<Publication>().HasMany<KeyWord>(k => k.Keywords);
-        builder.Entity<Publication>().HasMany<PublicationTitle>(t => t.References);
-        builder.Entity<KeyWord>().ToTable("KeyWords");
+        // builder.Entity<Publication>().HasMany<KeyWord>(k => k.Keywords);
+        // builder.Entity<Publication>().HasMany<PublicationTitle>(t => t.References);
+        // builder.Entity<KeyWord>().ToTable("KeyWords");
         
         builder.Entity<PublicationTitle>().HasKey(t => t.Title);
+        builder.Entity<KeyWord>().HasKey(k => k.Keyword);
         /*
         builder.Entity<Publication>()
             .HasMany<Reference>(p => p.References)

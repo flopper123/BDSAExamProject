@@ -6,5 +6,9 @@ public class KeyWord
 {
     [Key]
     public string Keyword {get; set;} = "?"; 
-    public List<Publication>? Publication {get; set;}
+
+    //Navigation Property
+    public string PublicationId { get; set; }
+    public Publication Publication { get; set; }
+
 }

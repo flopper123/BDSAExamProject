@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LitExplore.Entity.Migrations
 {
     [DbContext(typeof(LitExploreContext))]
-    [Migration("20211214142026_Potential_Fix_ForMissing_Lists")]
+    [Migration("20211215212257_Potential_Fix_ForMissing_Lists")]
     partial class Potential_Fix_ForMissing_Lists
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,29 +24,20 @@ namespace LitExplore.Entity.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("KeyWordPublication", b =>
-                {
-                    b.Property<string>("KeywordsKeyword")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PublicationTitle")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("KeywordsKeyword", "PublicationTitle");
-
-                    b.HasIndex("PublicationTitle");
-
-                    b.ToTable("KeyWordPublication");
-                });
-
             modelBuilder.Entity("LitExplore.Entity.Entities.KeyWord", b =>
                 {
                     b.Property<string>("Keyword")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("PublicationId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Keyword");
 
-                    b.ToTable("KeyWords", (string)null);
+                    b.HasIndex("PublicationId");
+
+                    b.ToTable("KeyWords");
                 });
 
             modelBuilder.Entity("LitExplore.Entity.Entities.Publication", b =>
@@ -78,7 +69,13 @@ namespace LitExplore.Entity.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("PublicationId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Title");
+
+                    b.HasIndex("PublicationId");
 
                     b.ToTable("References");
                 });
@@ -100,49 +97,33 @@ namespace LitExplore.Entity.Migrations
                     b.ToTable("History");
                 });
 
-            modelBuilder.Entity("PublicationPublicationTitle", b =>
+            modelBuilder.Entity("LitExplore.Entity.Entities.KeyWord", b =>
                 {
-                    b.Property<string>("PublicationTitle")
-                        .HasColumnType("nvarchar(450)");
+                    b.HasOne("LitExplore.Entity.Entities.Publication", "Publication")
+                        .WithMany("Keywords")
+                        .HasForeignKey("PublicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("ReferencesTitle")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("PublicationTitle", "ReferencesTitle");
-
-                    b.HasIndex("ReferencesTitle");
-
-                    b.ToTable("PublicationPublicationTitle");
+                    b.Navigation("Publication");
                 });
 
-            modelBuilder.Entity("KeyWordPublication", b =>
+            modelBuilder.Entity("LitExplore.Entity.Entities.PublicationTitle", b =>
                 {
-                    b.HasOne("LitExplore.Entity.Entities.KeyWord", null)
-                        .WithMany()
-                        .HasForeignKey("KeywordsKeyword")
+                    b.HasOne("LitExplore.Entity.Entities.Publication", "Publication")
+                        .WithMany("References")
+                        .HasForeignKey("PublicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LitExplore.Entity.Entities.Publication", null)
-                        .WithMany()
-                        .HasForeignKey("PublicationTitle")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Publication");
                 });
 
-            modelBuilder.Entity("PublicationPublicationTitle", b =>
+            modelBuilder.Entity("LitExplore.Entity.Entities.Publication", b =>
                 {
-                    b.HasOne("LitExplore.Entity.Entities.Publication", null)
-                        .WithMany()
-                        .HasForeignKey("PublicationTitle")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Keywords");
 
-                    b.HasOne("LitExplore.Entity.Entities.PublicationTitle", null)
-                        .WithMany()
-                        .HasForeignKey("ReferencesTitle")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("References");
                 });
 #pragma warning restore 612, 618
         }

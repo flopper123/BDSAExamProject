@@ -40,80 +40,80 @@ namespace LitExplore.Entity.Migrations
                 name: "PublicationTitle",
                 newName: "References");
 
+            migrationBuilder.AddColumn<string>(
+                name: "PublicationId",
+                table: "KeyWords",
+                type: "nvarchar(450)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "PublicationId",
+                table: "References",
+                type: "nvarchar(450)",
+                nullable: false,
+                defaultValue: "");
+
             migrationBuilder.AddPrimaryKey(
                 name: "PK_References",
                 table: "References",
                 column: "Title");
 
-            migrationBuilder.CreateTable(
-                name: "KeyWordPublication",
-                columns: table => new
-                {
-                    KeywordsKeyword = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PublicationTitle = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_KeyWordPublication", x => new { x.KeywordsKeyword, x.PublicationTitle });
-                    table.ForeignKey(
-                        name: "FK_KeyWordPublication_KeyWords_KeywordsKeyword",
-                        column: x => x.KeywordsKeyword,
-                        principalTable: "KeyWords",
-                        principalColumn: "Keyword",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_KeyWordPublication_Publications_PublicationTitle",
-                        column: x => x.PublicationTitle,
-                        principalTable: "Publications",
-                        principalColumn: "Title",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PublicationPublicationTitle",
-                columns: table => new
-                {
-                    PublicationTitle = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ReferencesTitle = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PublicationPublicationTitle", x => new { x.PublicationTitle, x.ReferencesTitle });
-                    table.ForeignKey(
-                        name: "FK_PublicationPublicationTitle_Publications_PublicationTitle",
-                        column: x => x.PublicationTitle,
-                        principalTable: "Publications",
-                        principalColumn: "Title",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PublicationPublicationTitle_References_ReferencesTitle",
-                        column: x => x.ReferencesTitle,
-                        principalTable: "References",
-                        principalColumn: "Title",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_KeyWords_PublicationId",
+                table: "KeyWords",
+                column: "PublicationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_KeyWordPublication_PublicationTitle",
-                table: "KeyWordPublication",
-                column: "PublicationTitle");
+                name: "IX_References_PublicationId",
+                table: "References",
+                column: "PublicationId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_PublicationPublicationTitle_ReferencesTitle",
-                table: "PublicationPublicationTitle",
-                column: "ReferencesTitle");
+            migrationBuilder.AddForeignKey(
+                name: "FK_KeyWords_Publications_PublicationId",
+                table: "KeyWords",
+                column: "PublicationId",
+                principalTable: "Publications",
+                principalColumn: "Title",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_References_Publications_PublicationId",
+                table: "References",
+                column: "PublicationId",
+                principalTable: "Publications",
+                principalColumn: "Title",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "KeyWordPublication");
+            migrationBuilder.DropForeignKey(
+                name: "FK_KeyWords_Publications_PublicationId",
+                table: "KeyWords");
 
-            migrationBuilder.DropTable(
-                name: "PublicationPublicationTitle");
+            migrationBuilder.DropForeignKey(
+                name: "FK_References_Publications_PublicationId",
+                table: "References");
+
+            migrationBuilder.DropIndex(
+                name: "IX_KeyWords_PublicationId",
+                table: "KeyWords");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_References",
+                table: "References");
+
+            migrationBuilder.DropIndex(
+                name: "IX_References_PublicationId",
+                table: "References");
+
+            migrationBuilder.DropColumn(
+                name: "PublicationId",
+                table: "KeyWords");
+
+            migrationBuilder.DropColumn(
+                name: "PublicationId",
                 table: "References");
 
             migrationBuilder.RenameTable(

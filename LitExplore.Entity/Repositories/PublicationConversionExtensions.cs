@@ -38,4 +38,16 @@ internal static class PublicationConversionExtensions
             Keywords = p.Keywords.Select(k => new KeyWord{Keyword = k}).ToList(), //? This damn EF..
         };
     }
+
+    internal static void UpdatePublication(this Publication old, Publication p_new)
+    {
+        //! Destructive update not taking into account for Refernces and Keywords already present.
+        //! If not in p_new it is assumed that it is on purpose.
+        old.Title = p_new.Title;
+        old.Author = p_new.Author;
+        old.Abstract = p_new.Abstract;
+        old.References = p_new.References;
+        old.Time = p_new.Time;
+        old.Keywords =p_new.Keywords;
+    }
 }

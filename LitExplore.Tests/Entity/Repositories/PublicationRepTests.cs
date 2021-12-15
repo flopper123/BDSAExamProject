@@ -16,10 +16,11 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
         // seed actions here
         PublicationTitle ref1 = new PublicationTitle { Title = "Test pub 1" };
         PublicationTitle ref2 = new PublicationTitle { Title = "Test pub 2" };
+        PublicationTitle ref3 = new PublicationTitle { Title = "Test pub 3" };
         Publication pub1 = new Publication{ Title = "Test pub 1", References = new List<PublicationTitle> {ref2}};
         context.Publications.AddRange(
           pub1,
-          new Publication { Title = "Test pub 2", References = new List<PublicationTitle> { ref1 } },
+          new Publication { Title = "Test pub 2", References = new List<PublicationTitle> { ref3 } },
           new Publication { Title = "Test pub 3", References = new List<PublicationTitle> { ref1, ref2 } }
         );
     }
@@ -36,7 +37,7 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
 
         Status act_status = await repository.UpdateAsync(exp);
 
-        Publication? act = context.Publications.Find(exp_title);
+        Publication? act = await context.Publications.FindAsync(exp_title);
         Assert.NotNull(act);
         Assert.NotNull(act.Keywords);
         var act_keys = act.Keywords;
@@ -46,10 +47,6 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
             Assert.True(exp_keys.Contains(k.Keyword), $"Expected keys doesn't contain {k.Keyword}");
         }
         Assert.Equal(Status.Updated, act_status);
-        foreach (String keyword in exp.Keywords)
-        {
-
-        }
     }
 
     [Fact]
@@ -65,7 +62,8 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
             Title = exp_title,
             References = new HashSet<PublicationDtoTitle> { new PublicationDtoTitle { Title = "Alabama Show Down" } },
             Author = "Harald Blåtand",
-            Keywords = new List<string> { "Vikinger", "Saxerne", "0xDEADBEEF" },
+            //! Rember to keep the types the same. -- ISet Readonly
+            Keywords = new List<string> { "Vikinger", "Saxerne", "0xDEADBEEF" }.AsReadOnly(),
             Time = DateTime.MaxValue,
             Abstract = "For Glory and Fellowship & second breakfast"
         };
@@ -75,10 +73,15 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
         Assert.Equal(Status.Updated, act_status);
 
         PublicationDtoDetails? act = await repository.ReadAsync(new PublicationDtoTitle { Title = exp_title });
-        Assert.True(act != null, $"Failed retrieval of #{exp_title}");
+        
+        Assert.True(act is not null, $"Failed retrieval of #{exp_title}");
 
+        // ! Check inserted such that we avoid using (act = null!) 
+        // ! Since in this instance somehow sat act to null. 
+        if (act is null) throw new ArgumentNullException("Should not throw this inspect.. act was somehow null.");
+        
         // Assert
-        Assert.True(exp.CustomEquals(act = null!), $"Expected {exp.ToString()}\nReceived: {act.ToString()}");
+        Assert.True(exp.CustomEquals(act), $"Expected {exp.ToString()}\nReceived: {act.ToString()}"); //TODO: Time equallity check should be fixed in next pull/push.
         Assert.Equal(exp, act); // use record equals
     }
 
@@ -115,14 +118,14 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
         // The reference representation of this DTO is being seeded to the db in seed()
         PublicationDtoDetails exp = new PublicationDtoDetails
         {
-            Title = "Test pub 1",
+            Title = "Test pub 2",
             References = new HashSet<PublicationDtoTitle> { 
-                new PublicationDtoTitle { Title = "Test pub 2" } 
+                new PublicationDtoTitle { Title = "Test pub 3" } 
             }
         };
     
         // Act
-        PublicationDtoDetails? act = await repository.ReadAsync(new PublicationDtoTitle { Title = "Test pub 1" } );
+        PublicationDtoDetails? act = await repository.ReadAsync(new PublicationDtoTitle { Title = "Test pub 2" } );
 
         Assert.True(exp.References.Count == act.References.Count, $"The recieved reference count of {act.References.Count} did not return with the expected count {exp.References.Count}.");
         // Assert
