@@ -5,9 +5,17 @@ using LitExplore.Core.Filter.Filters;
 
 public class FilterFactoryTests {
     [Theory]
+    [InlineData(typeof(MaxDepthFilter), 10)]
+    [InlineData(typeof(TitleContainsFilter), "0xDEADBEEF")]
+    public void Create_PublicationNode_by_Type(Type exp, params Object[] args) {
+        var act_filter = FilterFactory.Create<NodeDetails<PublicationNode>>(exp.Name, args);
+        Assert.Equal(exp.Name, act_filter.GetType().Name);
+    }
+
+    [Theory]
     [InlineData(typeof(MinRefsFilter), 10)]
     [InlineData(typeof(TitleFilter), "0xDEADBEEF")]
-    public void Create_by_Type(Type exp, params Object[] args) {
+    public void Create_PublicationDto_by_Type(Type exp, params Object[] args) {
         Filter<PublicationDto> act_filter = FilterFactory.Create<PublicationDto>(exp.Name, args);
         Assert.Equal(exp.Name, act_filter.GetType().Name);
     }

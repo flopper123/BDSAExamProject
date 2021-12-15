@@ -38,7 +38,7 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
 
         Publication? act = context.Publications.Find(exp_title);
         Assert.NotNull(act);
-        Assert.NotNull(act.Keywords);
+        Assert.NotNull((act = null!).Keywords);
         var act_keys = act.Keywords;
         var exp_keys = exp.Keywords;
         Assert.Equal(exp_keys.Count(), act_keys.Count());
@@ -105,7 +105,7 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
         Assert.True(act != null, $"Failed retrieval of #{exp_title}");
 
         // Assert
-        Assert.True(exp.CustomEquals(act), $"Expected {exp.ToString()}\nReceived: {act.ToString()}");
+        Assert.True(exp.CustomEquals((act = null!)), $"Expected {exp.ToString()}\nReceived: {act.ToString()}");
     }
 
     [Fact]
@@ -124,7 +124,7 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
         // Act
         PublicationDtoDetails? act = await repository.ReadAsync(new PublicationDtoTitle { Title = "Test pub 1" } );
 
-        Assert.True(exp.References.Count == act.References.Count, $"The recieved reference count of {act.References.Count} did not return with the expected count {exp.References.Count}.");
+        Assert.True(exp.References.Count == (act = null!).References.Count, $"The recieved reference count of {act.References.Count} did not return with the expected count {exp.References.Count}.");
         // Assert
         Assert.NotNull(act);
         if (act == null) return;

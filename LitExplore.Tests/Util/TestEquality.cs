@@ -9,14 +9,23 @@ public static class PublicationAssertionExtension {
         }
         if (!this_.Author.Equals(other.Author))
         {
-            throw new Exception("AuthorEquals throwing");
+            throw new Exception($"AuthorEquals throwing Author1:{this_.Author} and Author2:{other.Author}");
             return false;
         }
-        if (!this_.Time.Equals(other.Time))
+        if (!this_.Time.Day.Equals(other.Time.Day))
         {
-            throw new Exception("TimeEquals throwing");
+            throw new Exception("TimeEquals Day throwing");
             return false;
         }
+        if (!this_.Time.Month.Equals(other.Time.Month)) {
+            throw new Exception("TimeEquals Month throwing");
+            return false;
+        }
+        if (!this_.Time.Year.Equals(other.Time.Year)) {
+            throw new Exception("TimeEquals Year throwing");
+            return false;
+        }
+
         if (!this_.Abstract.Equals(other.Abstract))
         {
             throw new Exception("AbstractEquals throwing");
