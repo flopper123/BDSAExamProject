@@ -82,8 +82,8 @@ public class PublicationGraph : ISerialize
 
     
     // Returns true if atleast one child was added to target
-    private bool AddChildren(PublicationNode tar, 
-                             List<PublicationDtoTitle> newChildren) {
+    protected bool AddChildren(PublicationNode tar, 
+                               List<PublicationDtoTitle> newChildren) {
 
         bool hasAdded = false;
         // Check which children target is missing

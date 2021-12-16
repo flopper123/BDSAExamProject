@@ -1,7 +1,7 @@
 namespace LitExplore.Tests.Entity.Repositories;
 
 using LitExplore.Tests.Util; 
-/*
+
 // In memory testing of publication repository
 public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
 {
@@ -152,4 +152,3 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
         Assert.Equal(SIZE, (UInt64) i);
     }
 }
-*/

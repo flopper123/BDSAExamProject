@@ -1,11 +1,35 @@
 namespace LitExplore.Controllers;
 
+using LitExplore.Entity.Context;
 using LitExplore.Controllers.Graph;
+using LitExplore.Core.Filter;
 
 public class GraphController
 {
-    public GraphController() { }
+    IFilterRepository<PublicationGraph> _fRepo;
+    IPublicationRepository _pRepo;
     
+    public GraphController(IFilterRepository<PublicationGraph> fRepo, 
+                           IPublicationRepository pRepo) {
+        this._fRepo = fRepo;
+        this._pRepo = pRepo;
+    }
+    
+    public async Task<VisualGraph> GetDefaultGraph() {
+        throw new NotImplementedException();
+    }
+
+    public async Task<VisualGraph> Load(UInt64 uid) {
+
+        // Retrieve default graph
+
+        // if not found filter becomes EmptyFilter<PubGraph> which is fine
+        var filter = await _fRepo.ReadAsync(uid);
+        var graph = await GetDefaultGraph();
+        // if (filter != null) graph.Filter(filter);
+        return graph;
+    }
+
     public async Task<VisualGraph> GetGraphRepresentationAsync() {
         // Fetch graph
         // THIS IS TEST DATA FOR NOW

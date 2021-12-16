@@ -1,5 +1,6 @@
 namespace LitExplore.Core.Publication;
 
+using LitExplore.Core.Publication.Action;
 using static LitExplore.Core.Filter.FilterOption;
 
 // Auxiliary class for recursion
@@ -69,16 +70,14 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
 
         if (hasSeen)
         {
+            if ((opts & SearchDirection.VISIT_ONCE) != 0) return;
             if ((opts & SearchDirection.VISIT_MINDEPTH) != 0 &&
                 prv_depth <= depth)
             {
                 return;
             }
-            else if ((opts & SearchDirection.VISIT_ONCE) != 0 &&
-                      prv_depth != UInt32.MaxValue) {
-                return;
-            }
         }
+        
         // Add visitation
         Recursion.Visited[this.Details.Title] = depth;
 

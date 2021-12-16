@@ -1,7 +1,7 @@
 namespace LitExplore.Entity.Repositories;
 
 using LitExplore.Core.Filter;
-
+using LitExplore.Core;
 /// <summary>
 /// FilterRepository
 /// </summary>
@@ -18,7 +18,7 @@ public class FilterRepository<T> : AbsRepository, IFilterRepository<T>
     /// - If read fails, it returns a Task containing <null>
     /// </summary>
     /// <param name="userId"> The userId of the filter to retrieve </param>
-    public async Task<Filter<T>?> ReadAsync(ulong userId)
+    public async Task<Filter<T>?> ReadAsync(UInt64 userId)
     {
         UserFilter? uid_filter = (await _context.History.FindAsync(userId));
         return (uid_filter != null) ? FilterFactory.Deserialize<T>(uid_filter.Serialization) : 
@@ -37,7 +37,7 @@ public class FilterRepository<T> : AbsRepository, IFilterRepository<T>
     /// <param name="userId"></param>
     /// <param name="filter"></param>
     /// <returns></returns>
-    public async Task<Status> UpdateAsync(ulong userId, Filter<T> filter)
+    public async Task<Status> UpdateAsync(UInt64 userId, Filter<T> filter)
     {
         string fs = filter.Serialize();
         UserFilter? uid_filter = (await _context.History.FindAsync(userId));
