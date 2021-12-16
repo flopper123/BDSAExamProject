@@ -14,13 +14,29 @@ using static LitExplore.Tests.Utilities.GraphMockData;
 public class POVTests
 {
     [Fact]
-    public void Can_POV_ChildrenSearch_ReachEverything_Connected()
+    public void Can_POV_VISIT_ONCE_ChildrenSearch_ReachEverything_Connected()
     {
         var act = new PublicationGraph();        
         foreach (var n in GetConnectedAcyclicData(100, 11)) act.Add(n);
-        
-        act.Filter(new POV("0"));
-        Assert.Equal(0, act.GetNodes().Count());
+        var exp = act.Size;
+
+        var opts = FilterOption.SearchDirection.CHILDREN | FilterOption.SearchDirection.VISIT_ONCE;
+
+        act.Filter(new POV("0", opts));
+        Assert.Equal(exp, act.GetNodes().Count());
+    }
+
+    [Fact]
+    public void Assert_POV_ParentSearch_OnRoot_Size1()
+    {
+        var act = new PublicationGraph();        
+        foreach (var n in GetConnectedAcyclicData(100, 11)) act.Add(n);
+        var exp = 1;
+
+        var opts = FilterOption.SearchDirection.PARENTS | FilterOption.SearchDirection.VISIT_ONCE;
+
+        act.Filter(new POV("0", opts));
+        Assert.Equal(exp, act.GetNodes().Count());
     }
 }
 

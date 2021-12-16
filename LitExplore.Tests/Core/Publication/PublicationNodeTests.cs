@@ -141,8 +141,5 @@ public class PublicationNodeTests {
         Assert.DoesNotContain(addition, n.Parents);
     }
 
-    [Fact]
-    public void CanFilterChildren() {
-        throw new NotImplementedException();
-    }
+    // TO:DO Adds tests for SearchOptions
 }

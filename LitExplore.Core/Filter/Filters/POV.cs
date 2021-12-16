@@ -11,30 +11,39 @@ public sealed class POV : FilterDecorator<PublicationGraph>
         "LitExplore.Core.Publication.PublicationDtoTitle",
         "LitExplore.Core.FilterOption.SearchDirection"
     };
-    
-    private enum Args {
+
+    private enum Args
+    {
         TITLE = 0,
         DIRECTION = 1,
     }
 
     // Accepts multiple arguments so we overwrite
-    protected override Object[] PredicateArgs {
-        get {
-            if (p_args == null) throw new FilterPArgsException(this.GetType().Name, PARG_TYPES);    
-            
+    protected override Object[] PredicateArgs
+    {
+        get
+        {
+            if (p_args == null) throw new FilterPArgsException(this.GetType().Name, PARG_TYPES);
+
             return new Object[] { (PublicationDtoTitle) p_args[(int)Args.TITLE],
                                   (FilterOption.SearchDirection) p_args[(int) Args.DIRECTION] };
         }
     }
 
     // Determines the search direction from the nodes point of view. 
-    private FilterOption.SearchDirection Direction { 
-        get {
+    private FilterOption.SearchDirection Direction
+    {
+        get
+        {
             if (p_args == null) throw new FilterPArgsException(this.GetType(), PARG_TYPES);
-            return (FilterOption.SearchDirection) (p_args)[(int) Args.DIRECTION]; }
+            return (FilterOption.SearchDirection)(p_args)[(int)Args.DIRECTION];
+        }
     }
 
-    public POV(string key) : this(new PublicationDtoTitle { Title = key }, null) {}
+    public POV(string key) : this(new PublicationDtoTitle { Title = key }, null) { }
+
+    public POV(string key, FilterOption.SearchDirection dir)
+        : this(new PublicationDtoTitle { Title = key }, dir) {}
 
     public POV(PublicationDtoTitle key,
                Filter<PublicationGraph>? prv = null) 
@@ -61,7 +70,7 @@ public sealed class POV : FilterDecorator<PublicationGraph>
         // clear, if pov not found
         if (pov == null) { gr.Nodes = nodes; return; }
 
-        pov.InvokeRecursive(
+        pov.InvokeSearch(
             newGr,
             AddToGraphDictionary.Get(),
             0,  
