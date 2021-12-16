@@ -1,7 +1,7 @@
-namespace LitExplore.Entity.Filter;
+namespace LitExplore.Core.Filter;
 
 using System.Text;
-using LitExplore.Core.Filter;
+using LitExplore.Core.Filter.Filters;
 using System.Reflection;
 
 /// <summary>
@@ -57,9 +57,5 @@ public class FilterFactory
         type@System.String ~ value@0xDEADBEEF
         */
         return (Filter<T>)filter;
-    }
-
-    public static Filter<T> Create<T>(UserFilter dto) {
-        return deserializer.Deserialize<T>(_assembly, dto.Serialization);
     }
 }

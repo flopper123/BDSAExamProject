@@ -1,5 +1,7 @@
 namespace LitExplore.Core.Publication;
 
+using static LitExplore.Core.Filter.FilterOption;
+
 public record PublicationNode : IEquatable<PublicationDtoTitle> {
 
     public List<PublicationNode> Parents { get; protected set; } = new List<PublicationNode>();
@@ -8,6 +10,34 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
     
     public PublicationNode(PublicationDtoDetails details) {
         this.Details = details;
+    }
+
+    protected IEnumerable<PublicationNode> GetSearchTargets(SearchDirection dir) 
+    {
+        if ((dir & SearchDirection.CHILDREN) != 0) foreach (var c in this.Children) yield return c;
+        if ((dir & SearchDirection.PARENTS) != 0) foreach (var p in this.Parents) yield return p;
+        
+        // Add other search patterns as needed
+    }
+
+    // Action could be ADD to Graph for example which would add all encountered to graph 
+
+    // Apply action to target in manér of options
+    // For example if its used with AddToGraphDictionary,
+    //      Adds all nodes connected to this path to @tar 
+    public void InvokeRecursive(PublicationGraph tar,
+                                GraphAction action,
+                                UInt64 depth,
+                                SearchDirection opts = SearchDirection.DEFAULT) 
+    {
+        // apply action to target
+        action.Invoke(this.ToNodeDetails(depth), tar);
+
+        // TO:DO implement so we can perform both child and parent search simoultanously
+        //       Note! ToList is slow for large search ranges
+        GetSearchTargets(opts).ToList()
+                              .ForEach(t => t.InvokeRecursive(tar, action, depth + 1, opts));
+
     }
 
     public void UpdateDetails(PublicationDtoDetails update)
@@ -37,41 +67,10 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
         };
     }
 
+
     public bool Equals(PublicationDtoTitle? title) {
         if (title == null) return false; 
         return Details.Title.Equals(title.Title);
-    }
-
-    /// <param name="filter"> Filter to apply </param>
-    /// <param name="visisted"> A dictionary holding what titles are previously visisted </param>
-    /// <param name="depth"></param>
-    public void FilterChildren(Filter<NodeDetails<PublicationNode>> filter, 
-                               Dictionary<string, UInt32> visitHistory,
-                               UInt32 depth) {
-
-        UInt32 prv_depth = UInt32.MaxValue;
-        
-        bool hasVisisted = visitHistory.TryGetValue(this.Details.Title, out prv_depth);
-        if (hasVisisted && prv_depth < depth) return; // if previously visisted at a lower depth
-        if (!hasVisisted) visitHistory.Add(this.Details.Title, depth);
-
-        depth += 1U;
-        // filter children recursively
-        foreach (PublicationNode child in this.Children) {
-        
-            var details = new NodeDetails<PublicationNode>() {
-                Details = child,
-                Depth = depth,
-            };
-
-            if (filter.ShouldRemove(details))
-            {
-                this.Children.Remove(child);
-                child.Parents.Remove(this);
-
-            } else child.FilterChildren(filter, visitHistory, depth);
-        }
-
     }
 
     // Returns a list of all titles from parameter which this Node doesn't already hold as children.

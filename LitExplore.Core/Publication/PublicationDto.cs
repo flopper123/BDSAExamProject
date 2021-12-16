@@ -7,12 +7,12 @@ public record PublicationDtoTitle
     public string Title {get; init;} =null!; // The null! tells the compiler that this wont ever be null.
 }
 
-public record PublicationDto : PublicationDtoTitle
+public record PublicationDto : PublicationDtoTitle, IEquatable<PublicationDto>
 {
     public ISet<PublicationDtoTitle> References { get; init; } = new HashSet<PublicationDtoTitle>(); // Should be empty not null if references is empty
 }
 
-public record PublicationDtoDetails : PublicationDto
+public record PublicationDtoDetails : PublicationDto, IEquatable<PublicationDtoDetails>
 {
     public string Author { get; init; } = "?";
 

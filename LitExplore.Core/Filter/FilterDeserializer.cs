@@ -1,6 +1,5 @@
-namespace LitExplore.Entity.Filter;
+namespace LitExplore.Core.Filter;
 
-using LitExplore.Core.Filter;
 using LitExplore.Core.Filter.Filters;
 using System.Reflection;
 

@@ -2,22 +2,15 @@ namespace LitExplore.Core.Filter;
 
 using System.Text;
 
-public abstract class Filter<T> {
-    // The top-level predicate this filter applies.
-    protected Predicate<T> predicate;
-
+public abstract class Filter<T> : ISerialize {
     // How many filters this filter applies
     public virtual UInt32 Depth {
         get { return 1u; }
         protected set {}
     }
     
-    protected Filter(Predicate<T> predicate) {
-        this.predicate = predicate;
-    }
-
-    public virtual bool ShouldRemove(T v) { return predicate(v); }
-
+    protected Filter() {}
+    
     // Serialization is tailored for linux, doesn't account for windows line endings.
     public virtual string Serialize() {
         StringBuilder sb = new StringBuilder();
@@ -30,15 +23,12 @@ public abstract class Filter<T> {
         return sb.ToString();
     }
 
-
     /// <summary>
     /// Return an ordered ienumerable where the starting element is the first applied 
     /// filter in this sequence of filters.
     /// </summary>
     /// <returns> The filter history as an generic IEnumerable<Filter<T>> </returns>
-    public virtual IEnumerable<Filter<T>> GetHistory() {{}
-        yield return this;
-    }
+    public virtual IEnumerable<Filter<T>> GetHistory() { yield return this; }
 
     /// <summary>
     /// Returns a serialization of the arguments given to implementing classes constructors.
@@ -52,11 +42,11 @@ public abstract class Filter<T> {
     /// a subset of @tar. All elements in the returned subset,
     /// upholds the filter predicate. 
     /// </summary>
-    /// <param name="tar"> Target of filter </param>
-    /// <returns> An enumerable of all elements that uphold src predicate </returns>
-    public virtual IEnumerable<T> Apply(IEnumerable<T> tar) {
-        return tar.Where(v => predicate(v));
-    }
+    public virtual void Invoke(T v) { this.Action(v); }
+    
+    public abstract Filter<T> Decorate(Filter<T> snd);
+
+    protected abstract void Action(T v);
 
     override public string ToString() {
         StringBuilder sb = new StringBuilder();

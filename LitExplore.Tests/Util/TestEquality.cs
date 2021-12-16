@@ -67,6 +67,26 @@ public static class PublicationAssertionExtension {
         return true;
     }
 
+    
+    public static bool CustomEquals(this PublicationNode this_, PublicationNode other) {
+        if (!other.Children.SequenceEqual(this_.Children)) return false; 
+        if (!other.Parents.SequenceEqual(this_.Parents)) return false;
+        return other.Details.CustomEquals(this_.Details);
+    }
+
+    public static bool CustomEquals(this NodeDetails<PublicationNode> this_, 
+                                    NodeDetails<PublicationNode> other)
+    {
+        if (!this_.Depth.Equals(other.Depth)) return false;
+        var tDetails = this_.Details;
+        var oDetails = other.Details;
+        if (tDetails == null && oDetails == null) return true;
+        if (tDetails == null) return false;
+        if (oDetails == null) return false;
+        return tDetails.CustomEquals(oDetails);
+    }
+
+
     public static bool CustomEquals<T> (this IEnumerator<T> fst, IEnumerator<T> snd) {
         String fst_msg = "First values: ";
         String snd_msg = "Second values: ";

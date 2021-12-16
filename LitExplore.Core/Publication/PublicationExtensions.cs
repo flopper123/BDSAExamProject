@@ -1,6 +1,6 @@
 namespace LitExplore.Core.Publication;
 
-internal static class NodeExtensions {
+public static class NodeExtensions {
     internal static bool ContainsTitle(this List<PublicationNode> nodes, PublicationDtoTitle title)
     {
         foreach (PublicationNode n in nodes) {
@@ -26,5 +26,10 @@ internal static class NodeExtensions {
             };
 
         } else return new PublicationDtoDetails { Title = target.Title };
+    }
+
+    public static NodeDetails<PublicationNode> ToNodeDetails(this PublicationNode tar, UInt64 depth = 0) 
+    {
+        return new NodeDetails<PublicationNode>(tar, depth);
     }
 }
