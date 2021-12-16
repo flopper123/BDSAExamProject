@@ -1,6 +1,7 @@
 // TO:DO move publication type to server
 global using LitExplore.Core;
 global using LitExplore.Core.Publication;
+global using LitExplore.Tests.Util;
 global using System.Collections.Generic;
 global using System.Diagnostics;
 global using LitExplore.Entity;
