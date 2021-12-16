@@ -29,11 +29,15 @@ public sealed class POV : FilterDecorator<PublicationGraph>
 
     // Determines the search direction from the nodes point of view. 
     private FilterOption.SearchDirection Direction { 
-        get { return (FilterOption.SearchDirection) (p_args = null!)[1]; }
+        get {
+            if (p_args == null) throw new FilterPArgsException(this.GetType(), PARG_TYPES);
+            return (FilterOption.SearchDirection) (p_args)[(int) Args.DIRECTION]; }
     }
 
+    public POV(string key) : this(new PublicationDtoTitle { Title = key }, null) {}
+
     public POV(PublicationDtoTitle key,
-               Filter<PublicationGraph> prv) 
+               Filter<PublicationGraph>? prv = null) 
         : this(key, FilterOption.SearchDirection.DEFAULT, prv) 
     {} 
 
@@ -49,8 +53,11 @@ public sealed class POV : FilterDecorator<PublicationGraph>
         PublicationGraph newGr = new PublicationGraph();
         
         Dictionary<string, PublicationNode> nodes = new Dictionary<string, PublicationNode>();
-        PublicationNode? pov = gr.GetNode((p_args=null!).Title);
-        
+        if (p_args == null) throw new NullReferenceException("pargs is null");
+
+        //(p_args)[(int) Args.TITLE]
+        PublicationNode? pov = gr.GetNode((p_args)[(int) Args.TITLE].Title);
+
         // clear, if pov not found
         if (pov == null) { gr.Nodes = nodes; return; }
 

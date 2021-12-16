@@ -1,6 +1,6 @@
 namespace LitExplore.Tests.Core.Publication;
 
-using static PublicationGraphTests;
+using static LitExplore.Tests.Utilities.GraphMockData;
 
 public class PublicationNodeTests {
     

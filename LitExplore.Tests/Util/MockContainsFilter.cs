@@ -1,4 +1,4 @@
-namespace LitExplore.Tests.Entity.Filter;
+namespace LitExplore.Tests.Util;
 
 class MockContainsFilter : FilterDecorator<List<string>>
 {

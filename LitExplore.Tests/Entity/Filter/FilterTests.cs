@@ -43,10 +43,10 @@ public class FilterTests
     // Assertion is done by checking that tar contains excatly the same values as in exp_titles,
     // disregarding order of elements.
     [Theory]
-    [MemberData(nameof(TitleContainsTests.GetChainApplyData), parameters: 3)]
+    [MemberData(nameof(GetChainApplyData))]
     public void Is_GraphFilters_PackableAndAppliable(Filter<PublicationGraph> f, 
-                                                    PublicationGraph tar, 
-                                                    List<string> exp_titles) 
+                                                     PublicationGraph tar, 
+                                                     List<string> exp_titles) 
     {
         string fs = f.Serialize();
         Filter<PublicationGraph> act_filter = FilterFactory.Deserialize<PublicationGraph>(fs);
@@ -54,5 +54,15 @@ public class FilterTests
         foreach (var n in tar.GetNodes()) {
             Assert.Contains(n.Details.Title, exp_titles);
         }
+    }
+
+        // Used for general filtertesting in FilterTests.cs
+    public static IEnumerable<Object[]> GetChainApplyData() {
+        yield return new Object[] {
+            // applies 0x, then BEEF contains
+            new TitleContains("BEEF", new TitleContains("0x")),
+            TitleContainsTests.GetMockGraph(),
+            new List<string>() { "0xDEADBEEF", "0xBEEF" }
+        };
     }
 }

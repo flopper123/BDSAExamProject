@@ -10,7 +10,7 @@ public class AddToGraphDictionary : GraphAction
         {
             PublicationNode? n = d.Details;
             if (n == null) return;
-            t.Nodes.Add(n.Details.Title, n);
+            t.Nodes.TryAdd(n.Details.Title, n);
         };
 
     protected AddToGraphDictionary() : base(AddToGraphDictionary._Act) { }

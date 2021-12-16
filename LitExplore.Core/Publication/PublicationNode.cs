@@ -22,6 +22,8 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
 
     // Action could be ADD to Graph for example which would add all encountered to graph 
 
+    // TO:DO Implement functionality to avoid visiting same node twice in a cycle graph. 
+
     // Apply action to target in manér of options
     // For example if its used with AddToGraphDictionary,
     //      Adds all nodes connected to this path to @tar 

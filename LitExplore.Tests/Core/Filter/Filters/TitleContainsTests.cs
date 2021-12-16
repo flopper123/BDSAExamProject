@@ -1,14 +1,8 @@
 namespace LitExplore.Tests.Core.Filter.Filters;
 
-using Newtonsoft.Json;
-using LitExplore.Core;
-using LitExplore.Core.Filter;
-using LitExplore.Core.Filter.Filters;
-using System.Text;
-using Xunit.Abstractions;
-using LitExplore.Tests.Core.Publication;
 using static LitExplore.Tests.Core.Publication.PublicationGraphTests;
 using static LitExplore.Core.Filter.FilterPArgField;
+using static LitExplore.Tests.Utilities.GraphMockData;
 
 // Tests for Filter<T> and EmptyFilter 
 public class TitleContainsTests
@@ -25,27 +19,17 @@ public class TitleContainsTests
         foreach(var d in GetMockData()) graph.Add(d);
     }
 
-    private static IEnumerable<PublicationDtoDetails> GetMockData() {
+    public static IEnumerable<PublicationDtoDetails> GetMockData() {
         yield return new PublicationDtoDetails { Title = "0xDEAD", References = GetHashSet("0xBEEF") };
         yield return new PublicationDtoDetails { Title = "0xBEEF", References = GetHashSet("0xDEADBEEF") };
         yield return new PublicationDtoDetails { Title = "0xDEADBEEF", References = GetHashSet("Different") };
         yield return new PublicationDtoDetails { Title = "Different" };
     }
 
-    private static PublicationGraph GetMockGraph() {
+    public static PublicationGraph GetMockGraph() {
         var g = new PublicationGraph();
         foreach (var n in GetMockData()) g.Add(n);
         return g;
-    }
-
-    // Used for general filtertesting in FilterTests.cs
-    public static IEnumerable<Object[]> GetChainApplyData() {
-        yield return new Object[] {
-            // applies 0x, then BEEF contains
-            new TitleContains("BEEF", filter),
-            GetMockGraph(),
-            new List<string>() { "0xDEADBEEF", "0xBEEF" }
-        };
     }
 
     [Fact]
@@ -88,8 +72,8 @@ public class TitleContainsTests
     public void Can_Apply_Deserialization_Single()
     {
         var data = GetMockData().ToList();
-        var exp_titles = new List<string> { data[0].Title, data[2].Title };
-        
+        var exp_titles = new List<string> { data[0].Title, data[1].Title, data[2].Title };
+
         // Construct filter from deserialization
         Filter<PublicationGraph> act_filter = FilterFactory
             .Deserialize<PublicationGraph>(filter.Serialize());
@@ -97,10 +81,17 @@ public class TitleContainsTests
         this.graph.Filter(act_filter); // Apply filter
 
         // Assert correct count and values.
-        foreach (var n in this.graph.GetNodes()) {
+        var msg = new StringBuilder();
+        msg.Append($"Couldn't find in expected list of dtos.");
+        msg.Append("\nexp list: [");
+        foreach (var n in this.graph.GetNodes())
+        {
+            msg.Append(n.Details.Title);
+            msg.Append(" ");
             Assert.True(exp_titles.Contains(n.Details.Title), 
-                        $"Couldn't find {n.Details.Title} in expected list of dtos {exp_titles}.");
+                        msg.ToString() + $"\nact: {n.Details.Title}");
         }
+
     }
 
     [Fact]
