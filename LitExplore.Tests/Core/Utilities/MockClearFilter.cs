@@ -1,3 +1,4 @@
+/*
 namespace LitExplore.Tests.Core.Utilities;
 
 public class MockClearFilter : FilterDecorator<NodeDetails<PublicationNode>> 
@@ -8,3 +9,5 @@ public class MockClearFilter : FilterDecorator<NodeDetails<PublicationNode>>
         yield return ("", "");
     }
 }
+
+*/

@@ -7,8 +7,8 @@ using System.Text;
 public class PublicationGraphTests
 {
     PublicationGraph _graph = new PublicationGraph();
-    TitleContainsFilter tFilter = new TitleContainsFilter("1");
-    MaxDepthFilter dFilter = new MaxDepthFilter(2);
+    TitleContains tFilter = new TitleContains("1");
+    // MaxDepthFilter dFilter = new MaxDepthFilter(2);
     int N = 0;
 
     public PublicationGraphTests() {
@@ -58,7 +58,8 @@ public class PublicationGraphTests
     ///  
     ///  The Title of the n'th node = n.ToString()
     ///  
-    internal static IEnumerable<PublicationDtoDetails> GetConnectedCycleData(int N) {
+    public static IEnumerable<PublicationDtoDetails> GetConnectedCycleData(int N) 
+    {
         for (int i = 0; i < N; i++)
         {
             yield return new PublicationDtoDetails
@@ -69,17 +70,17 @@ public class PublicationGraphTests
         }
 
         yield return new PublicationDtoDetails { Title = $"{N}", References = GetHashSet("1") };
-
     }
 
     /// 
     /// Repeats the following pattern N times:
-    ///   --> *
-    /// * --> *
-    ///   --> *
+    ///   --> * -->
+    /// * --> * --> *
+    ///   --> * -->
     ///        
     ///  Where the objects @second row of * constitutes the @childCOunt                   
-    internal static IEnumerable<PublicationDtoDetails> GetConnectedAcyclicData(int repeat, int childCount = 3) {
+    internal static IEnumerable<PublicationDtoDetails> GetConnectedAcyclicData(int repeat, int childCount = 3) 
+    {
         for (int d = 0; d < repeat; d++)
         {
             var refs = new HashSet<PublicationDtoTitle>();
@@ -171,52 +172,57 @@ public class PublicationGraphTests
     //
     [Fact]
     public void CanFilterEntireGraph() {
-        var expNodes = this._graph
-            .GetNodes()
-            .Where((t) => !tFilter.ShouldRemove(t.ToNodeDetails()));
-
-        this._graph.Filter(tFilter);
-        var actNodes = this._graph.GetNodes();
-        
-        foreach(var exp in expNodes) {
-            Assert.Contains(exp, actNodes);
-        }
+        throw new NotImplementedException();
+        //var expNodes = this._graph
+        //    .GetNodes()
+        //    .Where((t) => !tFilter.ShouldRemove(t.ToNodeDetails()));
+        //
+        //this._graph.Filter(tFilter);
+        //var actNodes = this._graph.GetNodes();
+        //
+        //foreach(var exp in expNodes) {
+        //    Assert.Contains(exp, actNodes);
+        //}
     }
 
 
     [Fact]
     public void CanBranchFilterOn_DisconnectedRoot_OnlyRemovesRoot() {
-        var exp = this._graph.Size - 1;
+        throw new NotImplementedException();
 
-        var fclear = new MockClearFilter();
-        var disconnected = "Disconnected";
-        // assert its contained 
-        Assert.Single(this._graph.GetNodes().Where(t => t.Details.Title.Equals(disconnected)));
-        this._graph.FilterBranch(fclear, new PublicationDtoTitle { Title = disconnected });
-        var act = this._graph.Size;
-        Assert.Equal(exp, act);
+        //var exp = this._graph.Size - 1;
+//
+        //var fclear = new MockClearFilter();
+        //var disconnected = "Disconnected";
+        //// assert its contained 
+        //Assert.Single(this._graph.GetNodes().Where(t => t.Details.Title.Equals(disconnected)));
+        //this._graph.FilterBranch(fclear, new PublicationDtoTitle { Title = disconnected });
+        //var act = this._graph.Size;
+        //Assert.Equal(exp, act);
     }
 
     [Fact]
     public void CanBranchFilterEverything_ConnectedBranch()
     {
-        var act = new PublicationGraph();
-        var fclear = new MockClearFilter();
-
-        foreach (var n in GetConnectedAcyclicData(10, 2)) act.Add(n);
-        
-        act.FilterBranch(fclear, new PublicationDtoTitle { Title = "0" });
-        Assert.Equal(0, act.GetNodes().Count());
+        throw new NotImplementedException();
+        //var act = new PublicationGraph();
+        //var fclear = new MockClearFilter();
+        //
+        //foreach (var n in GetConnectedAcyclicData(10, 2)) act.Add(n);
+        //
+        //act.FilterBranch(fclear, new PublicationDtoTitle { Title = "0" });
+        //Assert.Equal(0, act.GetNodes().Count());
     }
 
     [Fact]
     public void CanBranchFilterByDepth_ConnectedBranch()
     {
-        var exp_titles = new List<string> { "0", "1", "2", "3" };
-        var act = new PublicationGraph();
-        var fdepth = new MaxDepthFilter(4);
-        foreach (var n in GetConnectedCycleData(50)) act.Add(n);
-        act.FilterBranch(fdepth, new PublicationDtoTitle { Title = "0" });
-        foreach (var n in act.GetNodes()) Assert.Contains(n.Details.Title, exp_titles);
+        throw new NotImplementedException();
+        //var exp_titles = new List<string> { "0", "1", "2", "3" };
+        //var act = new PublicationGraph();
+        //var fdepth = new MaxDepthFilter(4);
+        //foreach (var n in GetConnectedCycleData(50)) act.Add(n);
+        //act.FilterBranch(fdepth, new PublicationDtoTitle { Title = "0" });
+        //foreach (var n in act.GetNodes()) Assert.Contains(n.Details.Title, exp_titles);
     }
 }

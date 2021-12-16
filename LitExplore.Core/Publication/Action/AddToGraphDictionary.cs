@@ -17,7 +17,7 @@ public class AddToGraphDictionary : GraphAction
 
     public static AddToGraphDictionary Get()
     {
-        if (_this == null) _this = new AddToGraphDictionary; 
+        if (_this == null) _this = new AddToGraphDictionary(); 
         return _this;
     }
 }
