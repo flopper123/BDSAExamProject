@@ -1,7 +1,7 @@
-namespace LitExplore.Entity.Filter;
+namespace LitExplore.Core.Filter;
 
 using System.Text;
-using LitExplore.Core.Filter;
+using LitExplore.Core.Filter.Filters;
 using System.Reflection;
 
 /// <summary>
@@ -9,9 +9,14 @@ using System.Reflection;
 /// </summary>
 public class FilterFactory 
 {
-    static readonly Assembly _assembly = Assembly.Load("LitExplore.Core");
+    static Assembly _assembly = Assembly.Load("LitExplore.Core");
     static readonly string EXP_PATH = $"LitExplore.Core.Filter.Filters";
+
+    // Unused but could be effective for testing
+    public static void ChangeAssembly(Assembly assembly) { _assembly = assembly; }
+
     private static FilterDeserializer deserializer = new FilterDeserializer();
+
 
     public static Filter<T> Deserialize<T>(string fs) {
         return deserializer.Deserialize<T>(_assembly, fs);
@@ -57,9 +62,5 @@ public class FilterFactory
         type@System.String ~ value@0xDEADBEEF
         */
         return (Filter<T>)filter;
-    }
-
-    public static Filter<T> Create<T>(UserFilter dto) {
-        return deserializer.Deserialize<T>(_assembly, dto.Serialization);
     }
 }

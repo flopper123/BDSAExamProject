@@ -63,9 +63,7 @@ public class PublicationRepository : AbsRepository, IPublicationRepository
     public async IAsyncEnumerable<PublicationDtoDetails> ReadAllAsync()
     {
         var all =  _context.Publications.GetAsyncEnumerator(); //O(N) _
-        while (await all.MoveNextAsync()) {
-            yield return all.Current.ConvertToDetails();
-        }
+        while (await all.MoveNextAsync()) yield return all.Current.ConvertToDetails();
     }
 
     // TO:DO implement at some point

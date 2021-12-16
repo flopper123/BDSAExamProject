@@ -1,6 +1,6 @@
 namespace LitExplore.Tests.Core.Publication;
 
-using static PublicationGraphTests;
+using static LitExplore.Tests.Utilities.GraphMockData;
 
 public class PublicationNodeTests {
     
@@ -76,6 +76,29 @@ public class PublicationNodeTests {
     }
 
     [Fact]
+    public void CanCall_ToNodeDetails_WithoutParam() {
+        var details = NewTitledNode("0xDEADBEEF");
+        UInt64 exp_depth = 0;
+        var exp = new NodeDetails<PublicationNode>(details, exp_depth);
+        var act = details.ToNodeDetails();
+        Assert.True(exp.CustomEquals(act), $"Expected not equal to actual..\n\nexp:[{exp}]\nact:[{act}]\n\n");
+    }   
+
+    [Theory]
+    [InlineData(100)]
+    public void CanCall_ToDetails_WithParam(int testruns) 
+    {
+        Random r = new Random();
+        for (int i = 0; i < testruns; i++) {
+            var details = NewTitledNode("0xDEADBEEF");
+            UInt64 exp_depth = r.NextUInt64();
+            var exp = new NodeDetails<PublicationNode>(details, exp_depth);
+            var act = details.ToNodeDetails(exp_depth);
+            Assert.True(exp.CustomEquals(act), $"Expected not equal to actual..\n\nexp:[{exp}]\nact:[{act}]\n\n");
+        }
+    }
+
+    [Fact]
     public void CanAddToChild() {
         PublicationNode n = NewTitledNode("0xDEADBEEF");
         Assert.Empty(n.Children);
@@ -118,8 +141,5 @@ public class PublicationNodeTests {
         Assert.DoesNotContain(addition, n.Parents);
     }
 
-    [Fact]
-    public void CanFilterChildren() {
-        throw new NotImplementedException();
-    }
+    // TO:DO Adds tests for SearchOptions
 }

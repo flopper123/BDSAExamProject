@@ -2,12 +2,15 @@ namespace LitExplore.Tests.Core.Publication;
 
 using LitExplore.Core.Graph;
 using LitExplore.Core.Filter;
+using System.Text;
+
+using static LitExplore.Tests.Utilities.GraphMockData;
 
 public class PublicationGraphTests
 {
     PublicationGraph _graph = new PublicationGraph();
-    TitleContainsFilter tFilter = new TitleContainsFilter("1");
-    MaxDepthFilter dFilter = new MaxDepthFilter(2);
+    TitleContains tFilter = new TitleContains("1");
+    // MaxDepthFilter dFilter = new MaxDepthFilter(2);
     int N = 0;
 
     public PublicationGraphTests() {
@@ -19,16 +22,11 @@ public class PublicationGraphTests
         }
     }
 
-    internal static HashSet<PublicationDtoTitle> GetHashSet(params string[] titles) {
-        HashSet<PublicationDtoTitle> set = new HashSet<PublicationDtoTitle>(titles.Length);
-        foreach (string t in titles) set.Add(new PublicationDtoTitle { Title = t });
-        return set;
-    }
-
-    public static IEnumerable<PublicationDtoDetails> GetPublications()
+    internal static IEnumerable<PublicationDtoDetails> GetPublications()
     {
         // roots
-        yield return new PublicationDtoDetails { Title = "Alone" };
+        yield return new PublicationDtoDetails { Title = "Disconnected" };
+        yield return new PublicationDtoDetails { Title = "root0", References = GetHashSet("0") };
         yield return new PublicationDtoDetails { Title = "0", References = GetHashSet("2", "3") };
         yield return new PublicationDtoDetails { Title = "1", References = GetHashSet("2", "3") };
         yield return new PublicationDtoDetails { Title = "4", References = GetHashSet("5", "6") };
@@ -37,11 +35,28 @@ public class PublicationGraphTests
         yield return new PublicationDtoDetails { Title = "2", References = GetHashSet("3", "5") };
         yield return new PublicationDtoDetails { Title = "3", References = GetHashSet("7", "8") };
         yield return new PublicationDtoDetails { Title = "5", References = GetHashSet("6") };
-        yield return new PublicationDtoDetails { Title = "6", References = GetHashSet("7", "8", "10") };
-        yield return new PublicationDtoDetails { Title = "7", References = GetHashSet("10") };
+        yield return new PublicationDtoDetails { Title = "6", References = GetHashSet("7", "11") };
+        yield return new PublicationDtoDetails { Title = "7", References = GetHashSet("11") };
         yield return new PublicationDtoDetails { Title = "8", References = GetHashSet("10") };
         yield return new PublicationDtoDetails { Title = "10" };
         yield return new PublicationDtoDetails { Title = "11" };
+    }
+
+    [Fact]
+    public void CanGet() 
+    {
+        foreach (var exp in _graph.GetNodes()) 
+        {
+            var act = _graph.GetNode(exp.Details.Title);
+            Assert.NotNull(act);
+            if (act == null) return; 
+            Assert.True(act.CustomEquals(exp), $"Expected does not equal act: \n{exp} \n\t: \n{act}");
+        }   
+    }
+
+    [Fact]
+    public void CanGet_ReturnsNull_KeyNotFound() {
+        Assert.Null(_graph.GetNode("Something we would never put into a graph"));
     }
 
     [Fact]
@@ -106,11 +121,31 @@ public class PublicationGraphTests
     //
     [Fact]
     public void CanFilterEntireGraph() {
-        throw new NotImplementedException();
+        var expNodes = this._graph
+            .GetNodes()
+            .Where((t) => (t.Details.Title.Contains("1")));
+        
+        this._graph.Filter(tFilter);
+        var actNodes = this._graph.GetNodes();
+        
+        foreach(var exp in expNodes) {
+            Assert.Contains(exp, actNodes);
+        }
+    }
+    
+    [Fact]
+    public void CanHistorySaveFilterChain() {
+        // Copy below filters
+        // Assert value of each filter is as expected
     }
 
     [Fact]
-    public void CanFilterBranch() {
-        throw new NotImplementedException();
+    public void CanLoadFromHistory() {
+        // var initial = Save GetNodes() of a graph before any actions
+        // Do some filters on a graph.
+        // var exp = Save after filters
+        //  
+        // Try to Load init
+        // var act = initial.Load(exp.History)
     }
 }

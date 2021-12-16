@@ -1,5 +1,27 @@
 namespace LitExplore.Core.Publication;
 
+using static LitExplore.Core.Filter.FilterOption;
+
+// Auxiliary class for recursion
+internal static class Recursion 
+{
+    internal static PublicationGraph Graph = new PublicationGraph();
+    internal static GraphAction Action = new GraphAction((t, v) => { });
+    internal static Dictionary<string, UInt32> Visited = new Dictionary<string, UInt32>();
+    
+    internal static void ClearCache() {
+        // StringBuilder msg = new StringBuilder();
+        // msg.Append("Recursion.ClearCache() called:\n");
+        // msg.Append($"{Visited.Count()}@Visited\n");
+        // msg.Append($"{Graph.Size}@Graph\n");
+        // Log(msg);
+        
+        Visited.Clear();
+        Graph = new PublicationGraph();
+        Action = new GraphAction((t, v) => { });
+    } 
+}
+
 public record PublicationNode : IEquatable<PublicationDtoTitle> {
 
     public List<PublicationNode> Parents { get; protected set; } = new List<PublicationNode>();
@@ -8,6 +30,65 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
     
     public PublicationNode(PublicationDtoDetails details) {
         this.Details = details;
+    }
+
+    protected IEnumerable<PublicationNode> GetSearchTargets(SearchDirection dir) 
+    {
+        if ((dir & SearchDirection.CHILDREN) != 0) foreach (var c in this.Children) yield return c;
+        if ((dir & SearchDirection.PARENTS) != 0) foreach (var p in this.Parents) yield return p;
+        
+        // Add other search patterns as needed
+    }
+
+    // Apply action to target in manér of options
+    // For example if its used with AddToGraphDictionary,
+    //      Adds all nodes connected to this path to @tar 
+    public void InvokeSearch(PublicationGraph gr,
+                             GraphAction act,
+                             UInt32 depth,
+                             SearchDirection opts = SearchDirection.DEFAULT) 
+    {
+        // add static cache
+        Recursion.Graph = gr;
+        Recursion.Action = act;
+        Recursion.Visited = new Dictionary<string, UInt32>();
+        this.InvokeRecursive(depth, opts);
+        Recursion.ClearCache();
+    }
+
+    // Action could be ADD to Graph for example which would add all encountered to graph 
+
+    // TO:DO Implement functionality to avoid visiting same node twice in a cycle graph. 
+
+    private void InvokeRecursive(UInt32 depth,
+                                 SearchDirection opts = SearchDirection.DEFAULT)
+    {
+
+        UInt32 prv_depth = 0;
+        bool hasSeen = Recursion.Visited.TryGetValue(this.Details.Title, out prv_depth);
+
+        if (hasSeen)
+        {
+            if ((opts & SearchDirection.VISIT_MINDEPTH) != 0 &&
+                prv_depth <= depth)
+            {
+                return;
+            }
+            else if ((opts & SearchDirection.VISIT_ONCE) != 0 &&
+                      prv_depth != UInt32.MaxValue) {
+                return;
+            }
+        }
+        // Add visitation
+        Recursion.Visited[this.Details.Title] = depth;
+
+        // apply action to target
+        Recursion.Action.Invoke(this.ToNodeDetails(depth), Recursion.Graph);
+
+        // TO:DO implement so we can perform both child and parent search simoultanously
+        //       Note! ToList is slow for large search ranges
+        GetSearchTargets(opts).ToList()
+                              .ForEach(t => t.InvokeRecursive(depth + 1, opts));
     }
 
     public void UpdateDetails(PublicationDtoDetails update)
@@ -37,41 +118,10 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
         };
     }
 
+
     public bool Equals(PublicationDtoTitle? title) {
         if (title == null) return false; 
         return Details.Title.Equals(title.Title);
-    }
-
-    /// <param name="filter"> Filter to apply </param>
-    /// <param name="visisted"> A dictionary holding what titles are previously visisted </param>
-    /// <param name="depth"></param>
-    public void FilterChildren(Filter<NodeDetails<PublicationNode>> filter, 
-                               Dictionary<string, UInt32> visitHistory,
-                               UInt32 depth) {
-
-        UInt32 prv_depth = UInt32.MaxValue;
-        
-        bool hasVisisted = visitHistory.TryGetValue(this.Details.Title, out prv_depth);
-        if (hasVisisted && prv_depth < depth) return; // if previously visisted at a lower depth
-        if (!hasVisisted) visitHistory.Add(this.Details.Title, depth);
-
-        depth += 1U;
-        // filter children recursively
-        foreach (PublicationNode child in this.Children) {
-        
-            var details = new NodeDetails<PublicationNode>() {
-                Details = child,
-                Depth = depth,
-            };
-
-            if (filter.ShouldRemove(details))
-            {
-                this.Children.Remove(child);
-                child.Parents.Remove(this);
-
-            } else child.FilterChildren(filter, visitHistory, depth);
-        }
-
     }
 
     // Returns a list of all titles from parameter which this Node doesn't already hold as children.

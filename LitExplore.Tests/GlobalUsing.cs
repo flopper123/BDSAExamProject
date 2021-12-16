@@ -2,6 +2,7 @@
 global using LitExplore.Core;
 global using LitExplore.Core.Publication;
 global using LitExplore.Tests.Util;
+global using System;
 global using System.Collections.Generic;
 global using System.Diagnostics;
 global using LitExplore.Entity;
