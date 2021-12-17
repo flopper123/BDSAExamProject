@@ -21,8 +21,14 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
         context.Publications.AddRange(
           pub1,
           new Publication { Title = "Test pub 2", References = new List<PublicationTitle> { ref3 } },
-          new Publication { Title = "Test pub 3", References = new List<PublicationTitle> { ref1, ref2 } }
+          new Publication { Title = "Test pub 3", References = new List<PublicationTitle> { ref1, ref2 } },
+          new Publication { Title = "Test pub 4", References = new List<PublicationTitle> { ref1}}
         );
+
+        
+        Seed.SeedDB(context);
+
+
     }
 
     [Fact]
