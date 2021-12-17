@@ -14,13 +14,13 @@ using static LitExplore.Tests.Utilities.GraphMockData;
 // Tests for Filter<T> and EmptyFilter 
 public class POVTests
 {
-    public static IEnumerable<POV> GetPOVs() {
-        yield return new POV("Inner");
-        yield return new POV("Outer", new POV("Inner"));
-        yield return new POV("Outer", FilterOption.SearchDirection.DEFAULT, new POV("Inner"));
-        yield return new POV("Inner".ToTitle());
-        yield return new POV("Outer".ToTitle(), new POV("Inner".ToTitle()));
-        yield return new POV("Outer".ToTitle(), FilterOption.SearchDirection.DEFAULT, new POV("Inner".ToTitle()));
+    public static IEnumerable<Object[]> GetPOVs() {
+        yield return new Object[] { new POV("Inner") };
+        yield return new Object[] { new POV("Outer", new POV("Inner")) };
+        yield return new Object[] { new POV("Outer", FilterOption.SearchDirection.DEFAULT, new POV("Inner")) };
+        yield return new Object[] { new POV("Inner".ToTitle()) };
+        yield return new Object[] { new POV("Outer".ToTitle(), new POV("Inner".ToTitle())) };
+        yield return new Object[] { new POV("Outer".ToTitle(), FilterOption.SearchDirection.DEFAULT, new POV("Inner".ToTitle())) };
     }
 
     [Fact]

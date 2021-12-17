@@ -3,10 +3,9 @@ namespace LitExplore.Controllers.Graph;
 
 using LitExplore.Core;
 
-
-public class VisualGraph : List<VisualGraphRelationNode>
+public class VisualGraph : PublicationGraph
 {
-  public static VisualGraph FromList(List<(VisualGraphNode node, RelationsHandler relations)> list)
+  public static VisualGraph FromList(List<(PublicationNode node, RelationsHandler relations)> list)
   {
     VisualGraph vg = new VisualGraph();
 

@@ -5,6 +5,8 @@ using System.Linq;
 
 using LitExplore.Core;
 
+
+// ! TODO: Change types to match new types xD
 public class GraphRelation
 {
 

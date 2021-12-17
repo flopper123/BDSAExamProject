@@ -8,10 +8,8 @@ using LitExplore.Core.Publication.Action;
 public class TitleContains : FilterDecorator<PublicationGraph>
 {   
     private static string PARG_TYPE = "System.String";
-    
-    public TitleContains(string key) : this(key, null) { }
 
-    public TitleContains(string key, Filter<PublicationGraph>? _prv)
+    public TitleContains(string key, Filter<PublicationGraph>? _prv = null)
         : base(key, _prv)
     {}
     

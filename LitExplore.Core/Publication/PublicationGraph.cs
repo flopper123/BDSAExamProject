@@ -131,8 +131,6 @@ public class PublicationGraph : ISerialize, IEquatable<PublicationGraph>
         return other.GetNodes().SequenceEqual(this.GetNodes());
     }
 
-    public override int GetHashCode()
-    {
-        return this.Serialize().GetHashCode() ^ this.GetNodes().GetHashCode();
-    }
+    public override int GetHashCode() => Serialize().GetHashCode() ^ GetNodes().GetHashCode();
+    
 }

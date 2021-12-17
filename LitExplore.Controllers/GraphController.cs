@@ -4,6 +4,7 @@ using LitExplore.Entity.Context;
 using LitExplore.Controllers.Graph;
 using LitExplore.Core.Filter;
 
+
 public class GraphController
 {
     IFilterRepository<PublicationGraph> _fRepo;

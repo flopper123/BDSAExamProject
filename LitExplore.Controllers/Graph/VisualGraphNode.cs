@@ -2,22 +2,12 @@ namespace LitExplore.Controllers.Graph;
 
 using LitExplore.Core;
 
-public class VisualGraphNode
+public record VisualGraphNode : PublicationNode
 {
-  public PublicationDto Publication { get; init; } = null!;
-
   public (double x, double y) Point;
 
-  // Helper methods
-  public string Title { get => Publication.Title; }
-  public ISet<PublicationDtoTitle> References { get => Publication.References; }
-
-  public RelationsHandler Relations;
-
-  public VisualGraphNode(PublicationDto pub, (double x, double y) point) {
-    Publication = pub;
+  public VisualGraphNode(PublicationDtoDetails pub, (double x, double y) point) : base(pub) {
     Point = point;
-    Relations = new RelationsHandler();
   }
 
 } 
