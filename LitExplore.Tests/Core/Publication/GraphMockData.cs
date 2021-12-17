@@ -6,6 +6,7 @@ public static class GraphMockData {
         foreach (string t in titles) set.Add(new PublicationDtoTitle { Title = t });
         return set;
     }
+    
     /// 
     /// Created connected Cycle data by adding one child to the previous object,
     /// and setting the N'th child to point to fst.
@@ -31,7 +32,7 @@ public static class GraphMockData {
 
         yield return new PublicationDtoDetails { Title = $"{N}", References = GetHashSet("1") };
     }
-
+    
     /// 
     /// Repeats the following pattern N times:
     ///   --> * -->

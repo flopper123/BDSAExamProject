@@ -7,6 +7,11 @@ namespace LitExplore.Core.Utilities
 {
     public static class Extensions
     {
+        public static PublicationDtoTitle ToTitle(this string title) 
+        {
+            return new PublicationDtoTitle { Title = title };
+        }
+
         public static int ToInt(this string str)
         {
             bool hasFound = false;

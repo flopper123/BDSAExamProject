@@ -12,7 +12,7 @@ using static LitExplore.Core.Filter.FilterPArgField;
 /// in a textbook Decorator-Pattern.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public abstract class FilterDecorator<T> : Filter<T>
+public abstract class FilterDecorator<T> : Filter<T>, IEquatable<FilterDecorator<T>>
 {
 
     protected Filter<T> prv;
@@ -40,7 +40,7 @@ public abstract class FilterDecorator<T> : Filter<T>
     public override UInt32 Depth { get { return _depth; } }
 
     // Should be overwriten for decorators with multiple args
-    protected virtual Object[] PredicateArgs
+    public virtual Object[] PredicateArgs
     {
         get 
         { 
@@ -115,5 +115,11 @@ public abstract class FilterDecorator<T> : Filter<T>
         // Remove P_ARG seperator for last element
         sb[sb.Length - 1] = FilterField.END[0];
         return sb.ToString();
+    }
+
+    public bool Equals(FilterDecorator<T>? other)
+    {
+        if (other == null) return false;
+        throw new NotImplementedException();
     }
 }

@@ -6,11 +6,18 @@ using LitExplore.Core.Filter;
 using LitExplore.Core.Filter.Filters;
 using LitExplore.Core.Graph;
 
-public class PublicationGraph : ISerialize
+public class PublicationGraph : ISerialize, IEquatable<PublicationGraph>
 {
     protected Dictionary<string, PublicationNode> _Nodes = new Dictionary<string, PublicationNode>();
     protected Filter<PublicationGraph> fhistory = EmptyFilter<PublicationGraph>.Get(); // holds all applied filter
-    
+
+    public PublicationGraph() : this(Enumerable.Empty<PublicationDtoDetails>()) { }
+
+    public PublicationGraph(IEnumerable<PublicationDtoDetails> seed) 
+    {
+        foreach (PublicationDtoDetails d in seed) { this.Add(d); }
+    }
+
     // Public access so we can modify from filters
     public Dictionary<string, PublicationNode> Nodes {
         get { return this._Nodes;  }
@@ -23,8 +30,20 @@ public class PublicationGraph : ISerialize
     }
 
     public int Size { get { return this.Nodes.Count(); } }
-
     public string Serialize() { return this.fhistory.Serialize(); }
+    
+    /// <summary>
+    /// Applies the input filter to the current state of this.
+    /// </summary>
+    /// <param name="fs"> The string representation of a serialized filter </param>
+    public void Load(string fs) 
+    {
+        Filter<PublicationGraph> f = FilterFactory.Deserialize<PublicationGraph>(fs);
+        this.fhistory = f;
+        this.Filter(f);
+    }
+
+
 
     /// <summary>
     ///  retrieves the node saved under title from the dictionary.
@@ -94,5 +113,26 @@ public class PublicationGraph : ISerialize
             hasAdded = true;
         }
         return hasAdded;
+    }
+
+    public override bool Equals(Object? obj) 
+    {
+        if (obj == null) return false;
+        if (!(obj is PublicationGraph)) return false;        
+        return ((PublicationGraph) obj).Equals(this);
+    }
+
+    public bool Equals(PublicationGraph? other)
+    {
+        // Might be pointing to same objects
+        if (other == this) return true;
+        if (other == null) return false;
+        if (other.GetHashCode() != this.GetHashCode()) return false;
+        return other.GetNodes().SequenceEqual(this.GetNodes());
+    }
+
+    public override int GetHashCode()
+    {
+        return this.Serialize().GetHashCode() ^ this.GetNodes().GetHashCode();
     }
 }

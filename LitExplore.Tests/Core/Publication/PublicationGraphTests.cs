@@ -43,7 +43,18 @@ public class PublicationGraphTests
     }
 
     [Fact]
-    public void CanGet() 
+    public void Can_Construct() {
+        // Construct without exceptions
+        PublicationGraph gr = new PublicationGraph();
+        foreach(var n in GetConnectedCycleData(100)) gr.Add(n);
+        PublicationGraph exp = new PublicationGraph(GetConnectedCycleData(100));
+        
+        // Assert both constructions give same graph
+        Assert.Equal(gr.GetNodes(), exp.GetNodes());
+    }
+
+    [Fact]
+    public void Can_Get() 
     {
         foreach (var exp in _graph.GetNodes()) 
         {
@@ -55,12 +66,12 @@ public class PublicationGraphTests
     }
 
     [Fact]
-    public void CanGet_ReturnsNull_KeyNotFound() {
+    public void Does_Get_ReturnNull_KeyNotFound() {
         Assert.Null(_graph.GetNode("Something we would never put into a graph"));
     }
 
     [Fact]
-    public void EmptyGraph_HasSize0() {
+    public void Does_EmptyGraph_HaveSize0() {
         PublicationGraph gr = new PublicationGraph();
         Assert.Equal(0, gr.Size);
     }
@@ -140,12 +151,38 @@ public class PublicationGraphTests
     }
 
     [Fact]
-    public void CanLoadFromHistory() {
-        // var initial = Save GetNodes() of a graph before any actions
-        // Do some filters on a graph.
-        // var exp = Save after filters
-        //  
-        // Try to Load init
-        // var act = initial.Load(exp.History)
+    public void CanLoadFromHistory() 
+    {
+
+        // Arrange
+        var key = "1xDEADBEEF";
+        
+        var initial = new PublicationGraph();
+        var actGraph = new PublicationGraph();
+        foreach (var n in GetConnectedCycleData(100)) { actGraph.Add(n); initial.Add(n); }
+
+        actGraph.Add(new PublicationDtoDetails { Title = key });
+        var f = new POV(key, FilterOption.SearchDirection.BI | FilterOption.SearchDirection.VISIT_ONCE,
+                    new TitleContains("1"));
+
+        // Act
+        actGraph.Filter(f);
+        var exp = actGraph.GetNodes().ToList();
+        
+        // Assert state is correct before we serialize
+        Assert.Single(exp);
+        Assert.Equal(key, exp[0].Details.Title);
+        string gs = actGraph.Serialize();
+
+        // Assert
+        initial.Load(gs);
+        var act = initial.GetNodes().ToList();
+        Assert.Single(act);
+        Assert.Equal(key, act[0].Details.Title);
+    }
+
+    [Fact]
+    public void CanCopy() {
+        throw new NotImplementedException("CanCopy not implemented");
     }
 }

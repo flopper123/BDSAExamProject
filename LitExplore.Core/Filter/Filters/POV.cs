@@ -19,7 +19,7 @@ public sealed class POV : FilterDecorator<PublicationGraph>
     }
 
     // Accepts multiple arguments so we overwrite
-    protected override Object[] PredicateArgs
+    public override Object[] PredicateArgs
     {
         get
         {
@@ -40,11 +40,18 @@ public sealed class POV : FilterDecorator<PublicationGraph>
         }
     }
 
-    public POV(string key) : this(new PublicationDtoTitle { Title = key }, null) { }
+    // String constructors
+    public POV(string key, Filter<PublicationGraph>? prv = null)
+        : this(new PublicationDtoTitle { Title = key }, prv) {}
 
     public POV(string key, FilterOption.SearchDirection dir)
         : this(new PublicationDtoTitle { Title = key }, dir) {}
+    
+    public POV(string key, FilterOption.SearchDirection dir, Filter<PublicationGraph>? prv = null)
+        : this(new PublicationDtoTitle { Title = key }, dir, prv) {}
 
+
+    // DTOTitle constructors
     public POV(PublicationDtoTitle key,
                Filter<PublicationGraph>? prv = null) 
         : this(key, FilterOption.SearchDirection.DEFAULT, prv) 

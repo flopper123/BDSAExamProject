@@ -1,6 +1,5 @@
 namespace LitExplore.Tests.Core.Filter.Filters;
 
-using static LitExplore.Tests.Core.Publication.PublicationGraphTests;
 using static LitExplore.Core.Filter.FilterPArgField;
 using static LitExplore.Tests.Utilities.GraphMockData;
 
