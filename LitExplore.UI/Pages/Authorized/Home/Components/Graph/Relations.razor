@@ -10,8 +10,8 @@
     @foreach (var relation in relations)
     {
       <line
-        x1="@GraphUtil.GetPercentage(_node.Node.Point.x)%"
-        y1="@GraphUtil.GetPercentage(_node.Node.Point.y)%"
+        x1="@GraphUtil.GetPercentage(_node.Point.x)%"
+        y1="@GraphUtil.GetPercentage(_node.Point.y)%"
         x2="@GraphUtil.GetPercentage(relation.Point.x)%"
         y2="@GraphUtil.GetPercentage(relation.Point.y)%"
         shape-rendering="geometricPrecision"
@@ -30,7 +30,7 @@
     get { return _node; }
     set {
 
-      var pubTitles = value.Node.References.Select(r => r.Title).ToList();
+      var pubTitles = value.Children.Select(r => r.Details.Title).ToList();
 
       _node = value;
       
@@ -45,8 +45,8 @@
       relations = value.Relations
         .Where(
           rel => containsAny(
-            value.Node.References.Select(r => r.Title).ToList(),
-            rel.node.References.Select(r => r.Title).ToList()
+            value.Children.Select(r => r.Details.Title).ToList(),
+            rel.node.Children.Select(r => r.Details.Title).ToList()
           )
         )
         .Select(
@@ -62,9 +62,9 @@
     GraphUtil.AddSub(() => StateHasChanged());
   }
 
-  private VisualGraphRelationNode _node;
+  private VisualGraphRelationNode _node = null!;
 
-  private List<VisualGraphNode> relations;
+  private List<VisualGraphNode> relations = null!;
 
 
 }

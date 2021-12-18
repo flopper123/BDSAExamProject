@@ -11,42 +11,35 @@
 </div>
 
 @code {
+  private VisualGraphRelationNode _node = null!;
+  private (double x, double y) _pos = (0,0);
+  private int _red = 100;
+  private int _blue = 100;  
 
   [Parameter]
   public VisualGraphRelationNode node
   {
-    get {
-      return _node;
-    }
+    get { return _node; }
     set {
-      (double x, double y) = value.Node.Point;
+      (double x, double y) = value.Point;
 
       _red = colorFromFactor(x);
       _blue = colorFromFactor(y);
 
       _node = value;
 
-      pos = value.Node.Point;
+      pos = value.Point;
 
       runGraphAnimationLoop();
     }
   }
 
-  private VisualGraphRelationNode _node;
-  
-  private (double x, double y) pos {
-    get { return _pos; }
-    set {
-      _pos = GraphUtil.ToVisualPoint(value);
-    }
+  private (double x, double y) pos 
+  {
+    get => _pos;     
+    set => _pos = GraphUtil.ToVisualPoint(value);
   }
 
-  private (double x, double y) _pos;
-
-  private int _red;
-  private int _blue;
-
-  
   // Takes in a double between [0-1]
   // returns a mapped int, f, from values (100, 200, 300, ..., 900)
   private int colorFromFactor(double factor)
@@ -77,12 +70,11 @@
         (v, n) => {
 
           // Points
-          (double x, double y) from = _node.Node.Point;
+          (double x, double y) from = _node.Point;
           (double x, double y) to   = n.node.Point;
 
           // Get distance
           double d = dist(from, to);
-
 
           double factor = Math.Min(n.factor, 0.95);
           
@@ -110,6 +102,7 @@
             v.y + ftVec.y
           );
         },
+        
         v => {
           // Get total count
           double count = _node.Relations.Count;
@@ -139,11 +132,11 @@
       vec.y *= dt * strength;
 
       // Update point
-      _node.Node.Point.x += vec.x;
-      _node.Node.Point.y += vec.y;
+      _node.Point.x += vec.x;
+      _node.Point.y += vec.y;
 
       // Update visual
-      pos = _node.Node.Point;
+      pos = _node.Point;
 
       // Delay time
       int delay = (int)( dt * 1000.0d );

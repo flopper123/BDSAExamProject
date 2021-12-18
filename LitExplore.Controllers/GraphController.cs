@@ -1,29 +1,43 @@
 namespace LitExplore.Controllers;
 
+using LitExplore.Entity.Context;
 using LitExplore.Controllers.Graph;
+using LitExplore.Core.Filter;
 
 public class GraphController
 {
-    public GraphController() { }
-    
-    public async Task<VisualGraph> GetGraphRepresentationAsync() {
-        // Fetch graph
-        // THIS IS TEST DATA FOR NOW
-        var publications = GraphMockData.GetPublications();
+    IFilterRepository<PublicationGraph> _fRepo;
+    IPublicationRepository _pRepo;
 
-        // Find graph relations
-        // This will weight publications compared to eachother.
-        // And give a guess as to where they should be located on 
-        //      a normalized square with (x, y) in range of [0-1]
-        var graphRelation = new GraphRelation();
-        var relations = graphRelation.GetManyToManyRelations(publications);
+    public GraphController(IFilterRepository<PublicationGraph> fRepo,
+                           IPublicationRepository pRepo)
+    {
+        this._fRepo = fRepo;
+        this._pRepo = pRepo;
+    }
 
-        // Generate graph
-        var graph = VisualGraph.FromList(relations);
-        
-        // Normalize graph
-        var normalizer = new GraphNormalizer();
+    // At some point this method should build the graph dynamicly
+    // as the data is loaded from the repository 
+    public async Task<VisualGraph> GetDefaultGraphAsync()
+    {
+        VisualGraph graph = new VisualGraph();
+        // Graph but without visual 
+        await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
+        graph.OnInit();
 
-        return normalizer.Normalize(graph);
+        return graph;
+    }
+
+    public async Task<VisualGraph> Load(UInt64 uid = 0)
+    {
+
+        // Retrieve default graph
+        var graph = await GetDefaultGraphAsync();
+
+        // if not found filter becomes EmptyFilter<PubGraph> which is fine
+        Filter<PublicationGraph>? f = await _fRepo.ReadAsync(uid);
+
+        if (f != null) graph.Filter(f);
+        return graph;
     }
 }

@@ -13,12 +13,17 @@ public class EmptyFilter<T> : Filter<T>
 {
     protected static EmptyFilter<T>? _this;
 
-    protected EmptyFilter() : base(t => true) {}
+    protected EmptyFilter() : base() {}
     
     public override UInt32 Depth {
         get { return 0; }
     }
 
+    protected override void Action(T v) {}
+
+    // this filter is empty so simply return second
+    public override Filter<T> Decorate(Filter<T> snd) { return snd; }
+    
     /// <summary>
     /// Returns a T singleton instance of empty filter. 
     /// </summary>

@@ -9,8 +9,6 @@ public class GraphUtil
   public static void Notify() => subscribers.ForEach(sub => sub());
   public static void AddSub(OnUpdate subscriber) => subscribers.Add(subscriber);
 
-
-
   public static (double x, double y) ToVisualPoint((double x, double y) point)
   {
     return (

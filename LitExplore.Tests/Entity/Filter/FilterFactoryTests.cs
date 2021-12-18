@@ -4,21 +4,28 @@ using LitExplore.Core.Filter;
 using LitExplore.Core.Filter.Filters;
 
 public class FilterFactoryTests {
+    //[Theory]
+    //[InlineData(typeof(MaxDepthFilter), 10)]
+    //[InlineData(typeof(TitleContainsFilter), "0xDEADBEEF")]
+    //public void Create_PublicationNode_by_Type(Type exp, params Object[] args) {
+    //    var act_filter = FilterFactory.Create<NodeDetails<PublicationNode>>(exp.Name, args);
+    //    Assert.Equal(exp.Name, act_filter.GetType().Name);
+    //}
+    /*
     [Theory]
-    [InlineData(typeof(MinRefsFilter), 10)]
-    [InlineData(typeof(TitleFilter), "0xDEADBEEF")]
-    public void Create_by_Type(Type exp, params Object[] args) {
-        Filter<PublicationDto> act_filter = FilterFactory.Create<PublicationDto>(exp.Name, args);
+    [InlineData(typeof(TitleContains), "0xDEADBEEF")]
+    public void Create_PublicationGraphFilter_by_Type(Type exp, params Object[] args) {
+        Filter<PublicationGraph> act_filter = FilterFactory.Create<PublicationGraph>(exp.Name, args);
         Assert.Equal(exp.Name, act_filter.GetType().Name);
     }
+    */
 
-    [Theory]
-    [InlineData("MinRefsFilter", 10)]
-    [InlineData("TitleFilter", "0xDEADBEEF")]
-    public void Create_by_UnqualifiedName(string exp, params Object[] args) {
-        Filter<PublicationDto> act_filter = FilterFactory.Create<PublicationDto>(exp, args);
-        Assert.Equal(exp, act_filter.GetType().Name);
-    }
+    // [Theory]
+    // [InlineData("TitleContains", "0xDEADBEEF")]
+    // public void Create_by_UnqualifiedName(string exp, params Object[] args) {
+    //     Filter<PublicationGraph> act_filter = FilterFactory.Create<PublicationGraph>(exp, args);
+    //     Assert.Equal(exp, act_filter.GetType().Name);
+    // }
 
     [Fact]
     public void Create_Throws_NameFalse() {
@@ -30,38 +37,8 @@ public class FilterFactoryTests {
     [Fact]
     public void Create_Throws_ArgsFalse() {
         Assert.Throws<ArgumentException>(
-            () => FilterFactory.Create<PublicationDto>(typeof(TitleFilter).Name, new Object{})
+            () => FilterFactory.Create<PublicationGraph>(typeof(TitleContains).Name, new Object{})
         );
-    }
-
-    public IEnumerable<Filter<PublicationDto>> GetDtoFilters() {
-        yield return new TitleFilter("0xDEAD");
-        yield return new TitleFilter("0xDEAD", new TitleFilter("BEEF"));
-        yield return new MinRefsFilter(10);
-    }
-
-    [Fact]
-    public void CanDeserialize_TitleFilter() {
-        // Act
-        TitleFilter exp = new TitleFilter("0xDEAD");
-        string fs = exp.Serialize();
-
-        Filter<PublicationDto> act = FilterFactory.Deserialize<PublicationDto>(fs);
-
-        Assert.Equal(exp.GetType(), act.GetType());
-        Assert.Equal(exp.Depth, act.Depth);
-    }
-
-    [Fact]
-    public void CanDeserialize_MinRefsFilter() {
-        // Act
-        MinRefsFilter exp = new MinRefsFilter(10);
-        string fs = exp.Serialize();
-
-        Filter<PublicationDto> act = FilterFactory.Deserialize<PublicationDto>(fs);
-
-        Assert.Equal(exp.GetType(), act.GetType());
-        Assert.Equal(exp.Depth, act.Depth);
     }
 
     // TO:DO implement

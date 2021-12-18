@@ -8,7 +8,6 @@ global using LitExplore.Core.Filter;
 global using LitExplore.Core.Filter.Filters;
 
 global using LitExplore.Entity;
-global using LitExplore.Entity.Filter;
 global using System.ComponentModel.DataAnnotations;
 global using Microsoft.Data.Sqlite;
 global using Microsoft.EntityFrameworkCore;
