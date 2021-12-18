@@ -53,7 +53,7 @@ public class PublicationGraph : ISerialize, IEquatable<PublicationGraph>
         Nodes.TryGetValue(key.Title, out node);
         
         if (node == null) {
-            node = new PublicationNode(new PublicationDtoDetails { Title = key.Title } );
+            node = new PublicationNode(key.ToDetails());
             this.Nodes.Add(key.Title, node);
         }
 

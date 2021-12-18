@@ -14,16 +14,18 @@ public class VisualGraph : PublicationGraph
 
     public override PublicationNode TryGetNode(PublicationDtoTitle key)
     {
+        
         PublicationNode? node = null;
         Nodes.TryGetValue(key.Title, out node);
 
         if (node == null)
         {
-            node = new PublicationNode(new PublicationDtoDetails { Title = key.Title });
+            node = new PublicationNode(key.ToDetails());
+            node = node.ToVisual();
             this.Nodes.Add(key.Title, node);
         }
 
-        return node.ToVisual();
+        return node;
     }
 
 

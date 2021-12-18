@@ -4,7 +4,7 @@ using LitExplore.Controllers.Graph;
 
 public class VisualGraphRelationNodeTests
 {
-    
+
     public List<VisualGraphRelationNode> nodes;
 
 
@@ -12,11 +12,24 @@ public class VisualGraphRelationNodeTests
     {
 
         // Test publications
-        var graph = new PublicationGraph();
+        var graph = new VisualGraph();
         foreach (var n in GraphTestData.GetPublications()) graph.Add(n);
 
-        nodes = graph.GetNodes().Select(n => n.ToVisual()).ToList();
-    }
+        graph.OnInit();
+
+        var tmp = graph.GetNodes().Select(n => n.ToVisual()).ToList();
+
+        
+        nodes = new List<VisualGraphRelationNode>( new VisualGraphRelationNode[GraphTestData.GetPublications().Count()] );
+
+        foreach (var t in tmp) {
+            string title = t.Details.Title;
+            int i = int.Parse("" + title[title.Length - 1]);
+            //if (i == 0 && t.Details.References.Count() == 3) i += 1;  
+            
+            nodes[i] = t;
+        }
+    } 
 
     /**
      * Tests for GetRelations
@@ -27,16 +40,12 @@ public class VisualGraphRelationNodeTests
     {
         // Arrange
         VisualGraphRelationNode node0 = nodes[0];
-        List<VisualGraphNode> testnodes = new List<VisualGraphNode> { nodes[1], nodes[2], nodes[3], nodes[4], nodes[5] };
-
+        
         // Act
-        node0.AddRelations(testnodes.AsEnumerable());
-
         RelationsHandler relations = node0.Relations;
 
         // Assert
-        Assert.True(relations.Count == testnodes.Count); // Test number of elements are still the same
-        relations.ForEach(relation => Assert.True(testnodes.Contains(relation.node))); // Test that we still have the publications
+        relations.ForEach(relation => Assert.True(nodes.Contains(relation.node))); // Test that we still have the publications
         relations.ForEach(relation => Assert.True(relation.factor >= 0.0 && relation.factor <= 1.0)); // Test that factors are between 0 and 1
     }
 
@@ -54,37 +63,19 @@ public class VisualGraphRelationNodeTests
         Assert.DoesNotContain(node0, relations.Select(r => r.node));
     }
 
-    // [Fact]
-    // public void SimilarPublications_Have_HigherRelationScore()
-    // {
-    //     // Arrange
-    //     List<VisualGraphRelationNode> testnodes = new List<VisualGraphRelationNode> { nodes[0], nodes[1], nodes[2] };
-
-    //     // Act
-    //     testnodes[0].AddRelations(testnodes.AsEnumerable());
-    //     double relation_0_1 = testnodes[0].Relations[0].factor;
-    //     double relation_0_2 = testnodes[0].Relations[1].factor;
-
-    //     // Assert
-    //     Assert.True(relation_0_1 > relation_0_2);
-    // }
-
-    // [Fact]
-    // public void SameTitleShouldGiveTitleFactor1()
-    // {
-    //     // Arrange
-    //     var node = nodes[0];
-
-    //     double expected = 1.0d;
-
-    //     // Act
-    //     node.AddRelation(nodes[1]);
-    //     double actual = node.Relations[0].factor;
+    [Fact]
+    public void SimilarPublications_Have_HigherRelationScore()
+    {
+        // Arrange
+        nodes[0].AddRelations(nodes.AsEnumerable());
         
-    //     // Assert
-    //     Assert.True(expected == actual, $"\nNode1.Details.Title: {node.Details.Title}\nNode2.Details.Title: {nodes[1].Details.Title}");
-    //     Assert.Equal(expected, actual);
-    // }
+        // Act
+        double relation_0_1 = nodes[0].Relations[0].factor;
+        double relation_0_4 = nodes[0].Relations[4].factor;
+        
+        // Assert
+        Assert.True(relation_0_1 > relation_0_4, $"fst:{relation_0_1} not higher than snd:{relation_0_4}");
+    }
 
     [Fact]
     public void PubWithDifferentTitles_ShouldGive_TitleFactor0()

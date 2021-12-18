@@ -38,7 +38,7 @@ public record VisualGraphRelationNode : VisualGraphNode {
 		return fac / max; 
 	}
 
-    	// Returns true if titles are the same
+	// Returns true if titles are the same
 	public double GetTitleRelation(VisualGraphNode node)
 	{
         // TO:DO consider adding smooth string comparison
@@ -48,11 +48,11 @@ public record VisualGraphRelationNode : VisualGraphNode {
 	// First compared to second publication
 	public double GetReferenceRelation(VisualGraphNode node)
 	{
-		// Return if 0
-		if (this.Children.Count == 0 || node.Children.Count == 0) return 0.0;
+        // Return if 0
+        if (this.Children.Count == 0 || node.Children.Count == 0) return 0.0;
 
-		// Keeps track of not shared references
-		var references = new HashSet<string>();
+        // Keeps track of not shared references
+        var references = new HashSet<string>();
 
 		// Find the amount of references they do not share
 		this.Children
