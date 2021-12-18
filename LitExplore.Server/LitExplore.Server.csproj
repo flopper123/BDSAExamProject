@@ -11,7 +11,6 @@
     <ProjectReference Include="..\LitExplore.Core\LitExplore.Core.csproj" />
     <ProjectReference Include="..\LitExplore.Entity\LitExplore.Entity.csproj" />
     <ProjectReference Include="..\LitExplore.UI\LitExplore.UI.csproj" />
-    <ProjectReference Include="..\LitExplore.Controllers\LitExplore.Controllers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

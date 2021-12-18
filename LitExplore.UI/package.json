@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "buildcss": "postcss Pages/**/*.css --base Pages -d ../LitExplore.Server/wwwroot/css"
+    "buildcss": "postcss Pages/**/*.css --base Pages -d ../LitExplore.UI/wwwroot/css"
   },
   "author": "",
   "license": "ISC",
