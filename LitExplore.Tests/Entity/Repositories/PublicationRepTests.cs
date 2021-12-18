@@ -6,7 +6,7 @@ using LitExplore.Tests.Util;
 public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
 {
     // Size of seed
-    const UInt64 SIZE = 3;
+    const UInt64 SIZE = 4;
 
     public PublicationRepTests() : base() {}
 
