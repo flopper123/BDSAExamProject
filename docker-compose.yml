@@ -3,6 +3,12 @@
 version: '3.9'
 
 services:
+  tests:
+    image: mcr.microsoft.com/dotnet/sdk:6.0
+    volumes:
+      - .:/code
+    command: bash -c "cd /code && dotnet test"
+
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
@@ -13,7 +19,7 @@ services:
     secrets:
       - db_password
 
-  web:
+  testweb:
     image: mcr.microsoft.com/dotnet/sdk:6.0
     build:
       context: .
@@ -24,6 +30,7 @@ services:
       ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
       ASPNETCORE_Kestrel__Certificates__Default__Password: skrrrt
     ports:
+      - 44398:44398
       - 5141:5141
       - 7252:7252
       - 80:80
@@ -34,7 +41,7 @@ services:
       - source: connection_string
         target: ConnectionStrings__LitExplore
     volumes: #C:\Users\Thomas\Desktop\school\sem3\bdsa\BDSAExamProject
-      - $USERPROFILE/.aspnet/https:/https/
+      - $USERPROFILE/.aspnet/https/:/https/
 
 secrets:
   db_password:

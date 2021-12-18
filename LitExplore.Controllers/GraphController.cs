@@ -6,6 +6,8 @@ using LitExplore.Core.Filter;
 
 public class GraphController
 {
+    public GraphController() {}
+
     IFilterRepository<PublicationGraph> _fRepo;
     IPublicationRepository _pRepo;
 
