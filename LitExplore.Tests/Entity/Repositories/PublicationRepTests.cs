@@ -25,8 +25,8 @@ public class PublicationRepTests : AbsRepositoryTests<PublicationRepository>
           new Publication { Title = "Test pub 4", References = new List<PublicationTitle> { ref1}}
         );
 
-        
-        Seed.SeedDB(context);
+        //!Will break auto test since this information is generated with actual titles.
+        //Seed.SeedDB(context);
 
 
     }
