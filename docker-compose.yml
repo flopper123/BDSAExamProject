@@ -34,7 +34,7 @@ services:
       - source: connection_string
         target: ConnectionStrings__LitExplore
     volumes: #C:\Users\Thomas\Desktop\school\sem3\bdsa\BDSAExamProject
-      - ../../../../../.aspnet/https:/https/
+      - $USERPROFILE/.aspnet/https:/https/
 
 secrets:
   db_password:
