@@ -10,6 +10,11 @@ public class LitExploreContext : DbContext, ILitExploreContext
     public LitExploreContext(DbContextOptions<LitExploreContext> options) : base(options) { }
 
     // TO:DO consider cleaning
+
+    protected override void OnConfiguring(DbContextOptionsBuilder builder)
+    {
+        builder.EnableSensitiveDataLogging(true);
+    }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<UserFilter>().HasKey(f => f.UserId);
