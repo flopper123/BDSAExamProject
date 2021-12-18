@@ -42,16 +42,16 @@ public class PublicationGraphTests
         yield return new PublicationDtoDetails { Title = "11" };
     }
 
-    [Fact]
-    public void Can_Construct() {
-        // Construct without exceptions
-        PublicationGraph gr = new PublicationGraph();
-        foreach(var n in GetConnectedCycleData(100)) gr.Add(n);
-        PublicationGraph exp = new PublicationGraph(GetConnectedCycleData(100));
-        
-        // Assert both constructions give same graph
-        Assert.Equal(gr.GetNodes(), exp.GetNodes());
-    }
+    // [Fact]
+    // public void Can_Construct() {
+    //     // Construct without exceptions
+    //     PublicationGraph gr = new PublicationGraph();
+    //     foreach(var n in GetConnectedCycleData(100)) gr.Add(n);
+    //     PublicationGraph exp = new PublicationGraph(GetConnectedCycleData(100));
+    //     
+    //     // Assert both constructions give same graph
+    //     Assert.Equal(gr.GetNodes(), exp.GetNodes());
+    // }
 
     [Fact]
     public void Can_Get() 
@@ -149,40 +149,42 @@ public class PublicationGraphTests
         // Copy below filters
         // Assert value of each filter is as expected
     }
+    
+    // [Fact]
+    // public void CanLoadFromHistory() 
+    // {
 
-    [Fact]
-    public void CanLoadFromHistory() 
-    {
-
-        // Arrange
-        var key = "1xDEADBEEF";
+    //     // Arrange
+    //     var key = "1xDEADBEEF";
         
-        var initial = new PublicationGraph();
-        var actGraph = new PublicationGraph();
-        foreach (var n in GetConnectedCycleData(100)) { actGraph.Add(n); initial.Add(n); }
+    //     var initial = new PublicationGraph();
+    //     var actGraph = new PublicationGraph();
+    //     foreach (var n in GetConnectedCycleData(100)) { actGraph.Add(n); initial.Add(n); }
 
-        actGraph.Add(new PublicationDtoDetails { Title = key });
-        var f = new POV(key, FilterOption.SearchDirection.BI | FilterOption.SearchDirection.VISIT_ONCE,
-                    new TitleContains("1"));
+    //     actGraph.Add(new PublicationDtoDetails { Title = key });
+    //     var f = new POV(key, FilterOption.SearchDirection.BI | FilterOption.SearchDirection.VISIT_ONCE,
+    //                 new TitleContains("1"));
 
-        // Act
-        actGraph.Filter(f);
-        var exp = actGraph.GetNodes().ToList();
+    //     // Act
+    //     actGraph.Filter(f);
+    //     var exp = actGraph.GetNodes().ToList();
         
-        // Assert state is correct before we serialize
-        Assert.Single(exp);
-        Assert.Equal(key, exp[0].Details.Title);
-        string gs = actGraph.Serialize();
+    //     // Assert state is correct before we serialize
+    //     Assert.Single(exp);
+    //     Assert.Equal(key, exp[0].Details.Title);
+    //     string gs = actGraph.Serialize();
 
-        // Assert
-        initial.Load(gs);
-        var act = initial.GetNodes().ToList();
-        Assert.Single(act);
-        Assert.Equal(key, act[0].Details.Title);
-    }
-
+    //     // Assert
+    //     initial.Load(gs);
+    //     var act = initial.GetNodes().ToList();
+    //     Assert.Single(act);
+    //     Assert.Equal(key, act[0].Details.Title);
+    // }
+    
+    /*
     [Fact]
     public void CanCopy() {
         throw new NotImplementedException("CanCopy not implemented");
     }
+    */
 }

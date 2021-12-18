@@ -31,27 +31,27 @@ public class POVTests
         Assert.Equal(exp_pargs, pov.PredicateArgs);
     }
 
-    [Fact]
-    public void Can_Construct_From_StringAndDir() {
-        POV pov = new POV("1", FilterOption.SearchDirection.BI);
+    // [Fact]
+    // public void Can_Construct_From_StringAndDir() {
+    //     POV pov = new POV("1", FilterOption.SearchDirection.BI);
         
-        var exp_pargs = new Object[] { "1".ToTitle(), FilterOption.SearchDirection.BI};
-        var act_pargs = pov.PredicateArgs;
+    //     var exp_pargs = new Object[] { "1".ToTitle(), FilterOption.SearchDirection.BI};
+    //     var act_pargs = pov.PredicateArgs;
 
-        Assert.Equal(exp_pargs, pov.PredicateArgs);
-    }
+    //     Assert.Equal(exp_pargs, pov.PredicateArgs);
+    // }
 
-    [Fact]
-    public void Can_Construct_From_StringDirPrv() {
-        POV inner = new POV("0");
-        POV pov = new POV("1", FilterOption.SearchDirection.BI, inner);
+    // [Fact]
+    // public void Can_Construct_From_StringDirPrv() {
+    //     POV inner = new POV("0");
+    //     POV pov = new POV("1", FilterOption.SearchDirection.BI, inner);
         
-        var exp_pargs = new Object[] { "1".ToTitle(), FilterOption.SearchDirection.BI};
-        var act_pargs = pov.PredicateArgs;
+    //     var exp_pargs = new Object[] { "1".ToTitle(), FilterOption.SearchDirection.BI};
+    //     var act_pargs = pov.PredicateArgs;
 
-        Assert.Equal(exp_pargs, pov.PredicateArgs);
-        Assert.Contains(inner.Serialize(), pov.Serialize());
-    }
+    //     Assert.Equal(exp_pargs, pov.PredicateArgs);
+    //     Assert.Contains(inner.Serialize(), pov.Serialize());
+    // }
     
     [Fact]
     public void Can_Construct_From_Title() {
@@ -74,28 +74,28 @@ public class POVTests
         Assert.Equal(exp_pargs, pov.PredicateArgs);
     }
 
-    [Fact]
-    public void Can_Construct_From_TitleDirPrv() {
-        POV inner = new POV("0".ToTitle());
-        POV pov = new POV("1".ToTitle(), FilterOption.SearchDirection.BI, inner);
+    // [Fact]
+    // public void Can_Construct_From_TitleDirPrv() {
+    //     POV inner = new POV("0".ToTitle());
+    //     POV pov = new POV("1".ToTitle(), FilterOption.SearchDirection.BI, inner);
         
-        var exp_pargs = new Object[] { "1".ToTitle(), FilterOption.SearchDirection.BI};
-        var act_pargs = pov.PredicateArgs;
+    //     var exp_pargs = new Object[] { "1".ToTitle(), FilterOption.SearchDirection.BI};
+    //     var act_pargs = pov.PredicateArgs;
 
-        Assert.Equal(exp_pargs, pov.PredicateArgs);
-        Assert.Contains(inner.Serialize(), pov.Serialize());
-    }
+    //     Assert.Equal(exp_pargs, pov.PredicateArgs);
+    //     Assert.Contains(inner.Serialize(), pov.Serialize());
+    // }
 
-    [Theory]
-    [MemberData(nameof(GetPOVs))]
-    public void Can_PackAndConstruct(POV exp)
-    {
-        var act = (POV) FilterFactory.Deserialize<PublicationGraph>(exp.Serialize());
-        Assert.Equal(exp.Serialize(), act.Serialize());
-        Assert.Equal(exp.Depth, act.Depth);
-        Assert.Equal(exp.GetType(), act.GetType());
-        Assert.Equal(exp.PredicateArgs, act.PredicateArgs);
-    }
+    // [Theory]
+    // [MemberData(nameof(GetPOVs))]
+    // public void Can_PackAndConstruct(POV exp)
+    // {
+    //     var act = (POV) FilterFactory.Deserialize<PublicationGraph>(exp.Serialize());
+    //     Assert.Equal(exp.Serialize(), act.Serialize());
+    //     Assert.Equal(exp.Depth, act.Depth);
+    //     Assert.Equal(exp.GetType(), act.GetType());
+    //     Assert.Equal(exp.PredicateArgs, act.PredicateArgs);
+    // }
 
 
     [Fact]

@@ -2,7 +2,7 @@ namespace LitExplore.Tests.Core.Publication;
 
 using LitExplore.Core.Filter;
 using static LitExplore.Tests.Utilities.GraphMockData;
-
+/*
 public class PublicationGraphEqualityTests 
 {   
     [Fact]
@@ -59,7 +59,7 @@ public class PublicationGraphEqualityTests
         Assert.True(fst.Equals(snd));
     }
 
-    [Theory]
+    [Theory ]
     [InlineData((Object) 2)]
     [InlineData((Object) 2UL)]
     [InlineData((Object) "0xDEADBEEF")]
@@ -87,3 +87,4 @@ public class PublicationGraphEqualityTests
         }   
     }
 }
+*/

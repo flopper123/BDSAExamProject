@@ -43,13 +43,11 @@ public class PublicationGraph : ISerialize, IEquatable<PublicationGraph>
         this.Filter(f);
     }
 
-
-
     /// <summary>
     ///  retrieves the node saved under title from the dictionary.
     ///  If no such key found, it returns a new empty PublicationNode with attached details. 
     /// </summary>
-    public PublicationNode TryGetNode(PublicationDtoTitle key) {
+    public virtual PublicationNode TryGetNode(PublicationDtoTitle key) {
         
         PublicationNode? node = null;
         Nodes.TryGetValue(key.Title, out node);

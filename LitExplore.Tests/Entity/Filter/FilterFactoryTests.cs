@@ -11,20 +11,21 @@ public class FilterFactoryTests {
     //    var act_filter = FilterFactory.Create<NodeDetails<PublicationNode>>(exp.Name, args);
     //    Assert.Equal(exp.Name, act_filter.GetType().Name);
     //}
-
+    /*
     [Theory]
     [InlineData(typeof(TitleContains), "0xDEADBEEF")]
     public void Create_PublicationGraphFilter_by_Type(Type exp, params Object[] args) {
         Filter<PublicationGraph> act_filter = FilterFactory.Create<PublicationGraph>(exp.Name, args);
         Assert.Equal(exp.Name, act_filter.GetType().Name);
     }
+    */
 
-    [Theory]
-    [InlineData("TitleContains", "0xDEADBEEF")]
-    public void Create_by_UnqualifiedName(string exp, params Object[] args) {
-        Filter<PublicationGraph> act_filter = FilterFactory.Create<PublicationGraph>(exp, args);
-        Assert.Equal(exp, act_filter.GetType().Name);
-    }
+    // [Theory]
+    // [InlineData("TitleContains", "0xDEADBEEF")]
+    // public void Create_by_UnqualifiedName(string exp, params Object[] args) {
+    //     Filter<PublicationGraph> act_filter = FilterFactory.Create<PublicationGraph>(exp, args);
+    //     Assert.Equal(exp, act_filter.GetType().Name);
+    // }
 
     [Fact]
     public void Create_Throws_NameFalse() {

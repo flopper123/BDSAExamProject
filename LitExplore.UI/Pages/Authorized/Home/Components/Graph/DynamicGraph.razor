@@ -3,14 +3,13 @@
 @using LitExplore.Controllers.Graph
 
 <div class="relative h-full w-11/12">
-  @foreach (var node in graph)
+  @foreach (var node in graph.GetNodes())
   {
-    <DynamicRelationedNode node=@node></DynamicRelationedNode>
+    <DynamicRelationedNode node=@node.ToVisual()></DynamicRelationedNode>
   }
 </div>
 
 @code {
   [Parameter]
-  public VisualGraph graph { get; set; }
-
+  public VisualGraph graph { get; set; } = null!; 
 }

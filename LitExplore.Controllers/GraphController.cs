@@ -4,51 +4,40 @@ using LitExplore.Entity.Context;
 using LitExplore.Controllers.Graph;
 using LitExplore.Core.Filter;
 
-
 public class GraphController
 {
     IFilterRepository<PublicationGraph> _fRepo;
     IPublicationRepository _pRepo;
-    
-    public GraphController(IFilterRepository<PublicationGraph> fRepo, 
-                           IPublicationRepository pRepo) {
+
+    public GraphController(IFilterRepository<PublicationGraph> fRepo,
+                           IPublicationRepository pRepo)
+    {
         this._fRepo = fRepo;
         this._pRepo = pRepo;
     }
-    
-    public async Task<VisualGraph> GetDefaultGraph() {
-        throw new NotImplementedException();
-    }
 
-    public async Task<VisualGraph> Load(UInt64 uid) {
+    // At some point this method should build the graph dynamicly
+    // as the data is loaded from the repository 
+    public async Task<VisualGraph> GetDefaultGraphAsync()
+    {
+        VisualGraph graph = new VisualGraph();
+        // Graph but without visual 
+        await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
+        graph.OnInit();
 
-        // Retrieve default graph
-
-        // if not found filter becomes EmptyFilter<PubGraph> which is fine
-        var filter = await _fRepo.ReadAsync(uid);
-        var graph = await GetDefaultGraph();
-        // if (filter != null) graph.Filter(filter);
         return graph;
     }
 
-    public async Task<VisualGraph> GetGraphRepresentationAsync() {
-        // Fetch graph
-        // THIS IS TEST DATA FOR NOW
-        var publications = GraphMockData.GetPublications();
+    public async Task<VisualGraph> Load(UInt64 uid = 0)
+    {
 
-        // Find graph relations
-        // This will weight publications compared to eachother.
-        // And give a guess as to where they should be located on 
-        //      a normalized square with (x, y) in range of [0-1]
-        var graphRelation = new GraphRelation();
-        var relations = graphRelation.GetManyToManyRelations(publications);
+        // Retrieve default graph
+        var graph = await GetDefaultGraphAsync();
 
-        // Generate graph
-        var graph = VisualGraph.FromList(relations);
-        
-        // Normalize graph
-        var normalizer = new GraphNormalizer();
+        // if not found filter becomes EmptyFilter<PubGraph> which is fine
+        Filter<PublicationGraph>? f = await _fRepo.ReadAsync(uid);
 
-        return normalizer.Normalize(graph);
+        if (f != null) graph.Filter(f);
+        return graph;
     }
 }

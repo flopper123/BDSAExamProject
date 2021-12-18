@@ -21,6 +21,7 @@
 
   protected override async Task OnInitializedAsync()
   {
-    graph = await controller.GetGraphRepresentationAsync();
+    // TO:DO add userid as param to load for loading user specific graph
+    graph = await controller.Load();
   }
 }
