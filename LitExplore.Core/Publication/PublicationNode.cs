@@ -135,10 +135,8 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
     internal List<PublicationDtoTitle> MissingChildren(List<PublicationDtoTitle> titles) {
         
         var missing = new List<PublicationDtoTitle>();
-        foreach (var t in titles)
-        {
-            if (!Children.ContainsTitle(t)) missing.Add(t);
-        }
+        foreach (var t in titles) if (!Children.ContainsTitle(t)) missing.Add(t);
+        
         // Missing children from titles
         return missing;
     }
