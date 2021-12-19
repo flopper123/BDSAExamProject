@@ -2,6 +2,8 @@
 
 @using LitExplore.UI.Shared
 
+@inject Microsoft.AspNetCore.Components.NavigationManager NavManager
+
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -14,3 +16,12 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+
+
+@code {
+  protected override void OnInitialized()
+  {
+    NavManager.NavigateTo("graph");
+  } 
+}
