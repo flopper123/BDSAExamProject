@@ -12,9 +12,14 @@
 
   <FilterHistory />
 
-  <div class="flex w-full h-full">
-    <FilterSettings></FilterSettings>
-    <GraphVisualizer></GraphVisualizer>
+  <div class="grid grid-cols-4 w-full h-full">
+    <div class="col-span-1">
+      <FilterSettings></FilterSettings>
+      <ActiveNode></ActiveNode>
+    </div>
+    <div class="col-span-3">
+      <GraphVisualizer></GraphVisualizer>
+    </div>
   </div>
 
 </div>

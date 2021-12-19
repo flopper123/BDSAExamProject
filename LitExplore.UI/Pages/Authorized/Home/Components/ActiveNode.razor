@@ -1,0 +1,29 @@
+
+@namespace LitExplore.UI.Pages.Authorized.Home.Components
+
+@using LitExplore.Controllers.Graph
+@using LitExplore.UI.Pages.Authorized.Home.Components.Graph
+
+<div class="text-white bg-gray-800 pl-8 pr-4 pb-4 pt-2 w-full border-r-2 border-b-2 border-blue-900 max-h-min">
+  
+  @if (_node == null) {
+    <div class="text-2xl mb-4">
+      No node selected
+    </div>
+  } else {
+    <div class="text-2xl mb-4">
+      Active node
+    </div> 
+  } 
+    <div class="grid grid-cols-3 gap-2 mb-6">
+    </div>
+</div>
+
+@code {
+  private VisualGraphRelationNode? _node;
+
+  protected override async Task OnInitializedAsync()
+  {
+    SelectedNodeEvent.AddSub((VisualGraphRelationNode node) => _node = node);
+  }
+}
