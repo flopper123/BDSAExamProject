@@ -66,6 +66,7 @@ public abstract class FilterDecorator<T> : Filter<T>, IEquatable<FilterDecorator
         var sPArgs = sDecoration.PredicateArgs;
         Object[] pargs = new Object[sPArgs.Length + 1];
         for (int i = 0; i < pargs.Length - 1; i++) { pargs[i] = sPArgs[i]; }
+        //  throw new Exception($"Set pargs[{pargs.Length-1}] to {this.ToString()}");
         pargs[pargs.Length - 1] = this;
 
         string? fName = sDecoration.GetType().FullName;

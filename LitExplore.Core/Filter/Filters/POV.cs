@@ -67,7 +67,12 @@ public sealed class POV : FilterDecorator<PublicationGraph>
                Filter<PublicationGraph>? prv = null) 
         : base(new Object[] { key, dir }, 
                prv) 
-    {}
+    {
+        //if (key.Title.Equals("3")) {
+        //    string prvstr = (prv == null) ? "null" : prv.ToString();
+        //    throw new Exception($"Received args: \nkey={key}\ndir={dir}\nprv={prvstr}");
+        //}
+    }
 
     protected override void Action(PublicationGraph gr)
     {

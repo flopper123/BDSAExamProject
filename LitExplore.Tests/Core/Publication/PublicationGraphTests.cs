@@ -154,12 +154,14 @@ public class PublicationGraphTests
             ("3".ToTitle(), FilterOption.SearchDirection.BI | FilterOption.SearchDirection.VISIT_ONCE),
             ("4".ToTitle(), FilterOption.SearchDirection.DEFAULT),
         };
+        //String msg = "Error:\n";
         PublicationGraph gr = new PublicationGraph();
-        for (int j = pargs.Length-1; j > 0; j--)
+        for (int j = pargs.Length-1; j >= 0; j--)
         {
             var parg = pargs[j];
-            gr.Filter(new POV(parg.title, parg.dir));
-
+            var pov = new POV(parg.title, parg.dir);
+            //msg += $"filtered graph with serialization:\n{pov.Serialize()} @{j}";
+            gr.Filter(pov);
         }
         var act = gr.History;
         int i = 0;
@@ -168,11 +170,8 @@ public class PublicationGraphTests
                 new POV(pargs[i].title, pargs[i++].dir, 
                     new POV(pargs[i].title, pargs[i++].dir, 
                         new POV(pargs[i].title, pargs[i++].dir))));
-        var msg = $"Actual:\n{act.Serialize()}\nExpected:\n{exp.Serialize()}";
-        Assert.False(true, msg);
+        // msg += $"\nActual:\n{act.Serialize()}\nExpected:\n{exp.Serialize()}";
         Assert.Equal(act.Serialize(), exp.Serialize());
-                // Copy below filters
-        // Assert value of each filter is as expected
     }
 
     [Fact]
@@ -204,7 +203,6 @@ public class PublicationGraphTests
         // Assert.Single(act);
         Assert.Equal(exp.Count(), act.Count());
     }
-
     /*
     [Fact]
     public void CanCopy() {
