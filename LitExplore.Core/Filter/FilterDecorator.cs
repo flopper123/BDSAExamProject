@@ -1,5 +1,6 @@
 namespace LitExplore.Core.Filter;
 
+using System.Reflection;
 using System.Text;
 using static LitExplore.Core.Filter.FilterPArgField;
 
@@ -9,7 +10,9 @@ using static LitExplore.Core.Filter.FilterPArgField;
 /// predicate to the base constructor.
 /// 
 /// In design-pattern lingo this class is the abs Decorator component,
-/// in a textbook Decorator-Pattern.
+/// in a textbook Decorator-Pattern.'
+/// 
+/// ! Warning: Never pass object[] as a single constructor arg in child element
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public abstract class FilterDecorator<T> : Filter<T>, IEquatable<FilterDecorator<T>>
@@ -42,10 +45,13 @@ public abstract class FilterDecorator<T> : Filter<T>, IEquatable<FilterDecorator
     // Should be overwriten for decorators with multiple args
     public virtual Object[] PredicateArgs
     {
+        // ! TO:DO Make check to see if object is some array type, Object[] if yes, 
         get 
         { 
-            if (this.p_args != null) return new Object[] { this.p_args };
-            return new Object[] {}; 
+            // To account for multiple args 
+            if (p_args == null) return new object[] {};
+            if (p_args.GetType() == typeof(Object[])) return p_args;
+            else return new Object[] { this.p_args };
         }
     }
 
@@ -60,6 +66,7 @@ public abstract class FilterDecorator<T> : Filter<T>, IEquatable<FilterDecorator
         var sPArgs = sDecoration.PredicateArgs;
         Object[] pargs = new Object[sPArgs.Length + 1];
         for (int i = 0; i < pargs.Length - 1; i++) { pargs[i] = sPArgs[i]; }
+        //  throw new Exception($"Set pargs[{pargs.Length-1}] to {this.ToString()}");
         pargs[pargs.Length - 1] = this;
 
         string? fName = sDecoration.GetType().FullName;

@@ -71,7 +71,11 @@ public class PublicationGraph : ISerialize, IEquatable<PublicationGraph>
 
     // Transforms this graph by applying the transformation of parameter @f
     public void Filter(Filter<PublicationGraph> f) {
-        this.fhistory = this.fhistory.Decorate(f);
+        if (fhistory.GetType() == typeof(EmptyFilter<PublicationGraph>)) {
+            this.fhistory = f;
+        } else {
+            this.fhistory = this.fhistory.Decorate(f);
+        }
         f.Invoke(this); 
     }
 

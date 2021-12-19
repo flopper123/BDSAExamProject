@@ -7,10 +7,15 @@ using LitExplore.Core.Publication.Action;
 /// </summary>
 public sealed class POV : FilterDecorator<PublicationGraph>
 {
-    private static readonly string[] PARG_TYPES = new string[] {
+    // pargs[Args.Title] = typeof(PublicationDtoTitle) 
+    // 
+    private const uint MAX_DEPTH = 100_000;
+    private static readonly string[] PARG_TYPES_STR = new string[] {
         "LitExplore.Core.Publication.PublicationDtoTitle",
         "LitExplore.Core.FilterOption.SearchDirection"
     };
+
+    //private static readonly string[] PARG_TYPES = { typeof(PublicationDtoTitle) }
 
     private enum Args
     {
@@ -23,7 +28,7 @@ public sealed class POV : FilterDecorator<PublicationGraph>
     {
         get
         {
-            if (p_args == null) throw new FilterPArgsException(this.GetType().Name, PARG_TYPES);
+            if (p_args == null) throw new FilterPArgsException(this.GetType().Name, PARG_TYPES_STR);
 
             return new Object[] { (PublicationDtoTitle) p_args[(int)Args.TITLE],
                                   (FilterOption.SearchDirection) p_args[(int) Args.DIRECTION] };
@@ -35,7 +40,7 @@ public sealed class POV : FilterDecorator<PublicationGraph>
     {
         get
         {
-            if (p_args == null) throw new FilterPArgsException(this.GetType(), PARG_TYPES);
+            if (p_args == null) throw new FilterPArgsException(this.GetType(), PARG_TYPES_STR);
             return (FilterOption.SearchDirection)(p_args)[(int)Args.DIRECTION];
         }
     }
@@ -62,7 +67,12 @@ public sealed class POV : FilterDecorator<PublicationGraph>
                Filter<PublicationGraph>? prv = null) 
         : base(new Object[] { key, dir }, 
                prv) 
-    {}
+    {
+        //if (key.Title.Equals("3")) {
+        //    string prvstr = (prv == null) ? "null" : prv.ToString();
+        //    throw new Exception($"Received args: \nkey={key}\ndir={dir}\nprv={prvstr}");
+        //}
+    }
 
     protected override void Action(PublicationGraph gr)
     {
@@ -80,7 +90,7 @@ public sealed class POV : FilterDecorator<PublicationGraph>
         pov.InvokeSearch(
             newGr,
             AddToGraphDictionary.Get(),
-            0,  
+            MAX_DEPTH,  
             this.Direction
         );
 
@@ -94,7 +104,7 @@ public sealed class POV : FilterDecorator<PublicationGraph>
     public static Object[] DeserializePArgs(string pargs_serialized) 
     {
 
-        string title = POV.PARG_TYPES[(int) Args.TITLE];
+        string title = POV.PARG_TYPES_STR[(int) Args.TITLE];
 
         int i = 0;
         var ret = new Object[2];
@@ -102,18 +112,16 @@ public sealed class POV : FilterDecorator<PublicationGraph>
         foreach((string t, string val) in ExtractArgs(pargs_serialized)) {
     
             // cant switch cuz of const restrictions
-            if (t.Contains(POV.PARG_TYPES[(int) Args.TITLE], 
-                           StringComparison.OrdinalIgnoreCase)) 
+            if (t.Contains(POV.PARG_TYPES_STR[(int) Args.TITLE], StringComparison.OrdinalIgnoreCase)) 
             {
-                ret[i] = new PublicationDtoTitle { Title = val };
+                ret[(int) Args.TITLE] = new PublicationDtoTitle { Title = val };
 
-            } else if (t.Contains(POV.PARG_TYPES[(int) Args.DIRECTION], 
-                                  StringComparison.OrdinalIgnoreCase)) 
+            } else if (t.Contains(POV.PARG_TYPES_STR[(int) Args.DIRECTION], StringComparison.OrdinalIgnoreCase)) 
             {    
-                ret[i] = Enum.Parse(typeof(FilterOption.SearchDirection), val);    
-            
+                ret[(int) Args.DIRECTION] = Enum.Parse(typeof(FilterOption.SearchDirection), val);
+
             } else {
-                throw new FilterPArgsException(typeof(POV).Name, PARG_TYPES);                
+                throw new FilterPArgsException(typeof(POV).Name, PARG_TYPES_STR);                
             }
 
             i++;
@@ -123,7 +131,11 @@ public sealed class POV : FilterDecorator<PublicationGraph>
 
     protected override IEnumerable<(string type, string str_vals)> getPArgsStringTuple()
     {
-        yield return (PARG_TYPES[(int) Args.TITLE], (p_args=null!)[(int) Args.TITLE].Title);
-        yield return (PARG_TYPES[(int) Args.DIRECTION], (p_args=null!)[(int) Args.DIRECTION].ToString());
+        // ! Warning dont modify code
+        // had a lot of unexpected bugs with this method, when values were yielded directly out
+        // so now we first insert them into list, and then yield them XD 
+        if (p_args == null) throw new NullReferenceException("p_args is null");
+        yield return (PARG_TYPES_STR[(int)Args.TITLE], (String) (p_args)[(int)Args.TITLE].Title);
+        yield return ((PARG_TYPES_STR[(int)Args.DIRECTION], (p_args)[(int)Args.DIRECTION].ToString()));
     }
 }
