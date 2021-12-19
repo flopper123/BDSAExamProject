@@ -10,7 +10,7 @@ public static class NodeExtensions {
     }
 
     // unused
-    internal static PublicationDtoDetails ToDetails(this PublicationDtoTitle target)
+    public static PublicationDtoDetails ToDetails(this PublicationDtoTitle target)
     {
         Type t = target.GetType();
 

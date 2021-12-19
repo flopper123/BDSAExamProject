@@ -17,7 +17,7 @@ public abstract class Filter<T> : ISerialize {
         sb.Append(FilterField.START);
         foreach (Filter<T> f in GetHistory()) {
             sb.Append(f.ToString());
-            sb.Append(Environment.NewLine);
+            sb.Append("\n");
         }
         sb[sb.Length - 1] = FilterField.END[0];
         return sb.ToString();

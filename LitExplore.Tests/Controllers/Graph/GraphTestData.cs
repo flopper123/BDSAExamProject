@@ -4,11 +4,12 @@ public class GraphTestData
 {
 
   public static List<PublicationDtoTitle> GetReferences() {
-    var ref0 = new PublicationDtoTitle() { Title = "Test publication" };
-    var ref1 = new PublicationDtoTitle() { Title = "Test publication" };
-    var ref2 = new PublicationDtoTitle() { Title = "Test publication 2" };
-    var ref3 = new PublicationDtoTitle() { Title = "Test publication 3" };
-    var ref4 = new PublicationDtoTitle() { Title = "Test publication 4" };
+    var ref0 = new PublicationDtoTitle() { Title = "Test publication0" };
+    var ref1 = new PublicationDtoTitle() { Title = "Test publication1" };
+    var ref2 = new PublicationDtoTitle() { Title = "Test publication2" };
+    var ref3 = new PublicationDtoTitle() { Title = "Test publication3" };
+    var ref4 = new PublicationDtoTitle() { Title = "Test publication4" };
+
     return new List<PublicationDtoTitle> { ref0, ref1, ref2, ref3, ref4 };
   }
 
@@ -16,10 +17,10 @@ public class GraphTestData
 
     var refs = GetReferences(); 
 
-    var pub0 = new PublicationDtoDetails { Title = "Test publication", References = new HashSet<PublicationDtoTitle> { refs[0], refs[1], refs[2], refs[3] } };
+    var pub0 = new PublicationDtoDetails { Title = "Test publication0", References = new HashSet<PublicationDtoTitle> { refs[0], refs[1], refs[2], refs[3] } };
 
     // Pub1 and pub0 share same title
-    var pub1 = new PublicationDtoDetails { Title = "Test publication", References = new HashSet<PublicationDtoTitle> { refs[1], refs[2], refs[3] } };
+    var pub1 = new PublicationDtoDetails { Title = "Test publication1", References = new HashSet<PublicationDtoTitle> { refs[1], refs[2], refs[3] } };
 
     // Pub1 and pub2 share the same references
     var pub2 = new PublicationDtoDetails { Title = "Test publication2", References = new HashSet<PublicationDtoTitle> { refs[1], refs[2], refs[3] } };

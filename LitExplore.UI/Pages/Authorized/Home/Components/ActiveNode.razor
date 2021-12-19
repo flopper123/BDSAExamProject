@@ -1,0 +1,61 @@
+
+@namespace LitExplore.UI.Pages.Authorized.Home.Components
+
+@using System.Linq
+@using LitExplore.Controllers.Graph
+@using LitExplore.UI.Pages.Authorized.Home.Components.Graph
+
+<div class="text-white bg-gray-800 pl-8 pr-4 pb-4 pt-2 w-full border-r-2 border-b-2 border-blue-900 max-h-min">
+  
+  @if (_node == null) {
+    <div class="text-2xl mb-4">
+      No node selected
+    </div>
+  } else {
+    <div class="text-2xl mb-4">
+      Active node
+    </div> 
+  } 
+  <div class="text-l pb-2">
+    Title:
+    @if (_node != null) {
+      <span class="text-sm pl-2">@_node.Details.Title</span>
+    }
+  </div>
+  <div class="text-l pb-2">
+    Author:
+    @(_node != null ? _node.Details.Author : "")
+  </div>
+<div class="text-l pb-5">
+    Keywords:
+    @if (_node != null) {
+      @foreach(var keyword in _node.Details.Keywords) {
+        <p class="text-xs pl-3 pb-1">@keyword</p>
+      }
+    }
+  </div>
+  <div class="text-l pb-5">
+    References:
+    @if (_node != null) {
+      @foreach(var n in _node.Children) {
+        <p class="text-xs pl-3 pb-1">@n.Details.Title</p>
+      }
+    }
+  </div>
+  
+</div>
+
+@code {
+  private VisualGraphRelationNode? _node;
+
+
+  protected override async Task OnInitializedAsync()
+  {
+    SelectedNodeEvent.AddSub((VisualGraphRelationNode node) => {
+      InvokeAsync(() => {
+        _node = node;
+        StateHasChanged();
+      });
+    });
+  }
+}

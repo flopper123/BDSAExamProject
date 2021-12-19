@@ -30,8 +30,12 @@ services:
       ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
       ASPNETCORE_Kestrel__Certificates__Default__Password: skrrrt
     ports:
+      - 44398:44398
+      - 41338:41338
       - 5141:5141
       - 7252:7252
+      - 5001:5001
+      - 5000:5000
       - 80:80
       - 443:443
     depends_on:
@@ -39,8 +43,8 @@ services:
     secrets:
       - source: connection_string
         target: ConnectionStrings__LitExplore
-    volumes: #C:\Users\Thomas\Desktop\school\sem3\bdsa\BDSAExamProject
-      - ./secrets/:/https/
+    volumes: # C:\Users\Thomas\Desktop\school\sem3\bdsa\BDSAExamProject
+      - ../../../../../.aspnet/https/:/https/
 
 secrets:
   db_password:
