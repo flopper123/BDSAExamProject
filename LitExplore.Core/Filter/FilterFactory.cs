@@ -17,6 +17,7 @@ public class FilterFactory
 
     private static FilterDeserializer deserializer = new FilterDeserializer();
 
+
     public static Filter<T> Deserialize<T>(string fs) {
         return deserializer.Deserialize<T>(_assembly, fs);
     }

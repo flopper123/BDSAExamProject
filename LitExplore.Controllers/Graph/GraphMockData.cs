@@ -2,7 +2,7 @@ namespace LitExplore.Controllers.Graph;
 
 public class GraphMockData
 {
-
+    
   public static List<PublicationDtoTitle> GetReferences() {
     var ref0 = new PublicationDtoTitle() { Title = "gg go next" };
     var ref1 = new PublicationDtoTitle() { Title = "whats 9 + 10?" };
