@@ -31,7 +31,7 @@
     set {
 
       var pubTitles = value.Children.Select(r => r.Details.Title).ToList();
-
+     
       _node = value;
       
       var containsAny =
@@ -53,8 +53,6 @@
           rel => rel.node
         )
         .ToList();
-
-      
     }
   }
 

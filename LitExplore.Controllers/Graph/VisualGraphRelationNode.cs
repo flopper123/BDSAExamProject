@@ -27,12 +27,12 @@ public record VisualGraphRelationNode : VisualGraphNode {
 	public double /* AddRelation */ GetRelation(VisualGraphNode node)
 	{
 		// Collect
-		double title = GetTitleRelation(node);
+		//double title = GetTitleRelation(node);
 		double refs  = GetReferenceRelation(node);
 
 		// Weight
-		double max = 2.0 + 1.5;
-		double fac = title * 2.0 + refs * 1.5;
+		double max = 1.5;
+		double fac = refs * 1.5;
 
 		// Normalize
 		return fac / max; 

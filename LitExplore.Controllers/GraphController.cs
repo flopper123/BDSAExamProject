@@ -24,7 +24,9 @@ public class GraphController
     {
         VisualGraph graph = new VisualGraph();
         // Graph but without visual 
-        await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
+        //await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
+        GraphMockData.GetPublications().ForEach(pub => graph.Add(pub));
+        
         graph.OnInit();
 
         return graph;

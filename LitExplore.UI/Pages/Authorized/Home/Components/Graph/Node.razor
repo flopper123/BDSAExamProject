@@ -22,7 +22,7 @@
     get { return _node; }
     set {
       (double x, double y) = value.Point;
-
+      
       _red = colorFromFactor(x);
       _blue = colorFromFactor(y);
 
@@ -60,6 +60,8 @@
       (double x, double y) p0,
       (double x, double y) p1)
         => Math.Sqrt(Math.Pow(p0.x - p1.x, 2.0d) + Math.Pow(p0.y - p1.y, 2.0d));
+
+    double count = 0;
     
     // Run loop forever
     while (true) {
@@ -76,13 +78,14 @@
           // Get distance
           double d = dist(from, to);
 
-          double factor = Math.Min(n.factor, 0.95);
+          double factor = Math.Min(n.factor, 0.90);
           
 
           // Get weighted distance
           // This can be done like this,
           //    since both factor and distance is in range 0-1
-          double w = factor - (1-d);
+          double w = Math.Sqrt(factor);
+          if (d < 0.2) w = -w * 10;
 
           //if (w > 0.2) w = 0.2;
 
@@ -144,6 +147,11 @@
       // Update visually
       StateHasChanged();
       GraphUtil.Notify();
+
+      // Check if we should end
+      count += dt;
+
+      if (count > 8) break;
 
       // Sleep for delay ms
       await Task.Delay(delay);

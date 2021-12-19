@@ -2,6 +2,11 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 
+using LitExplore.Core.Publication;
+using LitExplore.Core.Filter;
+
+using LitExplore.Entity.Repositories;
+
 using LitExplore.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +28,10 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
+
+// builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
+// builder.Services.AddScoped<IFilterRepository<PublicationGraph>, FilterRepository<PublicationGraph>>();
+
 
 builder.Services.AddSingleton<GraphController>();
 
