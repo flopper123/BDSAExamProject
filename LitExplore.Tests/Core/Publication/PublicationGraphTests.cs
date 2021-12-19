@@ -4,6 +4,8 @@ using LitExplore.Core.Graph;
 using LitExplore.Core.Filter;
 using System.Text;
 
+using LitExplore.Tests.Util;
+
 using static LitExplore.Tests.Utilities.GraphMockData;
 
 public class PublicationGraphTests
@@ -186,7 +188,7 @@ public class PublicationGraphTests
 
         actGraph.Add(new PublicationDtoDetails { Title = key });
         initial.Add(new PublicationDtoDetails { Title = key });
-        var f = new POV(key, FilterOption.SearchDirection.BI | FilterOption.SearchDirection.VISIT_ONCE, new TitleContains(key));
+        var f = new POV(key, FilterOption.SearchDirection.CHILDREN | FilterOption.SearchDirection.VISIT_MINDEPTH, new TitleContains(key));
 
         // Act 
         actGraph.Filter(f);
@@ -203,10 +205,26 @@ public class PublicationGraphTests
         // Assert.Single(act);
         Assert.Equal(exp.Count(), act.Count());
     }
-    /*
+    
     [Fact]
     public void CanCopy() {
-        throw new NotImplementedException("CanCopy not implemented");
+        
+        var expGr = new PublicationGraph(GetConnectedAcyclicData(100, 10));
+        var actGr = new PublicationGraph();
+        
+        expGr.Filter(EmptyFilter<PublicationGraph>.Get());
+        actGr.Copy(expGr);
+
+        var act = actGr.GetNodes();
+        var exp = expGr.GetNodes();
+
+        // Assert
+        Assert.NotEmpty(act);
+        Assert.Equal(act.Count(), exp.Count());
+        Assert.True(act.GetEnumerator().CustomEquals(
+            exp.GetEnumerator()), 
+            "Enumerators are not equal..: Actual #{act.Count()} {act.ToString()} ~ Expected #{exp.Count()} {exp.ToString()}"
+        );
     }
-    */
+    
 }

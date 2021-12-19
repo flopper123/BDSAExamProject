@@ -15,4 +15,8 @@ public static class FilterOption
         VISIT_ONCE = 0b1000, //  visit node exactly once, Not implemented
         DEFAULT = CHILDREN | VISIT_MINDEPTH,
     }
+
+    public static bool IsSet(this SearchDirection src, SearchDirection needle) {
+        return (src & needle) != 0;
+    } 
 }

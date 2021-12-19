@@ -3,26 +3,6 @@ namespace LitExplore.Core.Publication;
 using LitExplore.Core.Publication.Action;
 using static LitExplore.Core.Filter.FilterOption;
 
-// Auxiliary class for recursion
-internal static class Recursion 
-{
-    internal static PublicationGraph Graph = new PublicationGraph();
-    internal static GraphAction Action = new GraphAction((t, v) => { });
-    internal static Dictionary<string, UInt32> Visited = new Dictionary<string, UInt32>();
-    
-    internal static void ClearCache() {
-        // StringBuilder msg = new StringBuilder();
-        // msg.Append("Recursion.ClearCache() called:\n");
-        // msg.Append($"{Visited.Count()}@Visited\n");
-        // msg.Append($"{Graph.Size}@Graph\n");
-        // Log(msg);
-        
-        Visited.Clear();
-        Graph = new PublicationGraph();
-        Action = new GraphAction((t, v) => { });
-    } 
-}
-
 public record PublicationNode : IEquatable<PublicationDtoTitle> {
 
     public List<PublicationNode> Parents { get; protected set; } = new List<PublicationNode>();
@@ -33,63 +13,90 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
         this.Details = details;
     }
 
-    protected IEnumerable<PublicationNode> GetSearchTargets(SearchDirection dir) 
+    private static bool shouldVisit(SearchDirection opts, UInt32 depthSeen, UInt32 curDepth) {
+        bool visit = true;
+        if (opts.HasFlag(SearchDirection.VISIT_ONCE)) visit = (depthSeen == uint.MaxValue);
+        else if (opts.HasFlag(SearchDirection.VISIT_MINDEPTH)) visit = (depthSeen > curDepth);
+        return visit;
+    }
+
+
+    protected static List<PublicationNode> GetSearchTargets(IEnumerable<PublicationNode> src, SearchDirection opts) {
+        HashSet<PublicationNode> l = new HashSet<PublicationNode>();
+        foreach (var n in src)
+        {
+            foreach (var c in n.GetSearchTargets(opts)) {
+                l.Add(c);
+            }
+        }
+        return l.ToList();
+    }
+
+    // Apply direction checks and return a list of all that satisfy
+    protected List<PublicationNode> GetSearchTargets(SearchDirection opts) 
     {
-        if ((dir & SearchDirection.CHILDREN) != 0) foreach (var c in this.Children) yield return c;
-        if ((dir & SearchDirection.PARENTS) != 0) foreach (var p in this.Parents) yield return p;
-        
+        HashSet<PublicationNode> set = new HashSet<PublicationNode>();
         // Add other search patterns as needed
+        if (opts.HasFlag(SearchDirection.CHILDREN)) foreach (var c in this.Children) set.Add(c);
+        if (opts.HasFlag(SearchDirection.PARENTS)) foreach (var p in this.Parents) set.Add(p);
+        return set.ToList();
     }
 
     // Apply action to target in manér of options
     // For example if its used with AddToGraphDictionary,
-    //      Adds all nodes connected to this path to @tar 
+    //      Adds all nodes connected to this path to @gr 
     public void InvokeSearch(PublicationGraph gr,
                              GraphAction act,
-                             UInt32 depth,
+                             UInt32 max_depth,
                              SearchDirection opts = SearchDirection.DEFAULT) 
-    {
+    {        
         // add static cache
-        Recursion.Graph = gr;
-        Recursion.Action = act;
-        Recursion.Visited = new Dictionary<string, UInt32>();
-        this.InvokeRecursive(depth, opts);
-        Recursion.ClearCache();
+        this.bfs(gr, act, max_depth, opts);
     }
 
-    // Action could be ADD to Graph for example which would add all encountered to graph 
+    private void bfs(PublicationGraph gr,
+                     GraphAction act,
+                     UInt32 max_depth,
+                     SearchDirection opts = SearchDirection.DEFAULT)
+    {
+        // titles of visitors to depth visited
+        var visited = new Dictionary<string, UInt32>();
+        visited[this.Details.Title] = 0;
+        act.Invoke(this.ToNodeDetails(0UL), gr);
+
+        var depth = 1u;
+        var targets = this.GetSearchTargets(opts);
+
+        while (max_depth > depth && targets.Count() != 0)
+        {
+            int i = 0;
+            
+            var lastVisited = new List<PublicationNode> ();
+            // All the nodes at the next layer that satisfies search opts
+            foreach (var c in targets)
+            {
+                i++;
+                uint prvDepth;
+                if (!visited.TryGetValue(c.Details.Title, out prvDepth)) {
+                    prvDepth = uint.MaxValue;
+                    visited[c.Details.Title] = depth;
+                }
+                else {
+                    if (prvDepth > depth) visited[c.Details.Title] = depth;
+                }
+
+                if (!shouldVisit(opts, prvDepth, depth)) continue;
+                // if (i > 10000) throw new Exception("i == 10000 : depth#" + depth + "  max_depth#" + max_depth + " visited so far:#" + visited.Count());
+                lastVisited.Add(c);
+                act.Invoke(c.ToNodeDetails(depth), gr);
+            }
+            depth++;
+            
+            targets = PublicationNode.GetSearchTargets(lastVisited, opts);
+        }
+    }
 
     // TO:DO Implement functionality to avoid visiting same node twice in a cycle graph. 
-
-    private void InvokeRecursive(UInt32 depth,
-                                 SearchDirection opts = SearchDirection.DEFAULT)
-    {
-
-        UInt32 prv_depth = 0;
-        bool hasSeen = Recursion.Visited.TryGetValue(this.Details.Title, out prv_depth);
-
-        if (hasSeen)
-        {
-            if ((opts & SearchDirection.VISIT_ONCE) != 0) return;
-            if ((opts & SearchDirection.VISIT_MINDEPTH) != 0 &&
-                prv_depth <= depth)
-            {
-                return;
-            }
-        }
-        
-        // Add visitation
-        Recursion.Visited[this.Details.Title] = depth;
-
-        // apply action to target
-        Recursion.Action.Invoke(this.ToNodeDetails(depth), Recursion.Graph);
-
-        // TO:DO implement so we can perform both child and parent search simoultanously
-        //       Note! ToList is slow for large search ranges
-        GetSearchTargets(opts).ToList()
-                              .ForEach(t => t.InvokeRecursive(depth + 1, opts));
-    }
-
     public void UpdateDetails(PublicationDtoDetails update)
     {
         Details = new PublicationDtoDetails
@@ -127,12 +134,13 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
     // The operation runs in parralel
     internal List<PublicationDtoTitle> MissingChildren(List<PublicationDtoTitle> titles) {
         
-        var missing = new ConcurrentBag<PublicationDtoTitle>();
-        Parallel.ForEach(titles, (PublicationDtoTitle t) =>
+        var missing = new List<PublicationDtoTitle>();
+        foreach (var t in titles)
         {
             if (!Children.ContainsTitle(t)) missing.Add(t);
-        });
+        }
         // Missing children from titles
-        return missing.ToList();
+        return missing;
     }
 }
+ 

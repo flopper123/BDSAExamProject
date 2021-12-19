@@ -9,7 +9,7 @@ public sealed class POV : FilterDecorator<PublicationGraph>
 {
     // pargs[Args.Title] = typeof(PublicationDtoTitle) 
     // 
-
+    private const uint MAX_DEPTH = 100_000;
     private static readonly string[] PARG_TYPES_STR = new string[] {
         "LitExplore.Core.Publication.PublicationDtoTitle",
         "LitExplore.Core.FilterOption.SearchDirection"
@@ -90,7 +90,7 @@ public sealed class POV : FilterDecorator<PublicationGraph>
         pov.InvokeSearch(
             newGr,
             AddToGraphDictionary.Get(),
-            0,  
+            MAX_DEPTH,  
             this.Direction
         );
 
