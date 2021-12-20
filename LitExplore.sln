@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitExplore.Entity", "LitExplore.Entity\LitExplore.Entity.csproj", "{CD5732CA-9C8E-433B-ADFA-4DB21210B5DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{A0B4C01B-C928-49B0-905A-6D3D71FAFC86}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitExplore.Core", "LitExplore.Core\LitExplore.Core.csproj", "{CF8A8328-54BF-436E-AE56-1D4201C5D5E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitExplore.Tests", "LitExplore.Tests\LitExplore.Tests.csproj", "{EEE35B7E-95C0-4A4A-955F-D6786CBA0CEE}"

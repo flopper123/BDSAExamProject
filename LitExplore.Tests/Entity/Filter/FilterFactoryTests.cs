@@ -14,7 +14,7 @@ public class FilterFactoryTests {
     [Theory]
     [MemberData(nameof(FilterCreateData))]
     public void Create_PublicationGraphFilter_by_Type(Type exp, params Object[] args) {
-        Filter<PublicationGraph> act_filter = FilterFactory.Create<PublicationGraph>(exp.Name, args);
+        Filter<PublicationGraph> act_filter = FilterFactory.Create<PublicationGraph>(exp.Name, args) ?? EmptyFilter<PublicationGraph>.Get();
         Assert.Equal(exp.Name, act_filter.GetType().Name);
         Assert.Equal(args[0], (act_filter as FilterDecorator<PublicationGraph>).PredicateArgs[0]);
     }
