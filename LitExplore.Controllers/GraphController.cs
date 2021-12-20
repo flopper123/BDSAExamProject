@@ -1,20 +1,31 @@
 namespace LitExplore.Controllers;
 
+using LitExplore.Controllers.Filter;
 using LitExplore.Entity.Context;
 using LitExplore.Controllers.Graph;
 using LitExplore.Core.Filter;
 
 public class GraphController
 {
-    IFilterRepository<PublicationGraph> _fRepo;
+    FilterController _fController;
     IPublicationRepository _pRepo;
 
     public GraphController() {}
     public GraphController(IFilterRepository<PublicationGraph> fRepo,
                            IPublicationRepository pRepo)
     {
-        this._fRepo = fRepo;
+        this._fController = new FilterController(fRepo);
         this._pRepo = pRepo;
+    }
+
+    /// <summary>
+    /// Parse user input filter to pargs
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="pargs"></param>
+    /// <returns></returns>
+    public Filter<PublicationGraph> ParseFilter(string name, string pargs) {
+        return _fController.ParseFilter(name, pargs);
     }
 
     // At some point this method should build the graph dynamicly
@@ -39,9 +50,9 @@ public class GraphController
         var graph = await GetDefaultGraphAsync();
 
         // if not found filter becomes EmptyFilter<PubGraph> which is fine
-        Filter<PublicationGraph>? f = await _fRepo.ReadAsync(uid);
+        Filter<PublicationGraph> f = await _fController.ReadAsync(uid);
 
-        if (f != null) graph.Filter(f);
+        if (f.GetType() != typeof(EmptyFilter<PublicationGraph>)) graph.Filter(f);
         return graph;
     }
 }
