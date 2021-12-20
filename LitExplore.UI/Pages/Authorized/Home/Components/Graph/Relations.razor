@@ -47,7 +47,7 @@
           rel => containsAny(
             value.Children.Select(r => r.Details.Title).ToList(),
             rel.node.Children.Select(r => r.Details.Title).ToList()
-          )
+          ) || (value.Children.Find(r => r.Details.Title == rel.node.Details.Title) != null)
         )
         .Select(
           rel => rel.node

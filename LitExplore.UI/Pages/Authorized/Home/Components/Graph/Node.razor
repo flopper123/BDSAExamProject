@@ -30,7 +30,7 @@
 
       pos = value.Point;
 
-      runGraphAnimationLoop();
+      //runGraphAnimationLoop();
     }
   }
 
@@ -63,7 +63,7 @@
       (double x, double y) p1)
         => Math.Sqrt(Math.Pow(p0.x - p1.x, 2.0d) + Math.Pow(p0.y - p1.y, 2.0d));
 
-    double count = 0;
+    double time = 0;
     
     // Run loop forever
     while (true) {
@@ -89,13 +89,14 @@
           double w = Math.Sqrt(factor);
           if (d < 0.2) w = -w * 10;
 
-          //if (w > 0.2) w = 0.2;
+          w *= 5;
 
           // Vector from -> to
           (double x, double y) ftVec = (
             to.x - from.x,
             to.y - from.y
           );
+          Console.WriteLine(ftVec);
 
           // Use weight on vec
           ftVec.x *= w;
@@ -125,7 +126,7 @@
       );
 
       // How often the animation should run
-      double fps = 10.0d;
+      double fps = 1.0d;
 
       // Delta time
       double dt = 1.0d / fps;
@@ -146,18 +147,18 @@
       // Delay time
       int delay = (int)( dt * 1000.0d );
 
-      // Update visually
-      StateHasChanged();
-      GraphUtil.Notify();
 
       // Check if we should end
-      count += dt;
+      time += dt;
+      Console.WriteLine(dt + " " + time);
 
-      if (count > 8) break;
+      if (time > 5) break;
 
       // Sleep for delay ms
       await Task.Delay(delay);
     }
+    await Task.Run(GraphUtil.Notify);
+    await Task.Run(StateHasChanged);
   }
 
 }

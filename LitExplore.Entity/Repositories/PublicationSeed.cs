@@ -1,14 +1,13 @@
 namespace LitExplore.Entity.Repositories;
 
 public static class Seed
-{  
-  public static bool IsSeeded(ILitExploreContext _context)
-                        => _context.Publications.Count() != 0;
+{
 
-  public static async void SeedDB(ILitExploreContext _context)
+  public static async void SeedDB(LitExploreContext _context)
   {
-
-    if (IsSeeded(_context)) return;
+    
+    _context.Database.EnsureDeleted();
+    _context.Database.EnsureCreated();
 
     PublicationTitle d1c5a900_0342_463f_89fb_496311cd6559 = new PublicationTitle { Title = "Culture and climate for innovation" };
     _context.Publications.AddRange(
