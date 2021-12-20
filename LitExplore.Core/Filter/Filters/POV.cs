@@ -46,33 +46,44 @@ public sealed class POV : FilterDecorator<PublicationGraph>
     }
 
     // String constructors
-    public POV(string key, Filter<PublicationGraph>? prv = null)
-        : this(new PublicationDtoTitle { Title = key }, prv) {}
+    public POV(string key) 
+        : this(new PublicationDtoTitle { Title = key })
+    {}
+    
+    public POV(string key, Filter<PublicationGraph>? prv)
+        : this(new PublicationDtoTitle { Title = key }, prv) 
+    {}
 
     public POV(string key, FilterOption.SearchDirection dir)
-        : this(new PublicationDtoTitle { Title = key }, dir) {}
+        : this(new PublicationDtoTitle { Title = key }, dir) 
+    {}
     
-    public POV(string key, FilterOption.SearchDirection dir, Filter<PublicationGraph>? prv = null)
-        : this(new PublicationDtoTitle { Title = key }, dir, prv) {}
+    public POV(string key, FilterOption.SearchDirection dir, Filter<PublicationGraph>? prv)
+        : this(new PublicationDtoTitle { Title = key }, dir, prv) 
+    {}
 
+
+    public POV(PublicationDtoTitle key) 
+        : this(key, null)
+    {}
 
     // DTOTitle constructors
     public POV(PublicationDtoTitle key,
-               Filter<PublicationGraph>? prv = null) 
+               Filter<PublicationGraph>? prv) 
         : this(key, FilterOption.SearchDirection.DEFAULT, prv) 
     {} 
 
+    public POV(PublicationDtoTitle key,
+               FilterOption.SearchDirection dir)
+        : this(key, dir, null)
+    {}
+
     public POV(PublicationDtoTitle key, 
                FilterOption.SearchDirection dir,  
-               Filter<PublicationGraph>? prv = null) 
+               Filter<PublicationGraph>? prv) 
         : base(new Object[] { key, dir }, 
                prv) 
-    {
-        //if (key.Title.Equals("3")) {
-        //    string prvstr = (prv == null) ? "null" : prv.ToString();
-        //    throw new Exception($"Received args: \nkey={key}\ndir={dir}\nprv={prvstr}");
-        //}
-    }
+    {}
 
     protected override void Action(PublicationGraph gr)
     {
@@ -130,11 +141,7 @@ public sealed class POV : FilterDecorator<PublicationGraph>
     }
 
     protected override IEnumerable<(string type, string str_vals)> getPArgsStringTuple()
-    {
-        // ! Warning dont modify code
-        // had a lot of unexpected bugs with this method, when values were yielded directly out
-        // so now we first insert them into list, and then yield them XD 
-        if (p_args == null) throw new NullReferenceException("p_args is null");
+    { 
         yield return (PARG_TYPES_STR[(int)Args.TITLE], (String) (p_args)[(int)Args.TITLE].Title);
         yield return ((PARG_TYPES_STR[(int)Args.DIRECTION], (p_args)[(int)Args.DIRECTION].ToString()));
     }

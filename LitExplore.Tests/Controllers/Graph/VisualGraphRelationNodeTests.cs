@@ -4,7 +4,7 @@ using LitExplore.Controllers.Graph;
 
 public class VisualGraphRelationNodeTests
 {
-
+    
     public List<VisualGraphRelationNode> nodes;
 
 

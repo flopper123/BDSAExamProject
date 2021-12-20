@@ -96,7 +96,6 @@ public class POVTests
     [InlineData(FilterOption.SearchDirection.BI | FilterOption.SearchDirection.VISIT_MINDEPTH)]
     [InlineData(FilterOption.SearchDirection.CHILDREN | FilterOption.SearchDirection.VISIT_ONCE)]
     [InlineData(FilterOption.SearchDirection.BI | FilterOption.SearchDirection.VISIT_ONCE)]
-    [InlineData(FilterOption.SearchDirection.DEFAULT)]
     public void Can_POV_VISIT_CHILDREN_Search_Everything_AcyclicConnected(FilterOption.SearchDirection opts)
     {
         var act = new PublicationGraph();        

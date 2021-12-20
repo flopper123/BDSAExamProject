@@ -4,28 +4,20 @@ using LitExplore.Core.Filter;
 using LitExplore.Core.Filter.Filters;
 
 public class FilterFactoryTests {
-    //[Theory]
-    //[InlineData(typeof(MaxDepthFilter), 10)]
-    //[InlineData(typeof(TitleContainsFilter), "0xDEADBEEF")]
-    //public void Create_PublicationNode_by_Type(Type exp, params Object[] args) {
-    //    var act_filter = FilterFactory.Create<NodeDetails<PublicationNode>>(exp.Name, args);
-    //    Assert.Equal(exp.Name, act_filter.GetType().Name);
-    //}
-    /*
+    
+    public static IEnumerable<object[]> FilterCreateData() {
+        yield return new Object[] {typeof(TitleContains), new Object[] {"0xDEADBEEF"} };
+        yield return new Object[] {typeof(POV), new Object[] { new PublicationDtoTitle { Title = "0x"} } };
+        yield return new Object[] {typeof(POV), new Object[] { new PublicationDtoTitle { Title = "3x"}, FilterOption.SearchDirection.PARENTS } } ;
+    }
+
     [Theory]
-    [InlineData(typeof(TitleContains), "0xDEADBEEF")]
+    [MemberData(nameof(FilterCreateData))]
     public void Create_PublicationGraphFilter_by_Type(Type exp, params Object[] args) {
         Filter<PublicationGraph> act_filter = FilterFactory.Create<PublicationGraph>(exp.Name, args);
         Assert.Equal(exp.Name, act_filter.GetType().Name);
+        Assert.Equal(args[0], (act_filter as FilterDecorator<PublicationGraph>).PredicateArgs[0]);
     }
-    */
-
-    // [Theory]
-    // [InlineData("TitleContains", "0xDEADBEEF")]
-    // public void Create_by_UnqualifiedName(string exp, params Object[] args) {
-    //     Filter<PublicationGraph> act_filter = FilterFactory.Create<PublicationGraph>(exp, args);
-    //     Assert.Equal(exp, act_filter.GetType().Name);
-    // }
 
     [Fact]
     public void Create_Throws_NameFalse() {

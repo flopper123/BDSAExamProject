@@ -1,0 +1,25 @@
+
+@page "/graph"
+
+@namespace LitExplore.UI.Authorized.Home
+
+@using LitExplore.UI.Pages.Authorized.Home.Components
+
+<PageTitle>LitExplore - Home</PageTitle>
+
+<div class="flex flex-col h-screen bg-gray-700">
+  <TopBarComponent />
+
+  <FilterHistory />
+
+  <div class="grid grid-cols-4 w-full h-full">
+    <div class="col-span-1">
+      <FilterSettings></FilterSettings>
+      <ActiveNode></ActiveNode>
+    </div>
+    <div class="col-span-3">
+      <GraphVisualizer></GraphVisualizer>
+    </div>
+  </div>
+
+</div>

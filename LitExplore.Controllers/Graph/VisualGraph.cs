@@ -14,7 +14,6 @@ public class VisualGraph : PublicationGraph
 
     public override PublicationNode TryGetNode(PublicationDtoTitle key)
     {
-        
         PublicationNode? node = null;
         Nodes.TryGetValue(key.Title, out node);
 
@@ -37,12 +36,12 @@ public class VisualGraph : PublicationGraph
 
         // x axis    
         double minx = nodes.Aggregate(1.0, (acc, curr) => Math.Min(acc, curr.Point.x), v => v);
-    	double maxx = nodes.Aggregate(1.0, (acc, curr) => Math.Max(acc, curr.Point.x), v => v);
+    	double maxx = nodes.Aggregate(0.0, (acc, curr) => Math.Max(acc, curr.Point.x), v => v);
         
         // y axis
         double miny = nodes.Aggregate(1.0, (acc, curr) => Math.Min(acc, curr.Point.y), v => v);
-        double maxy = nodes.Aggregate(1.0, (acc, curr) => Math.Max(acc, curr.Point.y), v => v);
-        
+        double maxy = nodes.Aggregate(0.0, (acc, curr) => Math.Max(acc, curr.Point.y), v => v);
+
         // Find diff
         double xfac = maxx - minx;
         double yfac = maxy - miny;
@@ -56,10 +55,11 @@ public class VisualGraph : PublicationGraph
 
         // Update all nodes
         nodes.ForEach(node => {
-            node.Point = (
-                (node.Point.x * xfac) - (minx * xfac),
-                (node.Point.y * yfac) - (miny * yfac)
-            );
+            node.Point.x -= minx;
+            node.Point.y -= miny;
+
+            node.Point.x *= xfac;
+            node.Point.y *= yfac;
         });
     }
 

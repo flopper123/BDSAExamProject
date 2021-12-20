@@ -13,7 +13,7 @@ WORKDIR /source
 WORKDIR /source/LitExplore.Server
 
 RUN dotnet restore
-RUN dotnet publish --configuration Release --output /app
+RUN dotnet build --output /app
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0

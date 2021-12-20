@@ -9,6 +9,7 @@ public class GraphController
     IFilterRepository<PublicationGraph> _fRepo;
     IPublicationRepository _pRepo;
 
+    public GraphController() {}
     public GraphController(IFilterRepository<PublicationGraph> fRepo,
                            IPublicationRepository pRepo)
     {
@@ -21,8 +22,11 @@ public class GraphController
     public async Task<VisualGraph> GetDefaultGraphAsync()
     {
         VisualGraph graph = new VisualGraph();
-        // Graph but without visual 
-        await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
+
+        
+        //await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
+        GraphMockData.GetPublications().ForEach(pub => graph.Add(pub));
+
         graph.OnInit();
 
         return graph;
