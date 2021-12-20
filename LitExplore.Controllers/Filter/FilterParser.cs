@@ -48,7 +48,7 @@ public sealed class FilterParser
 public static class UserInputExtension {
 
     public static string Sanitize(this string userInput) {
-        return new string(userInput.Where(uin => Char.IsLetterOrDigit(uin) || Char.IsWhiteSpace(uin))
+        return new string(userInput.Where(uin => Char.IsLetterOrDigit(uin) || Char.IsWhiteSpace(uin) || uin == ':')
                                    .ToArray());
     }
 
