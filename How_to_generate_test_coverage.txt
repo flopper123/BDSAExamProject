@@ -1,0 +1,9 @@
+
+//If not done first install tool
+dotnet tool install -g dotnet-reportgenerator-globaltool
+
+// To generate Test Coverage type this in cli.
+dotnet test --collect:"XPlat Code Coverage"
+
+// To generate Html write
+reportgenerator -reports:".\LitExplore.Tests\TestResults\<locationtoxml--guid>\coverage.cobertura.xml" -targetdir:"coveragereport" -reporttypes:Html
