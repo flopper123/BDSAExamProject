@@ -12,7 +12,7 @@
             "askForPassword": true,
             "driver": "MSSQL",
             "name": "LitExplore",
-            "connectString": "Server=localhost;Database=LitExplore;User Id=sa;Password=d2a681fb-c8ba-4f12-97ea-11ef72fa3f1c"
+            "connectString": "Server=localhost;Database=LitExplore;User Id=sa;Password=3ab341e8-b650-46c7-8fb1-125945f3739f"
         }
     ]
 }

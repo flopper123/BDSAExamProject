@@ -33,8 +33,8 @@ public class GraphController
     {
         VisualGraph graph = new VisualGraph();
 
-        // await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
-        GraphMockData.GetPublications().ForEach(pub => graph.Add(pub));
+        await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
+        //GraphMockData.GetPublications().ForEach(pub => graph.Add(pub));
 
         graph.OnInit();
 

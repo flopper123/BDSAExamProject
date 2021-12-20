@@ -17,7 +17,7 @@ public class LitExploreContextFactory : IDesignTimeDbContextFactory<LitExploreCo
                                                       .Build();
                     
         var optionsBuilder = new DbContextOptionsBuilder<LitExploreContext>();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("LitExplore"));
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("LitExplore"), opts => opts.EnableRetryOnFailure());
 
         return optionsBuilder;
     }
