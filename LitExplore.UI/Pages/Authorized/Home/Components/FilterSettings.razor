@@ -1,7 +1,12 @@
 
 @namespace LitExplore.UI.Pages.Authorized.Home.Components
 
+@inject LitExplore.Controllers.GraphController controller;
+
 @using LitExplore.UI.Pages.Shared
+@using LitExplore.Core.Publication
+@using LitExplore.Core.Filter
+@using LitExplore.Core.Filter.Filters
 
 <div class="text-white bg-gray-800 pl-8 pr-4 pb-4 pt-2 border-r-2 border-b-2 border-blue-900 w-full max-h-min">
   <div class="text-2xl mb-4">
@@ -9,22 +14,64 @@
   </div>
   
   <div class="grid grid-cols-3 gap-2 mb-6">
-    <div class="col-span-1">Find max:</div>
 
+    <div class="col-span-1">Find max:</div>
     <div class="col-span-2 flex space-x-2">
-      <input class="w-1/2 text-black" />
-      <input class="w-1/2 text-black" />
+      <input class="w-full text-black" @bind="maxrefs" />
     </div>
 
+
+    <div class="col-span-1">Title contains:</div>
+    <div class="col-span-2 flex space-x-2">
+      <input class="w-full text-black" @bind="title" />
+    </div>
 
     <div class="col-span-1">Keywords:</div>
- 
     <div class="col-span-2">
-      <input class="w-full text-black" />
+      <input class="w-full text-black" @bind="keywords" />
     </div>
+
   </div>
 
   <div class="flex justify-end">
-    <LitButton Text="Filter" />
+    <LitButton Text="Filter" Clicked="@FilterAction" />
   </div>
 </div>
+
+@code {
+
+  private string pov = String.Empty;
+  private string maxrefs = String.Empty;
+  private string title = String.Empty;
+  private string keywords = String.Empty;
+
+
+  public Action FilterAction => () => FilterFromInput();
+
+  public void FilterFromInput()
+  {
+    if (!pov.Equals(String.Empty)) {
+      Filter<PublicationGraph> filter = controller.Filter("pov", pov);
+      pov = String.Empty;
+    }
+
+    
+    if (!maxrefs.Equals(String.Empty)) {
+      controller.Filter("MaxRef", maxrefs);
+      maxrefs = String.Empty;
+    }
+
+    if (!title.Equals(String.Empty)) {
+      controller.Filter("TitleContains", maxrefs);
+      maxrefs = String.Empty;
+    }
+
+    if (!keywords.Equals(String.Empty)) {
+      controller.Filter("Keywords", keywords);
+      keywords = String.Empty;
+    }
+
+    StateHasChanged();
+  }
+
+}

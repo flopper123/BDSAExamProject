@@ -5,7 +5,9 @@ using Microsoft.Identity.Web.UI;
 using LitExplore.Core.Publication;
 using LitExplore.Core.Filter;
 
+using LitExplore.Entity;
 using LitExplore.Entity.Repositories;
+using LitExplore.Entity.Context;
 
 using LitExplore.Controllers;
 
@@ -16,21 +18,34 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<GraphController>();
 
-
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
-builder.Services.AddControllersWithViews()
+builder.Services
+    .AddControllersWithViews()
     .AddMicrosoftIdentityUI();
 
-builder.Services.AddAuthorization(options =>
-{});
+builder.Services.AddAuthorization(options => {});
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
 
-// builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
-// builder.Services.AddScoped<IFilterRepository<PublicationGraph>, FilterRepository<PublicationGraph>>();
+
+var factory = new LitExploreContextFactory();
+var context = factory.CreateDbContext(new string[] {});
+
+builder.Services.AddDbContext<LitExploreContext>(options => LitExploreContextFactory.GetOptions());
+
+builder.Services.AddTransient<IFilterRepository<PublicationGraph>, FilterRepository<PublicationGraph>>(
+  provider => new FilterRepository<PublicationGraph>(context)
+);
+builder.Services.AddTransient<IPublicationRepository, PublicationRepository>(
+  provider => new PublicationRepository(context)
+);
+
+
+// If database has not been seeded, seed it
+
 
 
 builder.Services.AddSingleton<GraphController>();

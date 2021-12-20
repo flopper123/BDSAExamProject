@@ -7,7 +7,7 @@ using LitExplore.Core.Publication;
 
 public class PublicationRepository : AbsRepository, IPublicationRepository
 {
-    public PublicationRepository(ILitExploreContext ctx) : base(ctx) { }
+    public PublicationRepository(LitExploreContext ctx) : base(ctx) { }
 
     /// <summary>
     /// Updates the context such that the title of @publication 

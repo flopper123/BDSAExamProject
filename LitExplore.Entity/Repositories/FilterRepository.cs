@@ -8,7 +8,7 @@ using LitExplore.Core;
 public class FilterRepository<T> : AbsRepository, IFilterRepository<T>
 {
     
-    public FilterRepository(ILitExploreContext ctx) : base(ctx) {}
+    public FilterRepository(LitExploreContext ctx) : base(ctx) {}
 
 
     /// <summary>

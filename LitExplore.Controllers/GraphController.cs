@@ -8,11 +8,10 @@ using LitExplore.Core.Filter;
 public class GraphController
 {
     FilterController _fController;
-    IPublicationRepository _pRepo;
+    private readonly IPublicationRepository _pRepo;
 
-    public GraphController() {}
-    public GraphController(IFilterRepository<PublicationGraph> fRepo,
-                           IPublicationRepository pRepo)
+    public GraphController(IPublicationRepository pRepo,
+                            IFilterRepository<PublicationGraph> fRepo)
     {
         this._fController = new FilterController(fRepo);
         this._pRepo = pRepo;
@@ -24,8 +23,8 @@ public class GraphController
     /// <param name="name"></param>
     /// <param name="pargs"></param>
     /// <returns></returns>
-    public Filter<PublicationGraph> ParseFilter(string name, string pargs) {
-        return _fController.ParseFilter(name, pargs);
+    public Filter<PublicationGraph> Filter(string name, string pargs) {
+       return _fController.ParseFilter(name, pargs);
     }
 
     // At some point this method should build the graph dynamicly
@@ -34,8 +33,7 @@ public class GraphController
     {
         VisualGraph graph = new VisualGraph();
 
-        
-        //await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
+        // await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
         GraphMockData.GetPublications().ForEach(pub => graph.Add(pub));
 
         graph.OnInit();
