@@ -1,4 +1,4 @@
-namespace LitExplore.Core.Graph;
+namespace LitExplore.Core.Publication;
 
 public interface IHasNodeDetails {
     // Depth of node

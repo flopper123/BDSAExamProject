@@ -4,7 +4,6 @@ using System.Collections;
 using System.Linq;
 using LitExplore.Core.Filter;
 using LitExplore.Core.Filter.Filters;
-using LitExplore.Core.Graph;
 
 public class PublicationGraph : ISerialize, IEquatable<PublicationGraph>
 {

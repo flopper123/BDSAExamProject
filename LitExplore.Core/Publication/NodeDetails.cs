@@ -1,4 +1,4 @@
-namespace LitExplore.Core.Graph;
+namespace LitExplore.Core.Publication;
 
 public class NodeDetails<T> : IHasNodeDetails {
     public T? Details { get; init; }

@@ -1,6 +1,5 @@
 namespace LitExplore.Tests.Core.Publication;
 
-using LitExplore.Core.Graph;
 using LitExplore.Core.Filter;
 using System.Text;
 
