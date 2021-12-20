@@ -3,6 +3,7 @@
 
 @inject LitExplore.Controllers.GraphController controller;
 
+@using LitExplore.UI.Pages.Authorized.Home.Components.Graph;
 @using LitExplore.UI.Pages.Shared
 @using LitExplore.Core.Publication
 @using LitExplore.Core.Filter
@@ -14,6 +15,11 @@
   </div>
   
   <div class="grid grid-cols-3 gap-2 mb-6">
+    <div class="col-span-1">POV:</div>
+    <div class="col-span-2 flex space-x-2">
+      <input class="w-full text-black" @bind="pov" />
+    </div>
+
 
     <div class="col-span-1">Find max:</div>
     <div class="col-span-2 flex space-x-2">
@@ -51,24 +57,27 @@
   public void FilterFromInput()
   {
     if (!pov.Equals(String.Empty)) {
-      Filter<PublicationGraph> filter = controller.Filter("pov", pov);
+      var filter = controller.Filter("pov", pov);
       pov = String.Empty;
+      FilterEvent.Notify(filter);
     }
-
     
     if (!maxrefs.Equals(String.Empty)) {
-      controller.Filter("MaxRef", maxrefs);
+      var filter = controller.Filter("maxref", pov);
       maxrefs = String.Empty;
+      FilterEvent.Notify(filter);
     }
 
     if (!title.Equals(String.Empty)) {
-      controller.Filter("TitleContains", maxrefs);
+      var filter = controller.Filter("titlecontains", title);
       maxrefs = String.Empty;
+      FilterEvent.Notify(filter);
     }
 
     if (!keywords.Equals(String.Empty)) {
-      controller.Filter("Keywords", keywords);
+      var filter = controller.Filter("keywords", keywords);
       keywords = String.Empty;
+      FilterEvent.Notify(filter);
     }
 
     StateHasChanged();
