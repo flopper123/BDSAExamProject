@@ -32,13 +32,12 @@ public static class FilterPArgField
 }
 
 public static class FilterPArgsParser {
-
     // Tries to parse the input pArgs serialization string to 
     // type, val pairs
     // Throws OutOfBoundsException if pArgs does not satisfy format
-    public static IEnumerable<(string type, string value)> ExtractArgs(string pArgs)
+    public static IEnumerable<(string type, string value)> ExtractArgs(string serialPArgs)
     {
-        foreach (string p_arg in pArgs.Split(FilterPArgField.PARG_SEPERATOR, RemoveEmptyEntries))
+        foreach (string p_arg in serialPArgs.Split(FilterPArgField.PARG_SEPERATOR, RemoveEmptyEntries))
         {
             string[] splitByFields = p_arg.Split(FilterPArgField.FIELD_SEPERATOR, RemoveEmptyEntries);
             string type = splitByFields[0].Split(FilterPArgField.VALUE_SEPERATOR, RemoveEmptyEntries)[1];

@@ -104,9 +104,7 @@ public class TitleContainsTests
         // Build expected serialization from filterfield enum
         StringBuilder exp = new StringBuilder();
         exp.Append(FilterField.START);
-
         exp.Append($"{f1}{"\n"}{f2}{"\n"}{f3}{"\n"}{f4}");
-
         exp.Append(FilterField.END);
 
         // Build actual serialization

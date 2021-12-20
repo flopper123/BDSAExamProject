@@ -4,6 +4,7 @@ using LitExplore.Controllers.Graph;
 
 public class VisualGraphRelationNodeTests
 {
+    
     public List<VisualGraphRelationNode> nodes;
 
 
@@ -24,11 +25,9 @@ public class VisualGraphRelationNodeTests
         foreach (var t in tmp) {
             string title = t.Details.Title;
             int i = int.Parse("" + title[title.Length - 1]);
-            //if (i == 0 && t.Details.References.Count() == 3) i += 1;  
-            
             nodes[i] = t;
         }
-    }
+    } 
 
     /**
      * Tests for GetRelations
@@ -91,54 +90,51 @@ public class VisualGraphRelationNodeTests
         Assert.Equal(expected, actual);
     }
 
-    // [Fact]
-    // public void AllShared_References_Are_Factor1()
-    // {
-    //     // Arrange
-    //     var node1 = nodes[1];
-    //     var node2 = nodes[2];
-
-    //     double expected = 1.0d;
-
-    //     // Act
-    //     double actual = node1.GetReferenceRelation(node2);
-
-    //     // Assert
-    //     Assert.Equal(expected, actual);
-    // }
+    [Fact]
+    public void AllShared_References_Are_Factor1()
+    {
+        // Arrange
+        var node1 = nodes[1];
+        var node2 = nodes[2];
+        double expected = 1.0d;
+        // Act
+        double actual = node1.GetReferenceRelation(node2);
+        // Assert
+        Assert.Equal(expected, actual);
+    }
 
 
-    // [Fact]
-    // public void HalfShared_References_Are_Factor0_5()
-    // {
-    //     // Arrange
-    //     var node5 = nodes[5];
-    //     var node6 = nodes[6];
+    [Fact]
+    public void HalfShared_References_Are_Factor0_5()
+    {
+        // Arrange
+        var node5 = nodes[5];
+        var node6 = nodes[6];
 
-    //     double expected = 0.5d;
+        double expected = 0.5d;
 
-    //     // Act
-    //     double actual = node5.GetReferenceRelation(node6);
+        // Act
+        double actual = node5.GetReferenceRelation(node6);
 
-    //     // Assert
-    //     Assert.Equal(expected, actual);
-    // }
+        // Assert
+        Assert.Equal(expected, actual);
+    }
 
-    // [Fact]
-    // public void QuarterSharedReferencesIsFactor0_25()
-    // {
-    //     // Arrange
-    //     var node0 = nodes[0];
-    //     var node5 = nodes[5];
+    [Fact]
+    public void QuarterSharedReferencesIsFactor0_25()
+    {
+        // Arrange
+        var node0 = nodes[0];
+        var node5 = nodes[5];
 
-    //     double expected = 0.25d;
+        double expected = 0.25d;
 
-    //     // Act
-    //     double actual = node0.GetReferenceRelation(node5);
+        // Act
+        double actual = node0.GetReferenceRelation(node5);
 
-    //     // Assert
-    //     Assert.Equal(expected, actual);
-    // }
+        // Assert
+        Assert.Equal(expected, actual);
+    }
 
     [Fact]
     public void PublicationWithNoReferencesIsFactor0()

@@ -30,7 +30,7 @@ public static class GraphMockData {
             };
         }
 
-        yield return new PublicationDtoDetails { Title = $"{N}", References = GetHashSet("1") };
+        yield return new PublicationDtoDetails { Title = $"{N}", References = GetHashSet("0") };
     }
     
     /// 

@@ -4,7 +4,8 @@ public static class NodeExtensions {
     internal static bool ContainsTitle(this List<PublicationNode> nodes, PublicationDtoTitle title)
     {
         foreach (PublicationNode n in nodes) {
-            if (n.Equals(title)) return true;
+            string nTitle = n.Details.Title;
+            if (nTitle.Equals(title.Title, StringComparison.OrdinalIgnoreCase)) return true;
         }
         return false;
     }

@@ -52,8 +52,15 @@ public class FilterFactory
         }
         catch (Exception e)
         {
-            throw new ArgumentException("\nSomething went wrong during creation of filter..\n\t" +
-                                        "Couldn't create the requested object", e);
+            StringBuilder err_msg = new StringBuilder("\nSomething went wrong during creation of filter..\n\t");
+            err_msg.Append($"Couldn't create the requested object name@typeof({name})\n\t");
+            err_msg.Append($"PArgs #{args.Length}:");
+            int i = 0;
+            foreach(var arg in args) {
+                err_msg.Append($"\narg #{i} typeof({arg.GetType()})");
+                i++;
+            }
+            throw new ArgumentException(err_msg.ToString(), e);
         }
         /*
         Trying to Instance Class: LitExplore.Core.Filter.Filters.TitleFilter : With args@1

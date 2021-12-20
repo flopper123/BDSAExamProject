@@ -33,7 +33,6 @@ public record VisualGraphRelationNode : VisualGraphNode {
 		double max = 1.5;
 		double fac = refs * 1.5;
 
-
 		// Normalize
 		return fac / max; 
 	}
@@ -48,8 +47,7 @@ public record VisualGraphRelationNode : VisualGraphNode {
 	// First compared to second publication
 	public double GetReferenceRelation(VisualGraphNode node)
 	{
-        
-        // Return if 0
+		// Return if 0
         if (this.Children.Count == 0 || node.Children.Count == 0) return 0.0;
 
         // Keeps track of not shared references
