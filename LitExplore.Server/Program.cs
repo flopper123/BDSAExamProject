@@ -37,10 +37,18 @@ var context = factory.CreateDbContext(new string[] {});
 builder.Services.AddDbContext<LitExploreContext>(options => LitExploreContextFactory.GetOptions());
 
 builder.Services.AddTransient<IFilterRepository<PublicationGraph>, FilterRepository<PublicationGraph>>(
-  provider => new FilterRepository<PublicationGraph>(context)
+    provider => {
+        var ctx = new LitExploreContextFactory().CreateDbContext(new string[] {});
+        Seed.SeedDB(ctx);
+        return new FilterRepository<PublicationGraph>(ctx);
+    }
 );
 builder.Services.AddTransient<IPublicationRepository, PublicationRepository>(
-  provider => new PublicationRepository(context)
+    provider => {
+        var ctx = new LitExploreContextFactory().CreateDbContext(new string[] {});
+        Seed.SeedDB(ctx);
+        return new PublicationRepository(ctx);
+    }
 );
 
 
