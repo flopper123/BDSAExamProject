@@ -8,14 +8,12 @@ using LitExplore.Core.Publication.Action;
 public sealed class POV : FilterDecorator<PublicationGraph>
 {
     // pargs[Args.Title] = typeof(PublicationDtoTitle) 
-    // 
+    // pargs[Args.DIRECTION] = typeof(FilterOption.SearchDirection) 
     private const uint MAX_DEPTH = 100_000;
     private static readonly string[] PARG_TYPES_STR = new string[] {
         "LitExplore.Core.Publication.PublicationDtoTitle",
         "LitExplore.Core.FilterOption.SearchDirection"
     };
-
-    //private static readonly string[] PARG_TYPES = { typeof(PublicationDtoTitle) }
 
     private enum Args
     {
@@ -105,6 +103,11 @@ public sealed class POV : FilterDecorator<PublicationGraph>
             this.Direction
         );
 
+        foreach (var n in newGr.GetNodes())
+        {
+            var prv = n.Children.Count() + n.Parents.Count();
+            var removed = n.RemoveInvalid(newGr);
+        }
         // set gr to newly build graph
         gr.Copy(newGr);
     }

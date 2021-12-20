@@ -6,7 +6,7 @@ using System.Text;
 public sealed class FilterParser 
 {
     private static FilterParser? _this;
-    internal static readonly char[] VALID_PARG_SEPERATORS = new char[] { ',', ' ' };
+    internal const char PARG_SEPERATOR = ',';
 
     private FilterParser() {}
 
@@ -39,13 +39,7 @@ public sealed class FilterParser
     }
 
     private static List<string> SplitPargs(string upargs) {
-        var pargs = new List<String>();
-        foreach (var sep in VALID_PARG_SEPERATORS)
-        {
-            var tmp = upargs.Split(sep, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            foreach (var t in tmp) pargs.Add(t.Replace(sep.ToString(), String.Empty));
-            
-        }
+        var pargs = upargs.Split(PARG_SEPERATOR, StringSplitOptions.RemoveEmptyEntries /*| StringSplitOptions.TrimEntries*/).ToList();
         for (int i = 0; i < pargs.Count(); i++) pargs[i] = pargs[i].Sanitize();
         return pargs;
     }
@@ -54,7 +48,7 @@ public sealed class FilterParser
 public static class UserInputExtension {
 
     public static string Sanitize(this string userInput) {
-        return new string(userInput.Where(uin => Char.IsLetterOrDigit(uin))
+        return new string(userInput.Where(uin => Char.IsLetterOrDigit(uin) || Char.IsWhiteSpace(uin))
                                    .ToArray());
     }
 
