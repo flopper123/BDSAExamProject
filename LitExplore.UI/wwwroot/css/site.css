@@ -1,5 +1,3 @@
-/* purgecss start ignore */
-
 #blazor-error-ui {
   --tw-bg-opacity: 1;
   background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
@@ -11,5 +9,3 @@
   right: 0.75rem;
   top: 0.5rem;
 }
-
-/* purgecss end ignore */
