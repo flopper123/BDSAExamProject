@@ -9,16 +9,6 @@ $connectionString = "Server=localhost;Database=$database;User Id=sa;Password=$pa
 dotnet user-secrets set "ConnectionStrings:LitExplore" "$connectionString" --project $projectDB
 Write-Host "DONE" -ForegroundColor DarkGreen
 
-Write-Host "Checking if Node is Installed." -ForegroundColor DarkCyan
-node -v
-npm -v
-
-Write-Host "Build WebPage" -ForegroundColor DarkCyan
-
-cd .\LitExplore.UI\ | npm install | npm run buildcss | cd..
-
-Write-Host "Built" -ForegroundColor DarkGreen
-
 Write-Host "Creating And Starting Docker DB Container " -ForegroundColor DarkCyan
 
 docker run --name "LitExploreDB" -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$password" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest
