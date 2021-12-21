@@ -42,17 +42,19 @@
 
   public void FilterFromInput()
   {
-    if (!pov.Equals(String.Empty)) {
-      var filter = controller.Filter("pov", pov);
-      pov = String.Empty;
-      FilterEvent.Notify(filter);
-    }
+    try {
+      if (!pov.Equals(String.Empty)) {
+        var filter = controller.Filter("pov", pov);
+        pov = String.Empty;
+        FilterEvent.Notify(filter);
+      }
 
-    if (!title.Equals(String.Empty)) {
-      var filter = controller.Filter("titlecontains", title);
-      title = String.Empty;
-      FilterEvent.Notify(filter);
-    }
+      if (!title.Equals(String.Empty)) {
+        var filter = controller.Filter("titlecontains", title);
+        title = String.Empty;
+        FilterEvent.Notify(filter);
+      }
+    } catch (Exception e) {}
 
     StateHasChanged();
   }

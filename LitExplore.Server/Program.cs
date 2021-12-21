@@ -20,11 +20,16 @@ builder.Services.AddSingleton<GraphController>();
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+                
 builder.Services
     .AddControllersWithViews()
     .AddMicrosoftIdentityUI();
 
-builder.Services.AddAuthorization(options => {});
+builder.Services.AddAuthorization(options =>
+{
+              // By default, all incoming requests will be authorized according to the default policy
+              options.FallbackPolicy = options.DefaultPolicy;
+});
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
@@ -34,6 +39,7 @@ builder.Services.AddServerSideBlazor()
 builder.Services.AddDbContext<LitExploreContext>(options => LitExploreContextFactory.GetOptions());
 
 var context = new LitExploreContextFactory().CreateDbContext(new string[] {});
+builder.Services.AddTransient<LitExploreContextFactory>();
 builder.Services.AddTransient<IFilterRepository<PublicationGraph>, FilterRepository<PublicationGraph>>(
     provider => {
         return new FilterRepository<PublicationGraph>(context);
