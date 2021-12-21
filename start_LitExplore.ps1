@@ -1,5 +1,5 @@
 [CmdletBinding()]
-$project = "LitExplore"
+$project = "LitExplore.Server"
 
 
 $password = New-Guid
@@ -13,7 +13,5 @@ Write-Host "Configuring Connection String"
 dotnet user-secrets init --project $project
 dotnet user-secrets set "ConnectionStrings:LitE" "$connectionString" --project $project
 
-#something with Node/ npm install, maybe?
-
-Write-Host "Starting App"
+Write-Host "Starting LitExplore.Server"
 dotnet run --project $project
