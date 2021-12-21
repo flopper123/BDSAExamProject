@@ -3,6 +3,7 @@ namespace LitExplore.Controllers.Graph;
 public static class NodeExtension {
     public static VisualGraphRelationNode ToVisual(this PublicationNode n) 
     {
+        
         if (n is VisualGraphRelationNode) return (VisualGraphRelationNode) n;
         
         // Maps a title to (x, y) using heuristics

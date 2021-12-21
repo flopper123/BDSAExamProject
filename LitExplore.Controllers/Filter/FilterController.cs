@@ -5,7 +5,7 @@ using LitExplore.Core.Filter;
 
 public class FilterController
 {
-    IFilterRepository<PublicationGraph> _fRepo;
+    private readonly IFilterRepository<PublicationGraph> _fRepo;
 
     public FilterController(IFilterRepository<PublicationGraph> fRepo)
     {

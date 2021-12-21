@@ -5,9 +5,10 @@ using LitExplore.Core;
 
 public class VisualGraph : PublicationGraph
 {
+
     // Add graph relations on init
     public void OnInit() {
-        var nodes = GetNodes().Select(n => n.ToVisual()).ToList();  
+        var nodes = GetNodes().Select(n => n.ToVisual()).ToList();
         foreach (var n in nodes) n.AddRelations(nodes);
         Normalize();
     }

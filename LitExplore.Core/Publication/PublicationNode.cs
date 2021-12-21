@@ -80,13 +80,14 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
                 if (!visited.TryGetValue(c.Details.Title, out prvDepth)) {
                     prvDepth = uint.MaxValue;
                     visited[c.Details.Title] = depth;
-                }
-                else {
+                } else {
                     if (prvDepth > depth) visited[c.Details.Title] = depth;
                 }
 
-                if (!shouldVisit(opts, prvDepth, depth)) continue;
-                // if (i > 10000) throw new Exception("i == 10000 : depth#" + depth + "  max_depth#" + max_depth + " visited so far:#" + visited.Count());
+                if (!shouldVisit(opts, prvDepth, depth))
+                {
+                    continue;
+                }
                 lastVisited.Add(c);
                 act.Invoke(c.ToNodeDetails(depth), gr);
             }
@@ -124,6 +125,11 @@ public record PublicationNode : IEquatable<PublicationDtoTitle> {
         };
     }
 
+    public int RemoveInvalid(PublicationGraph graph) {
+        var removed = this.Children.RemoveAll((c) => (graph.GetNode(c.Details.Title) == null));
+        removed += this.Parents.RemoveAll((c) => (graph.GetNode(c.Details.Title) == null));
+        return removed;
+    }
 
     public bool Equals(PublicationDtoTitle? title) {
         if (title == null) return false; 

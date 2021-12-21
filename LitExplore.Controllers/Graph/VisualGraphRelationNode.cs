@@ -26,12 +26,12 @@ public record VisualGraphRelationNode : VisualGraphNode {
     // Returns relation between first pub to second
 	public double /* AddRelation */ GetRelation(VisualGraphNode node)
 	{
-		//double title = GetTitleRelation(node);
+		double title = this.Details.Title.StringHeuristicEqualityFactor(node.Details.Title);
 		double refs  = GetReferenceRelation(node);
 
 		// Weight
-		double max = 1.5;
-		double fac = refs * 1.5;
+		double max = 1.5 + 0.5;
+		double fac = refs * 1.5 + title * 0.5;
 
 		// Normalize
 		return fac / max; 
@@ -48,10 +48,10 @@ public record VisualGraphRelationNode : VisualGraphNode {
 	public double GetReferenceRelation(VisualGraphNode node)
 	{
 		// Return if 0
-        if (this.Children.Count == 0 || node.Children.Count == 0) return 0.0;
+		if (this.Children.Count == 0 || node.Children.Count == 0) return 0.0;
 
-        // Keeps track of not shared references
-        var references = new HashSet<string>();
+		// Keeps track of not shared references
+		var references = new HashSet<string>();
 
 		// Find the amount of references they do not share
 		this.Children

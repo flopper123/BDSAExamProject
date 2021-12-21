@@ -1,6 +1,11 @@
 
 @namespace LitExplore.UI.Pages.Authorized.Home.Components
 
+@using LitExplore.UI.Pages.Authorized.Home.Components.Graph;
+
+@using LitExplore.Core.Publication
+@using LitExplore.Core.Filter
+@using LitExplore.Core.Filter.Filters
 
 <div class="bg-gray-800 text-white py-3 pl-5 pb-4 border-b-2 border-blue-900">
   <div class="flex ml-2">
@@ -16,7 +21,18 @@
 </div>
 
 @code {
-  private List<string> filters = new List<string> {
-    "select", "filter", "search", "filter"
-  };
+  private List<string> filters = new List<string>();
+
+  protected override async Task OnInitializedAsync()
+  {
+    // Add filter event
+    FilterEvent.AddSub((Filter<PublicationGraph> filter) => {
+      InvokeAsync(() => {
+        
+        filters.Add(filter.GetType().Name);
+
+        StateHasChanged();
+      });
+    });
+  }
 }

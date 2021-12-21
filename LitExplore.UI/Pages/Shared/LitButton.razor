@@ -12,7 +12,7 @@
 @code {
   [Parameter] public string Text { get; init; }
 
-  [Parameter] public Task Clicked { get; init; }
+  [Parameter] public Action Clicked { get; init; } = () => {};
 
   private bool disabled { get; set; }
 
@@ -20,8 +20,7 @@
   {
     disabled = true;
     
-    Func<Task> clickFunc = async () => await Clicked; 
-    await clickFunc();
+    Clicked.Invoke();
 
     disabled = false;
   }
