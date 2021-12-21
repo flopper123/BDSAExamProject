@@ -20,21 +20,9 @@
       <input class="w-full text-black" @bind="pov" />
     </div>
 
-
-    <div class="col-span-1">Find max:</div>
-    <div class="col-span-2 flex space-x-2">
-      <input class="w-full text-black" @bind="maxrefs" />
-    </div>
-
-
     <div class="col-span-1">Title contains:</div>
     <div class="col-span-2 flex space-x-2">
       <input class="w-full text-black" @bind="title" />
-    </div>
-
-    <div class="col-span-1">Keywords:</div>
-    <div class="col-span-2">
-      <input class="w-full text-black" @bind="keywords" />
     </div>
 
   </div>
@@ -47,9 +35,7 @@
 @code {
 
   private string pov = String.Empty;
-  private string maxrefs = String.Empty;
   private string title = String.Empty;
-  private string keywords = String.Empty;
 
 
   public Action FilterAction => () => FilterFromInput();
@@ -61,22 +47,10 @@
       pov = String.Empty;
       FilterEvent.Notify(filter);
     }
-    
-    if (!maxrefs.Equals(String.Empty)) {
-      var filter = controller.Filter("maxref", pov);
-      maxrefs = String.Empty;
-      FilterEvent.Notify(filter);
-    }
 
     if (!title.Equals(String.Empty)) {
       var filter = controller.Filter("titlecontains", title);
-      maxrefs = String.Empty;
-      FilterEvent.Notify(filter);
-    }
-
-    if (!keywords.Equals(String.Empty)) {
-      var filter = controller.Filter("keywords", keywords);
-      keywords = String.Empty;
+      title = String.Empty;
       FilterEvent.Notify(filter);
     }
 

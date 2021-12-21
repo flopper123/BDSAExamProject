@@ -34,8 +34,6 @@ public class GraphController
         VisualGraph graph = new VisualGraph();
 
         await foreach (var n in _pRepo.ReadAllAsync()) graph.Add(n);
-        //GraphMockData.GetPublications().ForEach(pub => graph.Add(pub));
-
         graph.OnInit();
 
         return graph;
@@ -51,6 +49,7 @@ public class GraphController
         Filter<PublicationGraph> f = await _fController.ReadAsync(uid);
 
         if (f.GetType() != typeof(EmptyFilter<PublicationGraph>)) graph.Filter(f);
+        
         return graph;
     }
 }

@@ -31,23 +31,18 @@ builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
 
 
-var factory = new LitExploreContextFactory();
-var context = factory.CreateDbContext(new string[] {});
-
 builder.Services.AddDbContext<LitExploreContext>(options => LitExploreContextFactory.GetOptions());
 
+var context = new LitExploreContextFactory().CreateDbContext(new string[] {});
 builder.Services.AddTransient<IFilterRepository<PublicationGraph>, FilterRepository<PublicationGraph>>(
     provider => {
-        var ctx = new LitExploreContextFactory().CreateDbContext(new string[] {});
-        Seed.SeedDB(ctx);
-        return new FilterRepository<PublicationGraph>(ctx);
+        return new FilterRepository<PublicationGraph>(context);
     }
 );
 builder.Services.AddTransient<IPublicationRepository, PublicationRepository>(
     provider => {
-        var ctx = new LitExploreContextFactory().CreateDbContext(new string[] {});
-        Seed.SeedDB(ctx);
-        return new PublicationRepository(ctx);
+        Seed.SeedDB(context);
+        return new PublicationRepository(context);
     }
 );
 

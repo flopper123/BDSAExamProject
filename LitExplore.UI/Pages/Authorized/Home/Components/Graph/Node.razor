@@ -28,9 +28,9 @@
 
       _node = value;
 
-      pos = value.Point;
+      pos = _node.Point;
 
-      //runGraphAnimationLoop();
+      runGraphAnimationLoop();
     }
   }
 
@@ -65,6 +65,8 @@
 
     double time = 0;
     
+    (double x, double y) current = (_node.Point.x, _node.Point.y);
+
     // Run loop forever
     while (true) {
 
@@ -81,22 +83,19 @@
           double d = dist(from, to);
 
           double factor = Math.Min(n.factor, 0.90);
-          
 
           // Get weighted distance
           // This can be done like this,
           //    since both factor and distance is in range 0-1
           double w = Math.Sqrt(factor);
-          if (d < 0.2) w = -w * 10;
 
-          w *= 5;
+          if (d < 0.4) w = -3*w;
 
           // Vector from -> to
           (double x, double y) ftVec = (
             to.x - from.x,
             to.y - from.y
           );
-          Console.WriteLine(ftVec);
 
           // Use weight on vec
           ftVec.x *= w;
@@ -126,11 +125,10 @@
       );
 
       // How often the animation should run
-      double fps = 1.0d;
+      double fps = 10.0d;
 
       // Delta time
       double dt = 1.0d / fps;
-
       double strength = 0.5d;
 
       // Update vector with dt and strength
@@ -138,11 +136,24 @@
       vec.y *= dt * strength;
 
       // Update point
-      _node.Point.x += vec.x;
-      _node.Point.y += vec.y;
+      current.x += vec.x;
+      current.y += vec.y;
+
+
+      // Check bounds
+      if (current.x < 0) current.x = 0;
+      if (current.x > 1) current.x = 1;
+      if (current.y < 0) current.y = 0;
+      if (current.y > 1) current.y = 1;
 
       // Update visual
-      pos = _node.Point;
+      _node.Point.x = current.x;
+      _node.Point.y = current.y;
+      pos = current;
+
+      // Notify update
+      GraphUtil.Notify();
+      StateHasChanged();
 
       // Delay time
       int delay = (int)( dt * 1000.0d );
@@ -150,15 +161,12 @@
 
       // Check if we should end
       time += dt;
-      Console.WriteLine(dt + " " + time);
-
-      if (time > 5) break;
+      if (time > 3) break;
 
       // Sleep for delay ms
       await Task.Delay(delay);
     }
-    await Task.Run(GraphUtil.Notify);
-    await Task.Run(StateHasChanged);
+    
   }
 
 }

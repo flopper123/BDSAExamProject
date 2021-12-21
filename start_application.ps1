@@ -1,7 +1,7 @@
 
 $project = "LitExplore.Server"
 
-$password = "3ab341e8-b650-46c7-8fb1-125945f3739f" #New-Guid
+$password = "2cb057ee-5078-4795-80ed-23b9c5af2e03" #New-Guid
 
 Write-Host "Starting SQL Server"
 docker run --name "LitExploreDE" -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$password" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest

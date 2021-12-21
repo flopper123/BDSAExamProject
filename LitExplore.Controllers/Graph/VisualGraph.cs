@@ -5,9 +5,26 @@ using LitExplore.Core;
 
 public class VisualGraph : PublicationGraph
 {
+    private List<VisualGraphRelationNode> _nodesAsVis = new List<VisualGraphRelationNode>();
+
     // Add graph relations on init
     public void OnInit() {
-        var nodes = GetNodes().Select(n => n.ToVisual()).ToList();  
+        var updated = new Dictionary<string, PublicationNode>();
+
+        foreach (var node in Nodes) {
+            var n = node.Value.ToVisual();
+            updated.Add(node.Key, n);
+            _nodesAsVis.Add(n);
+        }
+
+        Nodes = updated;
+
+
+
+        var nodes = new List<VisualGraphRelationNode>();
+        foreach (var node in _nodesAsVis) {
+            nodes.Add(node.ToVisual());
+        } 
         foreach (var n in nodes) n.AddRelations(nodes);
         Normalize();
     }

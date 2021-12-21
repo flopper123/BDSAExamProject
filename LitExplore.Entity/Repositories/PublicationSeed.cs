@@ -65,8 +65,7 @@ public static class Seed
       Title = "The 2019 SIM IT Issues and Trends Study",
       Author = "Leon Kappelman, Vess L. Johnson, Chris Maurer, Katie Guerra, Ephraim McLean, Russell Torres, Mark Snyder, Kevin Kim",
       References =
-      new List<PublicationTitle> {
-           new PublicationTitle { Title = "Unknown" }}
+      new List<PublicationTitle> {}
     },
     new Publication
     {
