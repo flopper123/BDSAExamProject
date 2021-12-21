@@ -19,12 +19,17 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<GraphController>();
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+                .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+                
 builder.Services
     .AddControllersWithViews()
     .AddMicrosoftIdentityUI();
 
-builder.Services.AddAuthorization(options => {});
+builder.Services.AddAuthorization(options =>
+{
+              // By default, all incoming requests will be authorized according to the default policy
+              options.FallbackPolicy = options.DefaultPolicy;
+});
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
