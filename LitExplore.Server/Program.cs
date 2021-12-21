@@ -19,7 +19,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<GraphController>();
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-                .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
                 
 builder.Services
     .AddControllersWithViews()
