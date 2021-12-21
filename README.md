@@ -1,7 +1,16 @@
-
-
+# LitExplore ResearchPaper Graph Visualizer
+This project tries to visualize research papers connectedness with other papers. 
 
 # How To Run
+## PreReqs
+Docker
+Node
+ADD login
+
+## Using PowerShell Script Located in ROOT of repo
+-- RunOnce.ps1 is for the one who wil run this for the first time.
+-- Start_Application.ps1 if RunOnce has been ran once use this.
+
 ## Initial setup.
 ### Env Vars
 Make sure docker is installed and setup.
@@ -30,7 +39,7 @@ $ dotnet run --project $project
 
 
 
-# There are Lies Below..
+# There Be Lies Below..
 # Lit Explore - Analysis Design and Software Architecture
 The program is run through a Linux Docker container.
 ## How to run program:
