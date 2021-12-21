@@ -21,6 +21,7 @@
 @code {
   private VisualGraph? graph;
 
+  
   protected override async Task OnInitializedAsync()
   {
 
@@ -34,11 +35,20 @@
     });
 
 
-    // TO:DO add userid as param to load for loading user specific graph
+    NewEvent.AddSub(() => {
+      LoadGraph();
+    });
+
+    LoadGraph();
+  }
+
+  private async void LoadGraph() {
     try {
       graph = await controller.Load(0);
     } catch (Exception e) {
       Console.WriteLine(e);
     }
+
+    StateHasChanged();
   }
 }

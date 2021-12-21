@@ -39,6 +39,7 @@ builder.Services.AddServerSideBlazor()
 builder.Services.AddDbContext<LitExploreContext>(options => LitExploreContextFactory.GetOptions());
 
 var context = new LitExploreContextFactory().CreateDbContext(new string[] {});
+builder.Services.AddTransient<LitExploreContextFactory>();
 builder.Services.AddTransient<IFilterRepository<PublicationGraph>, FilterRepository<PublicationGraph>>(
     provider => {
         return new FilterRepository<PublicationGraph>(context);
