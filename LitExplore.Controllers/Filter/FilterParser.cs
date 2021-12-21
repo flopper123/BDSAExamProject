@@ -6,7 +6,7 @@ using System.Text;
 public sealed class FilterParser 
 {
     private static FilterParser? _this;
-    internal const char PARG_SEPERATOR = ',';
+    internal const char PARG_SEPERATOR = '^';
 
     private FilterParser() {}
 
@@ -48,8 +48,7 @@ public sealed class FilterParser
 public static class UserInputExtension {
 
     public static string Sanitize(this string userInput) {
-        return new string(userInput.Where(uin => Char.IsLetterOrDigit(uin) || Char.IsWhiteSpace(uin) || uin == ':')
+        return new string(userInput.Where(uin => Char.IsLetterOrDigit(uin) || Char.IsWhiteSpace(uin) || uin == ':' || uin == '-')
                                    .ToArray());
     }
-
 }
