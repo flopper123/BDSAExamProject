@@ -22,12 +22,6 @@ $ $database = "LitExplore"
 $ $password = "2cb057ee-5078-4795-80ed-23b9c5af2e03" #New-Guid
 $ $connectionString = "Server=localhost;Database=$database;User Id=sa;Password=$password;
 
-### Create the WebTemplate from source.
-// Under assumption that Node.js has been installed on the system. 
-run the following:
-
-$ cd .\LitExplore.UI\ | npm install | npm run buildcss | cd..
-
 ### Run Of DB and AppServer
 // For Multiple uses, use this Line instead: 
 $ docker start LitExploreDB
