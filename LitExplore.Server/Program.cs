@@ -56,10 +56,6 @@ builder.Services.AddTransient<IPublicationRepository, PublicationRepository>(
 // If database has not been seeded, seed it
 
 
-
-builder.Services.AddSingleton<GraphController>();
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
